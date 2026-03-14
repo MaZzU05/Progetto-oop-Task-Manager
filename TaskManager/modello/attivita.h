@@ -3,10 +3,10 @@
 #include<QString>
 #include<QDateTime>
 #include<vector>
+#include"activityvisitorinterface.h"
+#include"constactivityvisitorinterface.h"
 namespace modello
 {
-class ActivityVisitorInterface;
-class ConstActivityVisitorInterface;
 enum class  Priority {bassa, media, alta};
 class Attivita
 {
