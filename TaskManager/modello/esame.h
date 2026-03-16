@@ -31,6 +31,7 @@ public:
     bool isPassed() const;
     void changeCfu(unsigned int);
     void modifyLode(bool l);
+    bool hasLode() const;
     void changeDate(const QDate&);
     void changeTime(const QTime&);
     const QDateTime& getDate() const;

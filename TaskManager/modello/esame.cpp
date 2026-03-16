@@ -57,6 +57,12 @@ void Esame::setSede(const QString& nuova)
 {
     sede=nuova;
 }
+bool Esame::hasLode() const
+{return lode;}
+bool Esame::isPassed() const
+{
+    return verbalizzabile;
+}
 void Esame::accept(ActivityVisitorInterface* visitor)
 {
     visitor->visit(this);
