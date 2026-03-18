@@ -2,9 +2,6 @@
 #define ESAME_H
 #include"attivita.h"
 #include<QString>
-#include<QDateTime>
-#include<QDate>
-#include<QTime>
 namespace modello
 {
 class Esame:public Attivita
@@ -14,7 +11,6 @@ private:
     unsigned int voto;
     bool lode;
     QString sede;
-    QDateTime dataEsame;
     bool verbalizzabile;
 public:
     Esame(const QString& title,
@@ -32,11 +28,8 @@ public:
     void changeCfu(unsigned int);
     void modifyLode(bool l);
     bool hasLode() const;
-    void changeDate(const QDate&);
-    void changeTime(const QTime&);
-    const QDateTime& getDate() const;
-    const QString& getSede() const;
     void setSede(const QString&);
+    const QString& getSede() const;
     void accept(ActivityVisitorInterface* visitor) override;
     void accept(ConstActivityVisitorInterface* visitor) const override;
     bool isUrgente() const override;

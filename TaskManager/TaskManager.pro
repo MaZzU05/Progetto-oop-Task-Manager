@@ -11,15 +11,19 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     gui/mainwindow.cpp \
+    modello/appuntamento.cpp \
     modello/attivita.cpp \
-    modello/esame.cpp
+    modello/esame.cpp \
+    modello/scadenza.cpp
 
 HEADERS += \
     gui/mainwindow.h \
     modello/activityvisitorinterface.h \
+    modello/appuntamento.h \
     modello/attivita.h \
     modello/constactivityvisitorinterface.h \
-    modello/esame.h
+    modello/esame.h \
+    modello/scadenza.h
 
 FORMS += \
     gui/mainwindow.ui

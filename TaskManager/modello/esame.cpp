@@ -8,7 +8,7 @@ Esame::Esame(const QString& title,
       const unsigned int cfu,
       const QDateTime& dataEsame,
       bool complete,
-             Priority priorita): Attivita(title,id,note,complete,priorita),cfu(cfu),voto(0), lode(false), sede(sede), dataEsame(dataEsame), verbalizzabile(false) {}
+             Priority priorita): Attivita(title,id,note,dataEsame,complete,priorita),cfu(cfu),voto(0), lode(false), sede(sede),  verbalizzabile(false) {}
 unsigned int Esame::getCFU() const
 {
     return cfu;
@@ -37,18 +37,7 @@ void Esame::modifyLode(bool l)
     if(voto==30) lode=l;
     else lode=false;
 }
-void Esame::changeDate(const QDate& data)
-{
-    dataEsame.setDate(data);
-}
-void Esame::changeTime(const QTime& time)
-{
-    dataEsame.setTime(time);
-}
-const QDateTime& Esame::getDate() const
-{
-    return dataEsame;
-}
+
 const QString& Esame::getSede() const
 {
     return sede;
@@ -78,15 +67,11 @@ bool Esame::isUrgente() const
     if(prior==Priority::alta) return true;
     //verifica per giorni, ignorando l'ora per indicare l'urgenza
     QDate oggi=QDate::currentDate();
-    int giorniMancanti=oggi.daysTo(dataEsame.date());
-    if(prior==Priority::media)
-    {
-        if(cfu>6&&giorniMancanti<=30) return true;
-        if(cfu<=6&&giorniMancanti<=14) return true;
-        return false;
-    }
-    if(cfu>6&&giorniMancanti<=14) return true;
-    if(cfu<=6&&giorniMancanti<=7) return true;
+    int giorniMancanti=oggi.daysTo(getDate().date());
+
+    if((giorniMancanti<0)||(prior==Priority::media&&((cfu>6&&giorniMancanti<=30)||(cfu<=6&&giorniMancanti<=14)))
+        ||(prior==Priority::bassa&&((cfu>6&&giorniMancanti<=14)||(cfu<=6&&giorniMancanti<=7))))
+    return true;
     return false;
 }
 }

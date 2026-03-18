@@ -2,6 +2,8 @@
 #define ATTIVITA_H
 #include<QString>
 #include<QDateTime>
+#include<QDate>
+#include<QTime>
 #include<vector>
 #include"activityvisitorinterface.h"
 #include"constactivityvisitorinterface.h"
@@ -17,11 +19,13 @@ private:
     bool complete;
     std::vector<QString> tag;
     QDateTime dataCreazione;
+    QDateTime dataFine;
     Priority priorita;
 public:
     Attivita(const QString& title,
              const unsigned int id,
              const QString& note,
+             const QDateTime& dataFine,
              bool complete=false,
              Priority priorita=Priority::bassa);
     virtual ~Attivita()=default;
@@ -37,6 +41,9 @@ public:
     void changePriority(Priority nuova);
     bool isComplete() const;
     void setComplete(bool flag=true); //flagga attivita
+    void changeDate(const QDate&);
+    void changeTime(const QTime&);
+    const QDateTime& getDate() const;
     const QDateTime& getDataCreazione() const;
     virtual void accept(ActivityVisitorInterface* visitor)=0;
     virtual void accept(ConstActivityVisitorInterface* visitor) const=0;

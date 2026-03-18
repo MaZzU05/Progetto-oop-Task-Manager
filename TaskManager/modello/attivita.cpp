@@ -4,10 +4,11 @@ namespace modello
 {
 //per id unico fallo esternamente, univocita' nella lista
 Attivita::Attivita(const QString& title,
-         const unsigned int id,
-         const QString& note,
-         bool complete,
-                   Priority priorita): title(title), id(id), note(note), complete(complete), dataCreazione(QDateTime::currentDateTime()), priorita(priorita) {}
+             const unsigned int id,
+             const QString& note,
+             const QDateTime& dataFine,
+             bool complete,
+             Priority priorita): title(title), id(id), note(note), complete(complete), dataCreazione(QDateTime::currentDateTime()), dataFine(dataFine), priorita(priorita) {}
 const QString& Attivita::getTitle() const
 {return title;}
 void Attivita::setTitle(const QString& tit)
@@ -62,5 +63,17 @@ bool Attivita::tagIsIn(const QString& t) const
     return sentinella;
 */
     return std::find(tag.begin(), tag.end(), t)!=tag.end();
+}
+void Attivita::changeDate(const QDate& data)
+{
+    dataFine.setDate(data);
+}
+void Attivita::changeTime(const QTime& time)
+{
+    dataFine.setTime(time);
+}
+const QDateTime& Attivita::getDate() const
+{
+    return dataFine;
 }
 }
