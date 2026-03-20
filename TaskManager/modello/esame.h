@@ -2,6 +2,7 @@
 #define ESAME_H
 #include"attivita.h"
 #include<QString>
+#include<vector>
 namespace modello
 {
 class Esame:public Attivita
@@ -12,6 +13,7 @@ private:
     bool lode;
     QString sede;
     bool verbalizzabile;
+    std::vector<QString> professori;
 public:
     Esame(const QString& title,
           const unsigned int id,
@@ -30,6 +32,9 @@ public:
     bool hasLode() const;
     void setSede(const QString&);
     const QString& getSede() const;
+    bool isProfessorIn(const QString&) const;
+    void addProfessor(const QString&);
+    bool removeProfessor(const QString&);
     void accept(ActivityVisitorInterface* visitor) override;
     void accept(ConstActivityVisitorInterface* visitor) const override;
     bool isUrgente() const override;

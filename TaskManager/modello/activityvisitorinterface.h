@@ -6,6 +6,7 @@ namespace modello
 class Esame;
 class Scadenza;
 class Appuntamento;
+class Sport;
 class ActivityVisitorInterface
 {
 public:
@@ -13,6 +14,7 @@ public:
     virtual void visit(Esame* e)=0;
     virtual void visit(Scadenza* s)=0;
     virtual void visit(Appuntamento* i)=0;
+    virtual void visit(Sport* s)=0;
 };
 }
 #endif // ACTIVITYVISITORINTERFACE_H

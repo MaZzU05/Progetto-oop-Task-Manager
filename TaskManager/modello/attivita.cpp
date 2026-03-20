@@ -66,7 +66,8 @@ bool Attivita::tagIsIn(const QString& t) const
 }
 void Attivita::changeDate(const QDate& data)
 {
-    dataFine.setDate(data);
+
+   dataFine.setDate(data);
 }
 void Attivita::changeTime(const QTime& time)
 {

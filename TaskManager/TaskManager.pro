@@ -14,7 +14,8 @@ SOURCES += \
     modello/appuntamento.cpp \
     modello/attivita.cpp \
     modello/esame.cpp \
-    modello/scadenza.cpp
+    modello/scadenza.cpp \
+    modello/sport.cpp
 
 HEADERS += \
     gui/mainwindow.h \
@@ -23,7 +24,8 @@ HEADERS += \
     modello/attivita.h \
     modello/constactivityvisitorinterface.h \
     modello/esame.h \
-    modello/scadenza.h
+    modello/scadenza.h \
+    modello/sport.h
 
 FORMS += \
     gui/mainwindow.ui

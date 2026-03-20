@@ -52,6 +52,22 @@ bool Esame::isPassed() const
 {
     return verbalizzabile;
 }
+bool Esame::isProfessorIn(const QString& prof) const
+{
+   auto it=std::find(professori.begin(), professori.end(), prof);
+    return it!=professori.end();
+}
+void Esame::addProfessor(const QString& prof)
+{
+    if(!isProfessorIn(prof)) professori.push_back(prof);
+}
+//restituisco falso se non era presente
+bool Esame::removeProfessor(const QString& Prof)
+{
+    if(!isProfessorIn(Prof)) return false;
+    professori.erase(std::remove_if(professori.begin(), professori.end(), [&Prof](const QString& p){return p==Prof;}), professori.end());
+    return true;
+}
 void Esame::accept(ActivityVisitorInterface* visitor)
 {
     visitor->visit(this);
