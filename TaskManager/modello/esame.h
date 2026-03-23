@@ -12,7 +12,6 @@ private:
     unsigned int voto;
     bool lode;
     QString sede;
-    bool verbalizzabile;
     std::vector<QString> professori;
 public:
     Esame(const QString& title,

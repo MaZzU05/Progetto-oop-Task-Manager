@@ -69,9 +69,9 @@ bool Sport::isUrgente() const
     if((data_oggi.daysTo(getDate().date())<0)||(isGiornoAllenamento(giornoSet)&&
          (oreMancanti>=0&&
          ((prior==Priority::alta&&(oreMancanti<12))||
-         (prior==Priority::media&&((oreMancanti/3600.0)<4))||
-         (prior==Priority::bassa&&((oreMancanti/3600.0)<1)))
-            )))
+         (prior==Priority::media&&(oreMancanti<4))||
+         (prior==Priority::bassa&&(oreMancanti)<1)))
+            ))
         return true;
     return false;
 }

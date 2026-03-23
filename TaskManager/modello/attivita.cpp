@@ -33,7 +33,7 @@ const std::vector<QString>& Attivita::getAllTag() const
 }
 void Attivita::addTag(const QString& t)
 {
-    tag.push_back(t);
+    if(!tagIsIn(t)) tag.push_back(t);
 }
 Priority Attivita::getPriority() const
 {
