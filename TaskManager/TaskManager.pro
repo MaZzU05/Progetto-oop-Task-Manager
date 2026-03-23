@@ -14,17 +14,20 @@ SOURCES += \
     modello/appuntamento.cpp \
     modello/attivita.cpp \
     modello/esame.cpp \
+    modello/gestore.cpp \
     modello/libretto.cpp \
     modello/scadenza.cpp \
     modello/sport.cpp
 
 HEADERS += \
     gui/mainwindow.h \
+    modello/abstractfilter.h \
     modello/activityvisitorinterface.h \
     modello/appuntamento.h \
     modello/attivita.h \
     modello/constactivityvisitorinterface.h \
     modello/esame.h \
+    modello/gestore.h \
     modello/libretto.h \
     modello/scadenza.h \
     modello/sport.h

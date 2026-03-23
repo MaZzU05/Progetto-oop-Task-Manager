@@ -22,6 +22,7 @@ public:
           const QDateTime& dataEsame,
           bool complete=false,
           Priority priorita=Priority::bassa);
+    Esame* clone() const override;
     unsigned int getCFU() const;
     unsigned int getVoto() const;
     bool setVoto(unsigned int); //ritorna true se voto valido (<=30) e lo modifica,  false altrimenti senza modifiche

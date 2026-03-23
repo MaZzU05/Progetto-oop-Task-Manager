@@ -29,6 +29,7 @@ public:
              bool complete=false,
              Priority priorita=Priority::bassa);
     virtual ~Attivita()=default;
+    virtual Attivita* clone() const=0;
     const QString& getTitle() const;
     void setTitle(const QString& tit);
     unsigned int getID() const;

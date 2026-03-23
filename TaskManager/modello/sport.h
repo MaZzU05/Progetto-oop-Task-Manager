@@ -24,6 +24,7 @@ public:
           const QTime& durata,
           bool complete=false,
           Priority priorita=Priority::bassa);
+    Sport* clone() const override;
     const QString& getLuogo() const;
     void setLuogo(const QString& l);
     const QTime& getDurata() const;

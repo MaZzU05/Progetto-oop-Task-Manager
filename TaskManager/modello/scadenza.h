@@ -26,6 +26,7 @@ public:
              unsigned int giorniPreavviso,
              bool complete=false,
              Priority priorita=Priority::bassa);
+    Scadenza* clone() const override;
     unsigned int getGiorniPreavviso() const;
     void setGiorniPreavviso(unsigned int);
     void addPassaggio(const QString&);

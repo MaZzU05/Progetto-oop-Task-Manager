@@ -9,6 +9,10 @@ Scadenza::Scadenza(const QString& title,
          unsigned int giorniPreavviso,
          bool complete,
                    Priority priorita):Attivita(title, id, note, dataFine, complete, priorita), giorniPreavviso(giorniPreavviso) {}
+Scadenza* Scadenza::clone() const
+{
+    return new Scadenza(*this);
+}
 unsigned int Scadenza::getGiorniPreavviso() const
 {return giorniPreavviso;}
 void Scadenza::setGiorniPreavviso(unsigned int g)

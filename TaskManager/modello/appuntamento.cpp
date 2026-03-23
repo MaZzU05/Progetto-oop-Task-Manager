@@ -13,7 +13,10 @@ Appuntamento::Appuntamento(const QString& title,
              bool complete,
             Priority priorita):
     Attivita(title, id, note, dataFine, complete, priorita), luogo(luogo), durata(durata), inPresenza(inPresenza) {}
-
+Appuntamento* Appuntamento::clone() const
+{
+    return new Appuntamento(*this);
+}
 const QString& Appuntamento::getLuogo() const
 {
     return luogo;

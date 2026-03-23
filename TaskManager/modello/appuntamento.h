@@ -23,6 +23,7 @@ public:
                  bool inPresenza,
                  bool complete=false,
                  Priority priorita=Priority::bassa);
+    Appuntamento* clone() const override;
     const QString& getLuogo() const;
     void setLuogo(const QString&);
     const QTime& getDurata() const;

@@ -10,6 +10,10 @@ Esame::Esame(const QString& title,
       const QDateTime& dataEsame,
       bool complete,
              Priority priorita): Attivita(title,id,note,dataEsame,complete,priorita),cfu(cfu),voto(0), lode(false), sede(sede) {}
+Esame* Esame::clone() const
+{
+    return new Esame(*this);
+}
 unsigned int Esame::getCFU() const
 {
     return cfu;

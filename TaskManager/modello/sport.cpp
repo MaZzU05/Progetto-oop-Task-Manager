@@ -10,6 +10,10 @@ Sport::Sport(const QString& title,
              const QTime& durata,
              bool complete,
              Priority priorita): Attivita(title, id, note, dataFine, complete, priorita), luogo(luogo), durata(durata) {}
+Sport* Sport::clone() const
+{
+    return new Sport(*this);
+}
 const QString& Sport::getLuogo() const
 {
     return luogo;
@@ -70,7 +74,7 @@ bool Sport::isUrgente() const
          (oreMancanti>=0&&
          ((prior==Priority::alta&&(oreMancanti<12))||
          (prior==Priority::media&&(oreMancanti<4))||
-         (prior==Priority::bassa&&(oreMancanti)<1)))
+                                                                                                             (prior==Priority::bassa&&(oreMancanti<1))))
             ))
         return true;
     return false;
