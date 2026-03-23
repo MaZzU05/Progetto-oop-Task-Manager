@@ -1,4 +1,5 @@
 #include "esame.h"
+#include<algorithm>
 namespace modello
 {
 Esame::Esame(const QString& title,

@@ -22,7 +22,7 @@ void Scadenza::addPassaggio(const QString& p)
 //La QString passata do per assunto che sia dentro il vettore, la ricevera' dalla gui
 void Scadenza::setPassaggioCompletato(const QString& tag_Elemento,  bool completato)
 {
-    std::for_each_n(todoList.begin(), todoList.end(), [&tag_Elemento, completato](SottoTask& t){if(t.descrizione==tag_Elemento) t.completa=completato;});
+    std::for_each(todoList.begin(), todoList.end(), [&tag_Elemento, completato](SottoTask& t){if(t.descrizione==tag_Elemento) t.completa=completato;});
 }
 unsigned int Scadenza::getNumPassaggiTotali() const
 {
