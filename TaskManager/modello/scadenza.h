@@ -29,9 +29,11 @@ public:
     unsigned int getGiorniPreavviso() const;
     void setGiorniPreavviso(unsigned int);
     void addPassaggio(const QString&);
-    void setPassaggioCompletato(unsigned int index, bool completato);
-    unsigned int getPassaggiTotali() const;
-    unsigned int getPassaggiCompletati() const;
+    void setPassaggioCompletato(const QString& tag_Elemento, bool completato);
+    unsigned int getNumPassaggiTotali() const;
+    unsigned int getNumPassaggiCompletati() const;
+    std::vector<QString> getPassaggiCompletati() const;
+    std::vector<QString> getPassaggiNonCompletati() const;
     void accept(ActivityVisitorInterface* visitor) override;
     void accept(ConstActivityVisitorInterface* visitor) const override;
     bool isUrgente() const override;
