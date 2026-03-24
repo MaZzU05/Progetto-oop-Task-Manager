@@ -72,7 +72,7 @@ Attivita* Gestore::getAttivitaById(unsigned int id) const
     for(Attivita* a:listaAttivita) if(a->getID()==id) return a;
     return nullptr;
 }
-std::vector<Attivita*> Gestore::filtra(const AbstractFilter& af) const
+std::vector<Attivita*> Gestore::filtra(const filtro::AbstractFilter& af) const
 {
     std::vector<Attivita*> aux;
     std::for_each(listaAttivita.begin(), listaAttivita.end(),

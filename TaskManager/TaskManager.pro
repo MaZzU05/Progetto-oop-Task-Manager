@@ -11,6 +11,10 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     gui/mainwindow.cpp \
+    modello/Filtri/filtrocompletate.cpp \
+    modello/Filtri/filtronome.cpp \
+    modello/Filtri/filtropriorita.cpp \
+    modello/Filtri/filtrotipo.cpp \
     modello/appuntamento.cpp \
     modello/attivita.cpp \
     modello/esame.cpp \
@@ -21,7 +25,11 @@ SOURCES += \
 
 HEADERS += \
     gui/mainwindow.h \
-    modello/abstractfilter.h \
+    modello/Filtri/filtrocompletate.h \
+    modello/Filtri/filtronome.h \
+    modello/Filtri/filtropriorita.h \
+    modello/Filtri/filtrotipo.h \
+    modello/Filtri/abstractfilter.h \
     modello/activityvisitorinterface.h \
     modello/appuntamento.h \
     modello/attivita.h \

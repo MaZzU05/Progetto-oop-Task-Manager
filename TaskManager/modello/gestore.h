@@ -1,7 +1,7 @@
 #ifndef GESTORE_H
 #define GESTORE_H
 #include"attivita.h"
-#include"abstractfilter.h"
+#include"Filtri/abstractfilter.h"
 #include<vector>
 namespace modello
 {
@@ -14,7 +14,6 @@ public:
     ~Gestore();
     //rule of three
     Gestore(const Gestore&);
-    bool operator!=(const Gestore& g) const;
     Gestore& operator=(const Gestore&);
     unsigned int generaNuovoId() const;
     void addAttivita(Attivita* a);
@@ -23,7 +22,7 @@ public:
     void svuota();
     const std::vector<Attivita*>& getAllAttivita() const;
     Attivita* getAttivitaById(unsigned int id) const;
-    std::vector<Attivita*> filtra(const AbstractFilter& af) const;
+    std::vector<Attivita*> filtra(const filtro::AbstractFilter& af) const;
 };
 }
 #endif // GESTORE_H
