@@ -1,6 +1,6 @@
 #ifndef FILTRONOME_H
 #define FILTRONOME_H
-#include"../TaskManager/modello/attivita.h"
+#include"../attivita.h"
 #include"abstractfilter.h"
 #include<QString>
 namespace modello

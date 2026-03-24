@@ -1,7 +1,7 @@
 #ifndef FILTROTIPO_H
 #define FILTROTIPO_H
 #include"abstractfilter.h"
-#include"../TaskManager/modello/constactivityvisitorinterface.h"
+#include"../constactivityvisitorinterface.h"
 namespace modello{
 namespace filtro
 {

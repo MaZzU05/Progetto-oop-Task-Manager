@@ -1,6 +1,6 @@
 #ifndef ABSTRACTFILTER_H
 #define ABSTRACTFILTER_H
-#include"../TaskManager/modello/attivita.h"
+#include"../attivita.h"
 namespace modello
 {
 namespace filtro
