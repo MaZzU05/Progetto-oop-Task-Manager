@@ -7,8 +7,9 @@ Attivita::Attivita(const QString& title,
              const unsigned int id,
              const QString& note,
              const QDateTime& dataFine,
+             const unsigned int durata,
              bool complete,
-             Priority priorita): title(title), id(id), note(note), complete(complete), dataCreazione(QDateTime::currentDateTime()), dataFine(dataFine), priorita(priorita) {}
+             Priority priorita): title(title), id(id), note(note), complete(complete), dataCreazione(QDateTime::currentDateTime()), dataFine(dataFine), durata(durata), priorita(priorita) {}
 const QString& Attivita::getTitle() const
 {return title;}
 void Attivita::setTitle(const QString& tit)
@@ -77,4 +78,23 @@ const QDateTime& Attivita::getDate() const
 {
     return dataFine;
 }
+bool Attivita::avvieneInData(const QDate& data) const
+{
+    return dataFine.date()==data;
 }
+unsigned int Attivita::getDurata() const
+{
+    return durata;
+}
+void Attivita::setDurata(const unsigned int d)
+{
+    durata=d;
+}
+}
+
+
+
+
+
+
+

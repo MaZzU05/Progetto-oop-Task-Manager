@@ -20,12 +20,14 @@ private:
     std::vector<QString> tag;
     QDateTime dataCreazione;
     QDateTime dataFine;
+    unsigned int durata; //spostata nella classe base, e cambiato il tipo da QTime ad unsigned int considerandolo per i minuti, effettivamente QTime era abbastanza ambiguo e sbagliato
     Priority priorita;
 public:
     Attivita(const QString& title,
              const unsigned int id,
              const QString& note,
              const QDateTime& dataFine,
+             const unsigned int durata,
              bool complete=false,
              Priority priorita=Priority::bassa);
     virtual ~Attivita()=default;
@@ -46,6 +48,10 @@ public:
     void changeTime(const QTime&);
     const QDateTime& getDate() const;
     const QDateTime& getDataCreazione() const;
+    //spostate nella classe base per chiare motivazioni logiche
+    unsigned int getDurata() const;
+    void setDurata(const unsigned int d);
+    virtual bool avvieneInData(const QDate&) const; //aggiunto per gestire problema della attivita ricorrente in sport
     virtual void accept(ActivityVisitorInterface* visitor)=0;
     virtual void accept(ConstActivityVisitorInterface* visitor) const=0;
     virtual bool isUrgente() const =0; //avra' un comportamento polimorfo in base alla specializzazione di attivita, ricordati dipensarle

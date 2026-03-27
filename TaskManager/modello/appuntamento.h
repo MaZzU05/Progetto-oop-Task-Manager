@@ -10,7 +10,6 @@ class Appuntamento: public Attivita
 {
 private:
     QString luogo;
-    QTime durata;
     bool inPresenza;
     std::vector<QString> partecipanti;
 public:
@@ -19,15 +18,13 @@ public:
                  const QString& note,
                  const QDateTime& dataFine,
                  const QString& luogo,
-                 const QTime& durata,
+                 const unsigned int durata,
                  bool inPresenza,
                  bool complete=false,
                  Priority priorita=Priority::bassa);
     Appuntamento* clone() const override;
     const QString& getLuogo() const;
     void setLuogo(const QString&);
-    const QTime& getDurata() const;
-    void setDurata(const QTime&);
     bool isInPresenza() const;
     void setPresenza(bool);
     bool addPartecipante(const QString&);

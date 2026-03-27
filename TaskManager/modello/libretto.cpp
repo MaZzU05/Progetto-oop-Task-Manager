@@ -19,7 +19,9 @@ unsigned int Libretto::getCfuCompletati() const
 }
 unsigned int Libretto::getCfuMancanti() const
 {
-    return cfu_totali-getCfuCompletati();
+    unsigned int completati = getCfuCompletati();
+    return completati >= cfu_totali ? 0 : cfu_totali - completati;
+
 }
 double Libretto::getMediaPesata() const
 {

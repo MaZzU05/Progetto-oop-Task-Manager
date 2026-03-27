@@ -20,6 +20,7 @@ public:
           const QString& sede,
           const unsigned int cfu,
           const QDateTime& dataEsame,
+          const unsigned int durata,
           bool complete=false,
           Priority priorita=Priority::bassa);
     Esame* clone() const override;

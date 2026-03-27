@@ -8,11 +8,11 @@ Appuntamento::Appuntamento(const QString& title,
              const QString& note,
              const QDateTime& dataFine,
              const QString& luogo,
-             const QTime& durata,
+             const unsigned int durata,
              bool inPresenza,
              bool complete,
             Priority priorita):
-    Attivita(title, id, note, dataFine, complete, priorita), luogo(luogo), durata(durata), inPresenza(inPresenza) {}
+    Attivita(title, id, note, dataFine, durata, complete, priorita), luogo(luogo), inPresenza(inPresenza) {}
 Appuntamento* Appuntamento::clone() const
 {
     return new Appuntamento(*this);
@@ -24,14 +24,6 @@ const QString& Appuntamento::getLuogo() const
 void Appuntamento::setLuogo(const QString& l)
 {
     luogo=l;
-}
-const QTime& Appuntamento::getDurata() const
-{
-    return durata;
-}
-void Appuntamento::setDurata(const QTime& d)
-{
-    durata=d;
 }
 bool Appuntamento::isInPresenza() const
 {

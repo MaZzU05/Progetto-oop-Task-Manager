@@ -6,9 +6,9 @@ Scadenza::Scadenza(const QString& title,
          const unsigned int id,
          const QString& note,
          const QDateTime& dataFine,
-         unsigned int giorniPreavviso,
+         const unsigned int giorniPreavviso,
          bool complete,
-                   Priority priorita):Attivita(title, id, note, dataFine, complete, priorita), giorniPreavviso(giorniPreavviso) {}
+                   Priority priorita):Attivita(title, id, note, dataFine,0, complete, priorita), giorniPreavviso(giorniPreavviso) {}
 Scadenza* Scadenza::clone() const
 {
     return new Scadenza(*this);

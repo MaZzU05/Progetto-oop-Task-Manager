@@ -5,7 +5,7 @@ namespace modello
 FiltroData::FiltroData(const QDate& target): target(target) {}
 bool FiltroData::filtra(const Attivita* a) const
 {
-    return a->getDate().date()==target;
+    return a->avvieneInData(target);
 }
 
 }}

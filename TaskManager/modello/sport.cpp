@@ -6,10 +6,11 @@ Sport::Sport(const QString& title,
              const unsigned int id,
              const QString& note,
              const QDateTime& dataFine,
+             const unsigned int durata,
+             const QDate& dataInizio,
              const QString& luogo,
-             const QTime& durata,
              bool complete,
-             Priority priorita): Attivita(title, id, note, dataFine, complete, priorita), luogo(luogo), durata(durata) {}
+             Priority priorita): Attivita(title, id, note, dataFine, durata, complete, priorita), luogo(luogo), dataInizio(dataInizio) {}
 Sport* Sport::clone() const
 {
     return new Sport(*this);
@@ -22,14 +23,7 @@ void Sport::setLuogo(const QString& l)
 {
     luogo=l;
 }
-const QTime& Sport::getDurata() const
-{
-    return durata;
-}
-void Sport::setDurata(const QTime& d)
-{
-    durata=d;
-}
+
 void Sport::removeGiornoSettimana(Qt::DayOfWeek giornoDaRimuovere)
 {
     //remove_if sposta gli elementi validi dopo il past_the_end, e ne ritorna l'iteratore, lo combino con erase
@@ -74,9 +68,15 @@ bool Sport::isUrgente() const
          (oreMancanti>=0&&
          ((prior==Priority::alta&&(oreMancanti<12))||
          (prior==Priority::media&&(oreMancanti<4))||
-                                                                                                             (prior==Priority::bassa&&(oreMancanti<1))))
-            ))
+         (prior==Priority::bassa&&(oreMancanti<1)))
+          )))
         return true;
+    return false;
+}
+bool Sport::avvieneInData(const QDate& giorno) const
+{
+    bool inRange=dataInizio.daysTo(giorno)>=0&&giorno.daysTo(getDate().date())>=0;
+    if(inRange&&isGiornoAllenamento(static_cast<Qt::DayOfWeek>(giorno.dayOfWeek()))) return true;
     return false;
 }
 }

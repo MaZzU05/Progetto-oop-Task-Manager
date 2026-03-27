@@ -8,8 +8,9 @@ Esame::Esame(const QString& title,
       const QString& sede,
       const unsigned int cfu,
       const QDateTime& dataEsame,
+      const unsigned int durata,
       bool complete,
-             Priority priorita): Attivita(title,id,note,dataEsame,complete,priorita),cfu(cfu),voto(0), lode(false), sede(sede) {}
+             Priority priorita): Attivita(title,id,note,dataEsame,durata, complete,priorita),cfu(cfu),voto(0), lode(false), sede(sede) {}
 Esame* Esame::clone() const
 {
     return new Esame(*this);

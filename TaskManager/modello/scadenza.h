@@ -19,11 +19,12 @@ class Scadenza:public Attivita
     unsigned int giorniPreavviso;
     std::vector<SottoTask> todoList;
 public:
+    //durata impostata a 0 di default dato che una scadenza non ha durata
     Scadenza(const QString& title,
              const unsigned int id,
              const QString& note,
              const QDateTime& dataFine,
-             unsigned int giorniPreavviso,
+             const unsigned int giorniPreavviso,
              bool complete=false,
              Priority priorita=Priority::bassa);
     Scadenza* clone() const override;
