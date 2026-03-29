@@ -3,6 +3,7 @@
 #include"attivita.h"
 #include"Filtri/abstractfilter.h"
 #include<vector>
+#include<QString>
 namespace modello
 {
 class Gestore
@@ -23,8 +24,8 @@ public:
     const std::vector<Attivita*>& getAllAttivita() const;
     Attivita* getAttivitaById(unsigned int id) const;
     std::vector<Attivita*> filtra(const filtro::AbstractFilter& af) const;
-    bool salva() const;
-    bool carica();
+    bool salva(const QString& nomeFile = "dati_salvati.json") const;
+    bool carica(const QString& nomeFile = "dati_salvati.json");
 };
 }
 #endif // GESTORE_H

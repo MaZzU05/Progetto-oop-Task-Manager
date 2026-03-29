@@ -91,7 +91,7 @@ std::vector<Attivita*> Gestore::filtra(const filtro::AbstractFilter& af) const
     });
     return aux;
 }
- bool Gestore::salva() const
+ bool Gestore::salva(const QString& nomeFile) const
 {
      QJsonArray daSalvare;
      for(Attivita* a:listaAttivita)
@@ -105,7 +105,7 @@ std::vector<Attivita*> Gestore::filtra(const filtro::AbstractFilter& af) const
      //va trasformato in sequenza di byte, uso indented che occupa piu' spazio ma e' piu' leggibile, almeno per essere sicuro funzioni correttamente
      QByteArray datiJson=doc.toJson(QJsonDocument::Indented);
      //apro il file
-     QFile file("dati_salvati.json");
+     QFile file(nomeFile);
      //controllo se l'apertura funziona, altrimenti ritorno falso
      if(file.open(QIODevice::WriteOnly))
      {
@@ -115,12 +115,12 @@ std::vector<Attivita*> Gestore::filtra(const filtro::AbstractFilter& af) const
      }
      return false;
 }
-bool Gestore::carica()
+bool Gestore::carica(const QString& nomeFile)
 {
     //seguiro il processo inverso al salvataggio
     //svuoto le attivita' attualmente in ram, se no avrei duplicati
     svuota();
-    QFile file("dati_salvati.json");
+    QFile file(nomeFile);
     if(file.open(QIODevice::ReadOnly))
     {
         QByteArray datiJson=file.readAll();
@@ -130,18 +130,26 @@ bool Gestore::carica()
         {
             QJsonObject aux=(*it).toObject();
             QString tipo=aux["Tipo"].toString();
+            if(tipo!="Esame"&&tipo!="Scadenza"&&tipo!="Appuntamento"&&tipo!="Sport")
+            {
+                svuota();
+                file.close();
+                return false;
+            }
+            //gli attributi della base li estrago gia', per rispettare il principio DRY
+            //so che alcuni cast sono impliciti ma li esplicito per leggibilita'
+            QString title=aux["title"].toString();
+            unsigned int id=static_cast<unsigned int>(aux["id"].toInt());
+            QString note=aux["note"].toString();
+            bool complete=aux["complete"].toBool();
+            //leggo dalla stringa in formato iso, converte automaticamente in data
+            QDateTime dataCreazione=QDateTime::fromString(aux["dataCreazione"].toString(), Qt::ISODate);
+            QDateTime dataFine=QDateTime::fromString(aux["dataFine"].toString(), Qt::ISODate);
+            unsigned int durata=static_cast<unsigned int>(aux["durata"].toInt());
+            Priority priorita=static_cast<Priority>(aux["priorita"].toInt());
             if(tipo=="Esame")
             {
-                //so che alcuni cast sono impliciti ma li esplicito per leggibilita'
-                QString title=aux["title"].toString();
-                unsigned int id=static_cast<unsigned int>(aux["id"].toInt());
-                QString note=aux["note"].toString();
-                bool complete=aux["complete"].toBool();
-                //leggo dalla stringa in formato iso, converte automaticamente in data
-                QDateTime dataCreazione=QDateTime::fromString(aux["dataCreazione"].toString(), Qt::ISODate);
-                QDateTime dataFine=QDateTime::fromString(aux["dataFine"].toString(), Qt::ISODate);
-                unsigned int durata=static_cast<unsigned int>(aux["durata"].toInt());
-                Priority priorita=static_cast<Priority>(aux["priorita"].toInt());
+
                 unsigned int cfu=static_cast<unsigned int>(aux["cfu"].toInt());
                 unsigned int voto=static_cast<unsigned int>(aux["voto"].toInt());
                 bool lode=aux["lode"].toBool();
@@ -162,16 +170,7 @@ bool Gestore::carica()
 
             }
             else if(tipo=="Scadenza")
-            {   //so che alcuni cast sono impliciti ma li esplicito per leggibilita'
-                QString title=aux["title"].toString();
-                unsigned int id=static_cast<unsigned int>(aux["id"].toInt());
-                QString note=aux["note"].toString();
-                bool complete=aux["complete"].toBool();
-                //leggo dalla stringa in formato iso, converte automaticamente in data
-                QDateTime dataCreazione=QDateTime::fromString(aux["dataCreazione"].toString(), Qt::ISODate);
-                QDateTime dataFine=QDateTime::fromString(aux["dataFine"].toString(), Qt::ISODate);
-                unsigned int durata=static_cast<unsigned int>(aux["durata"].toInt());
-                Priority priorita=static_cast<Priority>(aux["priorita"].toInt());
+            {
                 unsigned int giorniPreavviso=static_cast<unsigned int>(aux["giorniPreavviso"].toInt());
                 Scadenza* s=new Scadenza(title, id, note, dataFine, durata, giorniPreavviso, complete, priorita);
                 s->changeDataCreazione(dataCreazione);
@@ -190,15 +189,6 @@ bool Gestore::carica()
             }
             else if(tipo=="Appuntamento")
             {
-                QString title=aux["title"].toString();
-                unsigned int id=static_cast<unsigned int>(aux["id"].toInt());
-                QString note=aux["note"].toString();
-                bool complete=aux["complete"].toBool();
-                //leggo dalla stringa in formato iso, converte automaticamente in data
-                QDateTime dataCreazione=QDateTime::fromString(aux["dataCreazione"].toString(), Qt::ISODate);
-                QDateTime dataFine=QDateTime::fromString(aux["dataFine"].toString(), Qt::ISODate);
-                unsigned int durata=static_cast<unsigned int>(aux["durata"].toInt());
-                Priority priorita=static_cast<Priority>(aux["priorita"].toInt());
                 QString luogo=aux["luogo"].toString();
                 bool inPresenza=aux["inPresenza"].toBool();
                 Appuntamento* a=new Appuntamento(title, id, note, dataFine, luogo, durata,inPresenza, complete, priorita);
@@ -216,15 +206,6 @@ bool Gestore::carica()
             }
             else if(tipo=="Sport")
             {
-                QString title=aux["title"].toString();
-                unsigned int id=static_cast<unsigned int>(aux["id"].toInt());
-                QString note=aux["note"].toString();
-                bool complete=aux["complete"].toBool();
-                //leggo dalla stringa in formato iso, converte automaticamente in data
-                QDateTime dataCreazione=QDateTime::fromString(aux["dataCreazione"].toString(), Qt::ISODate);
-                QDateTime dataFine=QDateTime::fromString(aux["dataFine"].toString(), Qt::ISODate);
-                unsigned int durata=static_cast<unsigned int>(aux["durata"].toInt());
-                Priority priorita=static_cast<Priority>(aux["priorita"].toInt());
                 QString luogo=aux["luogo"].toString();
                 QDate dataInizio=QDate::fromString(aux["dataInizio"].toString(),Qt::ISODate);
                 Sport* s=new Sport(title, id, note, dataFine, durata,dataInizio,luogo, complete, priorita);
@@ -239,12 +220,7 @@ bool Gestore::carica()
                 }
                 addAttivita(s);
             }
-            else
-            {
-                svuota();
-                file.close();
-                return false;
-            }
+
         }
         file.close();
         return true;
