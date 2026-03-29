@@ -7,8 +7,9 @@ Scadenza::Scadenza(const QString& title,
          const QString& note,
          const QDateTime& dataFine,
          const unsigned int giorniPreavviso,
+         const unsigned int durata,
          bool complete,
-                   Priority priorita):Attivita(title, id, note, dataFine,0, complete, priorita), giorniPreavviso(giorniPreavviso) {}
+                   Priority priorita):Attivita(title, id, note, dataFine, durata, complete, priorita), giorniPreavviso(giorniPreavviso) {}
 Scadenza* Scadenza::clone() const
 {
     return new Scadenza(*this);
@@ -50,6 +51,13 @@ std::vector<QString> Scadenza::getPassaggiNonCompletati() const
 {
     std::vector<QString> aux;
     std::for_each(todoList.begin(), todoList.end(), [&aux](const SottoTask& t){if(!t.completa) aux.push_back(t.descrizione);});
+    return aux;
+}
+std::vector<std::pair<QString, bool>> Scadenza::getAllSottoTask() const
+{
+    std::vector<std::pair<QString,bool>> aux;
+    for(SottoTask t:todoList)
+        aux.push_back(std::pair<QString,bool>(t.descrizione,t.completa));
     return aux;
 }
 void Scadenza::accept(ActivityVisitorInterface* visitor)

@@ -46,6 +46,7 @@ public:
     void setComplete(bool flag=true); //flagga attivita
     void changeDate(const QDate&);
     void changeTime(const QTime&);
+    void changeDataCreazione(const QDateTime&);
     const QDateTime& getDate() const;
     const QDateTime& getDataCreazione() const;
     //spostate nella classe base per chiare motivazioni logiche

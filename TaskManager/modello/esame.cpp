@@ -73,6 +73,10 @@ bool Esame::removeProfessor(const QString& Prof)
     professori.erase(std::remove_if(professori.begin(), professori.end(), [&Prof](const QString& p){return p==Prof;}), professori.end());
     return true;
 }
+std::vector<QString> Esame::getAllProf() const
+{
+    return professori;
+}
 void Esame::accept(ActivityVisitorInterface* visitor)
 {
     visitor->visit(this);

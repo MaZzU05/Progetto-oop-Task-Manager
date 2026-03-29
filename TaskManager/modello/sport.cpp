@@ -47,6 +47,18 @@ const QTime Sport::getOraAllenamento() const
 {
     return getDate().time();
 }
+void Sport::setDataInizio(const QDate& d)
+{
+    dataInizio=d;
+}
+QDate Sport::getDataInizio() const
+{
+    return dataInizio;
+}
+std::vector<Qt::DayOfWeek> Sport::getAllGiorniSettimanali() const
+{
+    return giorni_sport;
+}
 void Sport::accept(ActivityVisitorInterface* visitor)
 {
     visitor->visit(this);

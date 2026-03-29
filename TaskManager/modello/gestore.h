@@ -23,6 +23,8 @@ public:
     const std::vector<Attivita*>& getAllAttivita() const;
     Attivita* getAttivitaById(unsigned int id) const;
     std::vector<Attivita*> filtra(const filtro::AbstractFilter& af) const;
+    bool salva() const;
+    bool carica();
 };
 }
 #endif // GESTORE_H

@@ -56,6 +56,8 @@ void Appuntamento::removePartecipante(const QString& daRimuovere)
     auto it=std::find(partecipanti.begin(), partecipanti.end(), daRimuovere);
     if(it!=partecipanti.end()) partecipanti.erase(it);
 }
+std::vector<QString> Appuntamento::getAllPartecipanti() const
+{ return partecipanti;}
 void Appuntamento::accept(ActivityVisitorInterface* visitor)
 {
     visitor->visit(this);

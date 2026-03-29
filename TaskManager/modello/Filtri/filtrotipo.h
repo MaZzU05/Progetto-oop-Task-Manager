@@ -22,7 +22,7 @@ private:
         checkVisitor(ricercaTipo tipoTarget);
         void visit(const Esame* e) override;
         void visit(const Scadenza* s) override;
-        void visit(const Appuntamento* i) override;
+        void visit(const Appuntamento* a) override;
         void visit(const Sport* s) override;
     };
 public:

@@ -29,6 +29,7 @@ SOURCES += \
     modello/attivita.cpp \
     modello/esame.cpp \
     modello/gestore.cpp \
+    modello/jsonsavervisitor.cpp \
     modello/libretto.cpp \
     modello/scadenza.cpp \
     modello/sport.cpp
@@ -51,6 +52,7 @@ HEADERS += \
     modello/constactivityvisitorinterface.h \
     modello/esame.h \
     modello/gestore.h \
+    modello/jsonsavervisitor.h \
     modello/libretto.h \
     modello/scadenza.h \
     modello/sport.h

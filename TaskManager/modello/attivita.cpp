@@ -90,6 +90,10 @@ void Attivita::setDurata(const unsigned int d)
 {
     durata=d;
 }
+void Attivita::changeDataCreazione(const QDateTime& d)
+{
+    dataCreazione=d;
+}
 }
 
 

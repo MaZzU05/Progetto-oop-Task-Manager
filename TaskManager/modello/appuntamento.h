@@ -29,6 +29,7 @@ public:
     void setPresenza(bool);
     bool addPartecipante(const QString&);
     void removePartecipante(const QString&);
+    std::vector<QString> getAllPartecipanti() const;
     void accept(ActivityVisitorInterface* visitor) override;
     void accept(ConstActivityVisitorInterface* visitor) const override;
     bool isUrgente() const override;

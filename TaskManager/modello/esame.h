@@ -36,6 +36,7 @@ public:
     bool isProfessorIn(const QString&) const;
     void addProfessor(const QString&);
     bool removeProfessor(const QString&);
+    std::vector<QString> getAllProf() const;
     void accept(ActivityVisitorInterface* visitor) override;
     void accept(ConstActivityVisitorInterface* visitor) const override;
     bool isUrgente() const override;

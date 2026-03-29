@@ -13,7 +13,7 @@ public:
     virtual ~ActivityVisitorInterface()=default;
     virtual void visit(Esame* e)=0;
     virtual void visit(Scadenza* s)=0;
-    virtual void visit(Appuntamento* i)=0;
+    virtual void visit(Appuntamento* a)=0;
     virtual void visit(Sport* s)=0;
 };
 }

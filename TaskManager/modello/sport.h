@@ -6,6 +6,7 @@
 #include<QTime>
 #include<QString>
 #include<vector>
+#include<utility>
 namespace modello
 {
 class Sport:public Attivita
@@ -31,7 +32,10 @@ public:
     const QTime getOraAllenamento() const;
     void setGiornoSettimana(Qt::DayOfWeek d);
     void removeGiornoSettimana(Qt::DayOfWeek giornoDaRimuovere);
+    std::vector<Qt::DayOfWeek> getAllGiorniSettimanali() const;
     bool isGiornoAllenamento(Qt::DayOfWeek d) const;
+    void setDataInizio(const QDate&);
+    QDate getDataInizio() const;
     void accept(ActivityVisitorInterface* visitor) override;
     void accept(ConstActivityVisitorInterface* visitor) const override;
     bool isUrgente() const override;

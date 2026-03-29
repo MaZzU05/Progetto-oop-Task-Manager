@@ -1,5 +1,14 @@
 #include "gestore.h"
+#include <QtCore/qjsonarray.h>
 #include<algorithm>
+#include"jsonsavervisitor.h"
+#include<QJsonDocument>
+#include<QFile>
+#include<QTextStream>
+#include"esame.h"
+#include"scadenza.h"
+#include"appuntamento.h"
+#include"sport.h"
 namespace modello
 {
 Gestore::~Gestore()
@@ -81,5 +90,166 @@ std::vector<Attivita*> Gestore::filtra(const filtro::AbstractFilter& af) const
         if(af.filtra(a)) aux.push_back(a);
     });
     return aux;
+}
+ bool Gestore::salva() const
+{
+     QJsonArray daSalvare;
+     for(Attivita* a:listaAttivita)
+     {
+         JsonSaverVisitor visitor;
+         a->accept(&visitor);
+         daSalvare.append(visitor.getJsonObject());
+     }
+     QJsonDocument doc; //"contenitore" dove appoggio il QJsonArray, necessario prima del salvataggio
+     doc.setArray(daSalvare);
+     //va trasformato in sequenza di byte, uso indented che occupa piu' spazio ma e' piu' leggibile, almeno per essere sicuro funzioni correttamente
+     QByteArray datiJson=doc.toJson(QJsonDocument::Indented);
+     //apro il file
+     QFile file("dati_salvati.json");
+     //controllo se l'apertura funziona, altrimenti ritorno falso
+     if(file.open(QIODevice::WriteOnly))
+     {
+         file.write(datiJson);
+         file.close();
+         return true;
+     }
+     return false;
+}
+bool Gestore::carica()
+{
+    //seguiro il processo inverso al salvataggio
+    //svuoto le attivita' attualmente in ram, se no avrei duplicati
+    svuota();
+    QFile file("dati_salvati.json");
+    if(file.open(QIODevice::ReadOnly))
+    {
+        QByteArray datiJson=file.readAll();
+        QJsonDocument doc=QJsonDocument::fromJson(datiJson);
+        QJsonArray daCaricare=doc.array();
+        for (auto it=daCaricare.begin(); it!=daCaricare.end(); it++)
+        {
+            QJsonObject aux=(*it).toObject();
+            QString tipo=aux["Tipo"].toString();
+            if(tipo=="Esame")
+            {
+                //so che alcuni cast sono impliciti ma li esplicito per leggibilita'
+                QString title=aux["title"].toString();
+                unsigned int id=static_cast<unsigned int>(aux["id"].toInt());
+                QString note=aux["note"].toString();
+                bool complete=aux["complete"].toBool();
+                //leggo dalla stringa in formato iso, converte automaticamente in data
+                QDateTime dataCreazione=QDateTime::fromString(aux["dataCreazione"].toString(), Qt::ISODate);
+                QDateTime dataFine=QDateTime::fromString(aux["dataFine"].toString(), Qt::ISODate);
+                unsigned int durata=static_cast<unsigned int>(aux["durata"].toInt());
+                Priority priorita=static_cast<Priority>(aux["priorita"].toInt());
+                unsigned int cfu=static_cast<unsigned int>(aux["cfu"].toInt());
+                unsigned int voto=static_cast<unsigned int>(aux["voto"].toInt());
+                bool lode=aux["lode"].toBool();
+                QString sede=aux["sede"].toString();
+                Esame* e=new Esame(title, id, note, sede, cfu, dataFine, durata, complete, priorita);
+                e->changeDataCreazione(dataCreazione);
+                e->setVoto(voto);
+                e->modifyLode(lode);
+                for(auto it=aux["tag"].toArray().begin(); it!=aux["tag"].toArray().end(); it++)
+                {
+                    e->addTag(it->toString());
+                }
+                for(auto it=aux["professori"].toArray().begin(); it!=aux["professori"].toArray().end(); it++)
+                {
+                    e->addProfessor(it->toString());
+                }
+                addAttivita(e);
+
+            }
+            else if(tipo=="Scadenza")
+            {   //so che alcuni cast sono impliciti ma li esplicito per leggibilita'
+                QString title=aux["title"].toString();
+                unsigned int id=static_cast<unsigned int>(aux["id"].toInt());
+                QString note=aux["note"].toString();
+                bool complete=aux["complete"].toBool();
+                //leggo dalla stringa in formato iso, converte automaticamente in data
+                QDateTime dataCreazione=QDateTime::fromString(aux["dataCreazione"].toString(), Qt::ISODate);
+                QDateTime dataFine=QDateTime::fromString(aux["dataFine"].toString(), Qt::ISODate);
+                unsigned int durata=static_cast<unsigned int>(aux["durata"].toInt());
+                Priority priorita=static_cast<Priority>(aux["priorita"].toInt());
+                unsigned int giorniPreavviso=static_cast<unsigned int>(aux["giorniPreavviso"].toInt());
+                Scadenza* s=new Scadenza(title, id, note, dataFine, durata, giorniPreavviso, complete, priorita);
+                s->changeDataCreazione(dataCreazione);
+                for(auto it=aux["tag"].toArray().begin(); it!=aux["tag"].toArray().end(); it++)
+                {
+                    s->addTag(it->toString());
+                }
+                for(auto it=aux["todoList"].toArray().begin(); it!=aux["todoList"].toArray().end(); it++)
+                {
+                    QJsonObject sottoTask=it->toObject();
+                    s->addPassaggio(sottoTask["descrizione"].toString());
+                    s->setPassaggioCompletato(sottoTask["descrizione"].toString(), sottoTask["completa"].toBool());
+                }
+                addAttivita(s);
+
+            }
+            else if(tipo=="Appuntamento")
+            {
+                QString title=aux["title"].toString();
+                unsigned int id=static_cast<unsigned int>(aux["id"].toInt());
+                QString note=aux["note"].toString();
+                bool complete=aux["complete"].toBool();
+                //leggo dalla stringa in formato iso, converte automaticamente in data
+                QDateTime dataCreazione=QDateTime::fromString(aux["dataCreazione"].toString(), Qt::ISODate);
+                QDateTime dataFine=QDateTime::fromString(aux["dataFine"].toString(), Qt::ISODate);
+                unsigned int durata=static_cast<unsigned int>(aux["durata"].toInt());
+                Priority priorita=static_cast<Priority>(aux["priorita"].toInt());
+                QString luogo=aux["luogo"].toString();
+                bool inPresenza=aux["inPresenza"].toBool();
+                Appuntamento* a=new Appuntamento(title, id, note, dataFine, luogo, durata,inPresenza, complete, priorita);
+                a->changeDataCreazione(dataCreazione);
+                for(auto it=aux["tag"].toArray().begin(); it!=aux["tag"].toArray().end(); it++)
+                {
+                    a->addTag(it->toString());
+                }
+                for(auto it=aux["partecipanti"].toArray().begin(); it!=aux["partecipanti"].toArray().end(); it++)
+                {
+                    a->addPartecipante(it->toString());
+                }
+                addAttivita(a);
+
+            }
+            else if(tipo=="Sport")
+            {
+                QString title=aux["title"].toString();
+                unsigned int id=static_cast<unsigned int>(aux["id"].toInt());
+                QString note=aux["note"].toString();
+                bool complete=aux["complete"].toBool();
+                //leggo dalla stringa in formato iso, converte automaticamente in data
+                QDateTime dataCreazione=QDateTime::fromString(aux["dataCreazione"].toString(), Qt::ISODate);
+                QDateTime dataFine=QDateTime::fromString(aux["dataFine"].toString(), Qt::ISODate);
+                unsigned int durata=static_cast<unsigned int>(aux["durata"].toInt());
+                Priority priorita=static_cast<Priority>(aux["priorita"].toInt());
+                QString luogo=aux["luogo"].toString();
+                QDate dataInizio=QDate::fromString(aux["dataInizio"].toString(),Qt::ISODate);
+                Sport* s=new Sport(title, id, note, dataFine, durata,dataInizio,luogo, complete, priorita);
+                s->changeDataCreazione(dataCreazione);
+                for(auto it=aux["tag"].toArray().begin(); it!=aux["tag"].toArray().end(); it++)
+                {
+                    s->addTag(it->toString());
+                }
+                for(auto it=aux["giorni_sport"].toArray().begin(); it!=aux["giorni_sport"].toArray().end(); it++)
+                {
+                    s->setGiornoSettimana(static_cast<Qt::DayOfWeek>(it->toInt()));
+                }
+                addAttivita(s);
+            }
+            else
+            {
+                svuota();
+                file.close();
+                return false;
+            }
+        }
+        file.close();
+        return true;
+    }
+    return false;
+
 }
 }
