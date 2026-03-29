@@ -1,3 +1,5 @@
+#per test
+#QT += core gui testlib
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -15,6 +17,7 @@ INCLUDEPATH += modello \
 
 SOURCES += \
     main.cpp \
+    #test_modello.cpp \
     gui/mainwindow.cpp \
     modello/Filtri/filtroanno.cpp \
     modello/Filtri/filtrocompletate.cpp \

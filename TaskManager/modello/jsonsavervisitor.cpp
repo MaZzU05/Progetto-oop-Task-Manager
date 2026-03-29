@@ -26,6 +26,8 @@ namespace modello
 //scritta per evitare di riscrivere il codice 4 volte, rispettando il principio DRY
 void JsonSaverVisitor::preparaBase(const Attivita* a)
 {
+    //svuoto preventivamente
+    daSalvare = QJsonObject();
     //attributi della base
     daSalvare["title"]=a->getTitle();
     //devo convertirlo da unsigned int a int o double per salvarlo nel QJsonObject, so che ci sarebbe il rischio di overflow ma e' ragionevole pensare di non avere cosi tante attivita
@@ -54,8 +56,8 @@ void JsonSaverVisitor::preparaBase(const Attivita* a)
  */
 void JsonSaverVisitor::visit(const Esame* e)
 {
-    daSalvare["Tipo"]="Esame";
     preparaBase(e);
+    daSalvare["Tipo"]="Esame";
     daSalvare["cfu"]=static_cast<int>(e->getCFU());
     daSalvare["voto"]=static_cast<int>(e->getVoto());
     daSalvare["lode"]=e->hasLode();
@@ -70,8 +72,8 @@ void JsonSaverVisitor::visit(const Esame* e)
     std::vector<SottoTask> todoList;*/
 void JsonSaverVisitor::visit(const Scadenza* s)
 {
-    daSalvare["Tipo"]="Scadenza";
     preparaBase(s);
+    daSalvare["Tipo"]="Scadenza";
     daSalvare["giorniPreavviso"]=static_cast<int>(s->getGiorniPreavviso());
     //per toDoList che e' una classe interna privata faccio una gestione ad hoc(anche per il salvataggio), creo dei QJsonObject, e li salvo nel QJsonArray
     QJsonArray todoList;
@@ -92,8 +94,8 @@ void JsonSaverVisitor::visit(const Scadenza* s)
     std::vector<QString> partecipanti;*/
 void JsonSaverVisitor::visit(const Appuntamento* a)
 {
-    daSalvare["Tipo"]="Appuntamento";
     preparaBase(a);
+    daSalvare["Tipo"]="Appuntamento";
     daSalvare["luogo"]=a->getLuogo();
     daSalvare["inPresenza"]=a->isInPresenza();
     QJsonArray partecipanti;
@@ -108,8 +110,8 @@ void JsonSaverVisitor::visit(const Appuntamento* a)
     std::vector<Qt::DayOfWeek> giorni_sport;*/
 void JsonSaverVisitor::visit(const Sport* s)
 {
-    daSalvare["Tipo"]="Sport";
     preparaBase(s);
+    daSalvare["Tipo"]="Sport";
     daSalvare["luogo"]=s->getLuogo();
     daSalvare["dataInizio"]=s->getDataInizio().toString(Qt::ISODate);
     QJsonArray giorni_sport;

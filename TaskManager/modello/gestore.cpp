@@ -94,9 +94,9 @@ std::vector<Attivita*> Gestore::filtra(const filtro::AbstractFilter& af) const
  bool Gestore::salva(const QString& nomeFile) const
 {
      QJsonArray daSalvare;
+    JsonSaverVisitor visitor;
      for(Attivita* a:listaAttivita)
      {
-         JsonSaverVisitor visitor;
          a->accept(&visitor);
          daSalvare.append(visitor.getJsonObject());
      }
@@ -158,11 +158,13 @@ bool Gestore::carica(const QString& nomeFile)
                 e->changeDataCreazione(dataCreazione);
                 e->setVoto(voto);
                 e->modifyLode(lode);
-                for(auto it=aux["tag"].toArray().begin(); it!=aux["tag"].toArray().end(); it++)
+                QJsonArray tempTag=aux["tag"].toArray();
+                for(auto it=tempTag.begin(); it!=tempTag.end(); it++)
                 {
                     e->addTag(it->toString());
                 }
-                for(auto it=aux["professori"].toArray().begin(); it!=aux["professori"].toArray().end(); it++)
+                QJsonArray tempProf=aux["professori"].toArray();
+                for(auto it=tempProf.begin(); it!=tempProf.end(); it++)
                 {
                     e->addProfessor(it->toString());
                 }
@@ -172,13 +174,15 @@ bool Gestore::carica(const QString& nomeFile)
             else if(tipo=="Scadenza")
             {
                 unsigned int giorniPreavviso=static_cast<unsigned int>(aux["giorniPreavviso"].toInt());
-                Scadenza* s=new Scadenza(title, id, note, dataFine, durata, giorniPreavviso, complete, priorita);
+                Scadenza* s=new Scadenza(title, id, note, dataFine, giorniPreavviso, durata, complete, priorita);
                 s->changeDataCreazione(dataCreazione);
-                for(auto it=aux["tag"].toArray().begin(); it!=aux["tag"].toArray().end(); it++)
+                QJsonArray tempTag=aux["tag"].toArray();
+                for(auto it=tempTag.begin(); it!=tempTag.end(); it++)
                 {
                     s->addTag(it->toString());
                 }
-                for(auto it=aux["todoList"].toArray().begin(); it!=aux["todoList"].toArray().end(); it++)
+                QJsonArray tempToDo=aux["todoList"].toArray();
+                for(auto it=tempToDo.begin(); it!=tempToDo.end(); it++)
                 {
                     QJsonObject sottoTask=it->toObject();
                     s->addPassaggio(sottoTask["descrizione"].toString());
@@ -193,11 +197,13 @@ bool Gestore::carica(const QString& nomeFile)
                 bool inPresenza=aux["inPresenza"].toBool();
                 Appuntamento* a=new Appuntamento(title, id, note, dataFine, luogo, durata,inPresenza, complete, priorita);
                 a->changeDataCreazione(dataCreazione);
-                for(auto it=aux["tag"].toArray().begin(); it!=aux["tag"].toArray().end(); it++)
+                QJsonArray tempTag=aux["tag"].toArray();
+                for(auto it=tempTag.begin(); it!=tempTag.end(); it++)
                 {
                     a->addTag(it->toString());
                 }
-                for(auto it=aux["partecipanti"].toArray().begin(); it!=aux["partecipanti"].toArray().end(); it++)
+                QJsonArray tempPartecipanti=aux["partecipanti"].toArray();
+                for(auto it=tempPartecipanti.begin(); it!=tempPartecipanti.end(); it++)
                 {
                     a->addPartecipante(it->toString());
                 }
@@ -210,11 +216,13 @@ bool Gestore::carica(const QString& nomeFile)
                 QDate dataInizio=QDate::fromString(aux["dataInizio"].toString(),Qt::ISODate);
                 Sport* s=new Sport(title, id, note, dataFine, durata,dataInizio,luogo, complete, priorita);
                 s->changeDataCreazione(dataCreazione);
-                for(auto it=aux["tag"].toArray().begin(); it!=aux["tag"].toArray().end(); it++)
+                QJsonArray tempTag=aux["tag"].toArray();
+                for(auto it=tempTag.begin(); it!=tempTag.end(); it++)
                 {
                     s->addTag(it->toString());
                 }
-                for(auto it=aux["giorni_sport"].toArray().begin(); it!=aux["giorni_sport"].toArray().end(); it++)
+                QJsonArray tempGiorniSport=aux["giorni_sport"].toArray();
+                for(auto it=tempGiorniSport.begin(); it!=tempGiorniSport.end(); it++)
                 {
                     s->setGiornoSettimana(static_cast<Qt::DayOfWeek>(it->toInt()));
                 }
