@@ -20,6 +20,7 @@ SOURCES += \
     #test_modello.cpp \
     gui/mainwindow.cpp \
     modello/Filtri/filtroanno.cpp \
+    modello/Filtri/filtroannocreazione.cpp \
     modello/Filtri/filtrocompletate.cpp \
     modello/Filtri/filtrocongiuntivo.cpp \
     modello/Filtri/filtrodata.cpp \
@@ -40,6 +41,7 @@ SOURCES += \
 HEADERS += \
     gui/mainwindow.h \
     modello/Filtri/filtroanno.h \
+    modello/Filtri/filtroannocreazione.h \
     modello/Filtri/filtrocompletate.h \
     modello/Filtri/filtrocongiuntivo.h \
     modello/Filtri/filtrodata.h \
