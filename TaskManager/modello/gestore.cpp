@@ -242,4 +242,14 @@ std::set<int> Gestore::getAnniPresenti() const
     std::for_each(listaAttivita.begin(), listaAttivita.end(), [&aux](Attivita* a)->void{aux.insert(a->getDate().date().year());});
     return aux;
 }
+std::set<QString> Gestore::getTagPresenti() const
+{
+    std::set<QString> aux;
+    for(Attivita* a:listaAttivita)
+    {
+        std::vector<QString> temp=a->getAllTag();
+        std::for_each(temp.begin(), temp.end(), [&aux](const QString& tag)->void{aux.insert(tag);});
+    }
+    return aux;
+}
 }

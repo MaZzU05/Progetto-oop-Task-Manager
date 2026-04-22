@@ -29,6 +29,8 @@ public:
     bool carica(const QString& nomeFile = "dati_salvati.json");
     //aggiunto per avere tutti gli anni presenti, utile per la gui
     std::set<int> getAnniPresenti() const;
+    //aggiunto per avere una occorrenza di ogni tag presente, sempre per la gui
+    std::set<QString> getTagPresenti() const;
 
 };
 }
