@@ -4,6 +4,7 @@
 #include"Filtri/abstractfilter.h"
 #include<vector>
 #include<QString>
+#include<set>
 namespace modello
 {
 class Gestore
@@ -26,6 +27,9 @@ public:
     std::vector<Attivita*> filtra(const filtro::AbstractFilter& af) const;
     bool salva(const QString& nomeFile = "dati_salvati.json") const;
     bool carica(const QString& nomeFile = "dati_salvati.json");
+    //aggiunto per avere tutti gli anni presenti, utile per la gui
+    std::set<int> getAnniPresenti() const;
+
 };
 }
 #endif // GESTORE_H

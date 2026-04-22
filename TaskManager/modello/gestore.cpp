@@ -236,4 +236,10 @@ bool Gestore::carica(const QString& nomeFile)
     return false;
 
 }
+std::set<int> Gestore::getAnniPresenti() const
+{
+    std::set<int> aux;
+    std::for_each(listaAttivita.begin(), listaAttivita.end(), [&aux](Attivita* a)->void{aux.insert(a->getDate().date().year());});
+    return aux;
+}
 }

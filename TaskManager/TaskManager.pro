@@ -16,6 +16,7 @@ INCLUDEPATH += modello \
 
 
 SOURCES += \
+    gui/barralateralewidget.cpp \
     main.cpp \
     #test_modello.cpp \
     gui/mainwindow.cpp \
@@ -39,6 +40,7 @@ SOURCES += \
     modello/sport.cpp
 
 HEADERS += \
+    gui/barralateralewidget.h \
     gui/mainwindow.h \
     modello/Filtri/filtroanno.h \
     modello/Filtri/filtroannocreazione.h \
@@ -72,3 +74,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 #workaroun che ho dovuto aggiungere per un problema di incompatibilità con clang di apple sui processopri arm
 QMAKE_CXXFLAGS += -Wno-error=implicit-function-declaration
 QMAKE_CXXFLAGS += -Wno-implicit-function-declaration
+
+RESOURCES += \
+    resources.qrc

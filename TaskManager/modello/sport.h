@@ -6,7 +6,6 @@
 #include<QTime>
 #include<QString>
 #include<vector>
-#include<utility>
 namespace modello
 {
 class Sport:public Attivita

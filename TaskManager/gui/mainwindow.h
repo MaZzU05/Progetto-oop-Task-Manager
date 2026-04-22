@@ -2,22 +2,22 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
-QT_END_NAMESPACE
-
+#include <QStackedWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QWidget>
+#include "gui/barralateralewidget.h"
+namespace gui
+{
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    MainWindow(QWidget *parent=nullptr);
 
 private:
-    Ui::MainWindow *ui;
+    BarraLateraleWidget* barraLaterale;
 };
+}
 #endif // MAINWINDOW_H
