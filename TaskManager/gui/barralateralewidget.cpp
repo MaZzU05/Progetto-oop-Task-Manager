@@ -40,7 +40,7 @@ void BarraLateraleWidget::setup()
     layout->addWidget(labelAnno);
     comboAnno=new QComboBox(this);
     layout->addWidget(comboAnno);
-    checkFiltroData=new QCheckBox(this);
+    checkFiltroData=new QCheckBox("Filtra per data:", this);
     layout->addWidget(checkFiltroData);
     modificaData=new QDateEdit(QDate::currentDate());
     modificaData->setDisplayFormat("dd.MM.yyyy"); //cosi visualizzo il selettore in giorno-mese-anno
@@ -61,6 +61,11 @@ void BarraLateraleWidget::popolaAnni(const std::set<int>& s)
 bool BarraLateraleWidget::isFiltroDataOn() const
 {
     return checkFiltroData->isChecked();
+}
+
+bool BarraLateraleWidget::isFiltroAnnoOn() const
+{
+    return comboAnno->currentText() != "Tutte";
 }
 
 QString BarraLateraleWidget::getTestoRicerca() const

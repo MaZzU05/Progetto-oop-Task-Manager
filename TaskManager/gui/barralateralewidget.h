@@ -21,6 +21,7 @@ public:
      QString getTipoSelezionato() const;
      QString getStatoSelezionato() const;
      bool isFiltroDataOn() const;
+     bool isFiltroAnnoOn() const;
      unsigned int getAnnoSelezionato() const;
      void popolaAnni(const std::set<int>& s);
 private:

@@ -6,7 +6,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QWidget>
-#include "gui/barralateralewidget.h"
+#include "barralateralewidget.h"
 namespace gui
 {
 class MainWindow : public QMainWindow
