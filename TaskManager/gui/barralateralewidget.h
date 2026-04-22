@@ -12,6 +12,7 @@
 #include<QPushButton>
 #include<QListWidget>
 #include<set>
+#include<vector>
 namespace gui{
 class BarraLateraleWidget : public QWidget
 {
@@ -25,6 +26,11 @@ public:
      bool isFiltroDataOn() const;
      bool isFiltroAnnoOn() const;
      unsigned int getAnnoSelezionato() const;
+     QString getPrioritaSelezionata() const;
+     std::vector<QString> getTagSelezionati() const;
+     bool isFiltroMeseAnnoOn() const; // true solo se mese E anno2 sono entrambi selezionati
+     int getMeseSelezionato() const;  // ritorna 1-12 (corrispondente a MeseTarget)
+     int getAnno2Selezionato() const;
      void popolaAnni(const std::set<int>& s);
      void popolaTag(const std::set<QString>& t);
 private:
