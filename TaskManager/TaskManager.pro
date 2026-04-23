@@ -16,7 +16,9 @@ INCLUDEPATH += modello \
 
 
 SOURCES += \
+    gui/abstractvistaattivita.cpp \
     gui/barralateralewidget.cpp \
+    gui/vistaelenco.cpp \
     main.cpp \
     #test_modello.cpp \
     gui/mainwindow.cpp \
@@ -40,8 +42,10 @@ SOURCES += \
     modello/sport.cpp
 
 HEADERS += \
+    gui/abstractvistaattivita.h \
     gui/barralateralewidget.h \
     gui/mainwindow.h \
+    gui/vistaelenco.h \
     modello/Filtri/filtroanno.h \
     modello/Filtri/filtroannocreazione.h \
     modello/Filtri/filtrocompletate.h \
