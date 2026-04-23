@@ -6,11 +6,7 @@ BarraLateraleWidget::BarraLateraleWidget(QWidget *parent)
 {setup();
 connectSegnali();}
 
-/*
-     QLabel* labelMeseAnno;
-     QComboBox* comboAnno2;
-     QComboBox* ComboMese;
- */
+
 
 void BarraLateraleWidget::setup()
 {
@@ -150,6 +146,37 @@ QDate BarraLateraleWidget::getDataSelezionata() const
 {
     return modificaData->date();
 }
+
+QString BarraLateraleWidget::getPrioritaSelezionata() const
+{
+    return comboPriorita->currentText();
+}
+
+std::vector<QString> BarraLateraleWidget::getTagSelezionati() const
+{
+    std::vector<QString> selezionati;
+    for(QListWidgetItem* item : listaTag->selectedItems())
+        selezionati.push_back(item->text());
+    return selezionati;
+}
+
+bool BarraLateraleWidget::isFiltroMeseAnnoOn() const
+{
+    // attivo solo se sia il mese che l'anno sono selezionati (FiltroMeseAnno richiede entrambi)
+    return comboMese->currentIndex() != 0 && comboAnno2->currentText() != "Tutte";
+}
+
+int BarraLateraleWidget::getMeseSelezionato() const
+{
+    // currentIndex() e' gia' 1-12: "Tutte"=0, "Gennaio"=1, ..., "Dicembre"=12
+    // corrisponde direttamente ai valori dell'enum MeseTarget del modello
+    return comboMese->currentIndex();
+}
+
+int BarraLateraleWidget::getAnno2Selezionato() const
+{
+    return comboAnno2->currentText().toInt();
+}
 //scorro tutti gli elementi per indice di riga, li estraggo di volta in volta, e valuto se vi e' la sottostringa, se si le lascio visibili, se no le nascondo
 void BarraLateraleWidget::filtraRigheTag(const QString& testoCercato)
 {
@@ -173,6 +200,7 @@ void BarraLateraleWidget::azzeraFiltri()
     checkFiltroData->setChecked(false);
     modificaData->setEnabled(false);
     cercaTag->clear();
+    filtraRigheTag(""); // ripristina la visibilità di tutte le righe nascoste dalla ricerca
     for(int i=0; i<listaTag->count(); i++)
     {
         QListWidgetItem* temp=listaTag->item(i);
