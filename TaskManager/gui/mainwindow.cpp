@@ -25,10 +25,17 @@ MainWindow::MainWindow(QWidget *parent)
     QWidget* temp=new QWidget();
     setCentralWidget(temp);
     QHBoxLayout* layout=new QHBoxLayout(temp);
+    centrale=new VistaElenco(this);
+    centrale->popolaAttivita(tempG.getAllAttivita());
     barraLaterale=new BarraLateraleWidget(this);
     barraLaterale->popolaAnni(tempG.getAnniPresenti());
     barraLaterale->popolaTag(tempG.getTagPresenti());
     layout->addWidget(barraLaterale);
+    layout->addWidget(centrale);
+    //provo a dare le dimensioni, 1/4 barra laterale, 3/4 vista centrale
+    layout->setStretchFactor(barraLaterale,1);
+    layout->setStretchFactor(centrale,3);
+
 }
 
 

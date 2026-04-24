@@ -11,7 +11,6 @@ private:
     QJsonObject daSalvare;
     void preparaBase(const Attivita* a);
 public:
-    JsonSaverVisitor()=default;
     void visit(const Esame* e) override;
     void visit(const Scadenza* s) override;
     void visit(const Appuntamento* i) override;

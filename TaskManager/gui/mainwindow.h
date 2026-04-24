@@ -7,6 +7,7 @@
 #include <QHBoxLayout>
 #include <QWidget>
 #include "barralateralewidget.h"
+#include"vistaelenco.h"
 namespace gui
 {
 class MainWindow : public QMainWindow
@@ -18,6 +19,7 @@ public:
 
 private:
     BarraLateraleWidget* barraLaterale;
+    VistaElenco* centrale;
 };
 }
 #endif // MAINWINDOW_H

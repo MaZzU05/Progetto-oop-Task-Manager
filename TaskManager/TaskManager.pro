@@ -18,6 +18,8 @@ INCLUDEPATH += modello \
 SOURCES += \
     gui/abstractvistaattivita.cpp \
     gui/barralateralewidget.cpp \
+    gui/cardactivityvisitor.cpp \
+    gui/cardattivita.cpp \
     gui/vistaelenco.cpp \
     main.cpp \
     #test_modello.cpp \
@@ -44,6 +46,8 @@ SOURCES += \
 HEADERS += \
     gui/abstractvistaattivita.h \
     gui/barralateralewidget.h \
+    gui/cardactivityvisitor.h \
+    gui/cardattivita.h \
     gui/mainwindow.h \
     gui/vistaelenco.h \
     modello/Filtri/filtroanno.h \
