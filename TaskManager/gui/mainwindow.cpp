@@ -4,11 +4,13 @@
 #include"../modello/appuntamento.h"
 #include"../modello/gestore.h"
 #include"../modello/scadenza.h"
+#include<QIcon>
 namespace gui
 {
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    this->setStyleSheet("gui--MainWindow QPushButton{border: 1px solid grey; border-radius: 10px;} gui--MainWindow QPushButton:hover { background-color: light blue;} gui--MainWindow QPushButton:pressed{ background-color: #e0e0e0; border: 1px solid #b0b0b0;}");
     //test
     modello::Gestore tempG;
     modello::Esame* e1=new modello::Esame("analisi", tempG.generaNuovoId(), " ", "boh", 12,QDateTime(QDate(2024,12, 20), QTime(15,30,0)), 130 );
@@ -29,20 +31,43 @@ MainWindow::MainWindow(QWidget *parent)
     tempG.addAttivita(s1);
     QWidget* temp=new QWidget();
     setCentralWidget(temp);
+    finestraPrincipale=new QStackedWidget(this);
     QHBoxLayout* layout=new QHBoxLayout(temp);
     centrale=new VistaElenco(this);
     centrale->popolaAttivita(tempG.getAllAttivita());
+    finestraPrincipale->addWidget(centrale);
+    dettaglioCentrale=new VistaDettaglio(this);
+    finestraPrincipale->addWidget(dettaglioCentrale);
     barraLaterale=new BarraLateraleWidget(this);
     barraLaterale->popolaAnni(tempG.getAnniPresenti());
     barraLaterale->popolaTag(tempG.getTagPresenti());
     layout->addWidget(barraLaterale);
-    layout->addWidget(centrale);
+    QVBoxLayout* layoutCentrale=new QVBoxLayout();
+    QHBoxLayout* layoutBottoni=new QHBoxLayout();
+    layoutBottoni->setAlignment(Qt::AlignRight);
+    bottoneVistaLista=new QPushButton(this);
+    QIcon iconaLista(":/gui/assets/icona_lista.png");
+    bottoneVistaLista->setIcon(iconaLista);
+    bottoneVistaLista->setIconSize(QSize(24,24));
+    layoutBottoni->addWidget(bottoneVistaLista);
+    bottoneVistaCalendario=new QPushButton(this);
+    QIcon iconaCalendario(":/gui/assets/icona_calendario");
+    bottoneVistaCalendario->setIcon(iconaCalendario);
+    bottoneVistaCalendario->setIconSize(QSize(24,24));
+    layoutBottoni->addWidget(bottoneVistaCalendario);
+    layoutCentrale->addLayout(layoutBottoni);
+    layoutCentrale->addWidget(finestraPrincipale);
+    layout->addLayout(layoutCentrale);
     //provo a dare le dimensioni, 1/4 barra laterale, 3/4 vista centrale
     layout->setStretchFactor(barraLaterale,1);
-    layout->setStretchFactor(centrale,3);
+    layout->setStretchFactor(layoutCentrale,3);
+    connectSegnali();
 
 }
 
-
-
-}
+void MainWindow::connectSegnali()
+{
+    connect(bottoneVistaLista, &QPushButton::pressed, this, [this](){finestraPrincipale->setCurrentIndex(0);});
+    connect(bottoneVistaCalendario, &QPushButton::pressed, this, [this](){finestraPrincipale->setCurrentIndex(1);});
+    connect(dettaglioCentrale, &VistaDettaglio::tornaIndietro, this, [this](){finestraPrincipale->setCurrentIndex(0);});
+}}

@@ -21,6 +21,7 @@ SOURCES += \
     gui/cardactivityvisitor.cpp \
     gui/cardattivita.cpp \
     gui/vistacalendario.cpp \
+    gui/vistadettaglio.cpp \
     gui/vistaelenco.cpp \
     main.cpp \
     #test_modello.cpp \
@@ -51,6 +52,7 @@ HEADERS += \
     gui/cardattivita.h \
     gui/mainwindow.h \
     gui/vistacalendario.h \
+    gui/vistadettaglio.h \
     gui/vistaelenco.h \
     modello/Filtri/filtroanno.h \
     modello/Filtri/filtroannocreazione.h \
@@ -78,12 +80,11 @@ FORMS += \
     gui/mainwindow.ui
 
 # Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
+#else: unix:!android: target.path = /opt/$${TARGET}/bin
+#!isEmpty(target.path): INSTALLS += target
 #workaroun che ho dovuto aggiungere per un problema di incompatibilità con clang di apple sui processopri arm
-QMAKE_CXXFLAGS += -Wno-error=implicit-function-declaration
-QMAKE_CXXFLAGS += -Wno-implicit-function-declaration
+#QMAKE_CXXFLAGS += -Wno-error=implicit-function-declaration
+#QMAKE_CXXFLAGS += -Wno-implicit-function-declaration
 
 RESOURCES += \
     resources.qrc

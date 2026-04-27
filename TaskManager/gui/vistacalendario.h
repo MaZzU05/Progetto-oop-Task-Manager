@@ -3,6 +3,9 @@
 
 #include <QObject>
 #include <QWidget>
+#include<QCalendarWidget>
+#include<QVBoxLayout>
+#include<QHBoxLayout>
 #include "abstractvistaattivita.h"
 namespace gui
 {

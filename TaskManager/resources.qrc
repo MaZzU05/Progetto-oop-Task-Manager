@@ -2,5 +2,9 @@
     <qresource prefix="/">
         <file>gui/assets/icona_ricerca.png</file>
         <file>gui/assets/stile.qss</file>
+        <file>gui/assets/freccia_sx.png</file>
+        <file>gui/assets/icona_calendario.png</file>
+        <file>gui/assets/icona_lista.png</file>
+        <file>gui/assets/icona_scuola.png</file>
     </qresource>
 </RCC>
