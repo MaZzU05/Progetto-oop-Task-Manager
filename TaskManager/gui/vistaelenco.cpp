@@ -20,7 +20,6 @@ void VistaElenco::setup()
     areaScorrimento=new QScrollArea(this);
     //per rimuovere il bordo nero
     areaScorrimento->setFrameShape(QFrame::NoFrame);
-    areaScorrimento->setWidgetResizable(true);
     areaScorrimento->setStyleSheet("background-color: transparent;"); //mettendo lo sfondo trasparente cerco un effetto piu' elegante
     principale->addWidget(areaScorrimento);
     contenitoreCentrale=new QWidget();

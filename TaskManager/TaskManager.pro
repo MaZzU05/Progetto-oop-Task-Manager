@@ -20,6 +20,7 @@ SOURCES += \
     gui/barralateralewidget.cpp \
     gui/cardactivityvisitor.cpp \
     gui/cardattivita.cpp \
+    gui/vistacalendario.cpp \
     gui/vistaelenco.cpp \
     main.cpp \
     #test_modello.cpp \
@@ -49,6 +50,7 @@ HEADERS += \
     gui/cardactivityvisitor.h \
     gui/cardattivita.h \
     gui/mainwindow.h \
+    gui/vistacalendario.h \
     gui/vistaelenco.h \
     modello/Filtri/filtroanno.h \
     modello/Filtri/filtroannocreazione.h \

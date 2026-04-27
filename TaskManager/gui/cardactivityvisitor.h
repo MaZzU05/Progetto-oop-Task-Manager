@@ -7,7 +7,7 @@ namespace gui
 class CardActivityVisitor:public modello::ConstActivityVisitorInterface
 {
 private:
-    CardAttivita* widget;
+    CardAttivita* widget=nullptr;
 public:
     void visit(const modello::Esame* e) override;
     void visit(const modello::Scadenza* s) override;

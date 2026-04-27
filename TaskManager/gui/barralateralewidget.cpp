@@ -169,7 +169,7 @@ bool BarraLateraleWidget::isFiltroMeseAnnoOn() const
 int BarraLateraleWidget::getMeseSelezionato() const
 {
     // currentIndex() e' gia' 1-12: "Tutte"=0, "Gennaio"=1, ..., "Dicembre"=12
-    // corrisponde direttamente ai valori dell'enum MeseTarget del modello
+    // corrisponde direttamente ai valori del'enum MeseTarget del modello
     return comboMese->currentIndex();
 }
 
@@ -212,7 +212,7 @@ void BarraLateraleWidget::azzeraFiltri()
 void BarraLateraleWidget::connectSegnali()
 {
     //ablitazione selettore data
-    connect(checkFiltroData, &QCheckBox::clicked, modificaData, &QDateEdit::setEnabled);
+    connect(checkFiltroData, &QCheckBox::toggled, modificaData, &QDateEdit::setEnabled);
     //reset, mi appoggio alla funzione interna azzera
     connect(reset, &QPushButton::pressed, this, &BarraLateraleWidget::azzeraFiltri);
     //selezione Tag
