@@ -19,15 +19,15 @@ private:
     QLabel* data_ora;
     QLabel* durata;
     QLabel* Completata;
+    QLabel* dataCreazione;
     QLabel* tag;
     QLabel* note;
-    QLabel* noteEffettive;
-    QListWidget *listaTag;
     QLabel* priorita;
     QHBoxLayout* layoutAlto;
     QVBoxLayout* layoutDettagli;
     bool espansa;
     void setup();
+    const modello::Attivita* attivitaRappresentata;
 public:
     CardAttivita(QWidget *parent = nullptr);
     void setSelezionata(bool stato);

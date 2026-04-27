@@ -3,6 +3,7 @@
 #include"../modello/esame.h"
 #include"../modello/appuntamento.h"
 #include"../modello/gestore.h"
+#include"../modello/scadenza.h"
 namespace gui
 {
 MainWindow::MainWindow(QWidget *parent)
@@ -22,6 +23,10 @@ MainWindow::MainWindow(QWidget *parent)
     a1->addTag("Prova3");
     a1->addTag("Sus");
     tempG.addAttivita(a1);
+    modello::Scadenza* s1=new modello::Scadenza("Consegna Priogetto", tempG.generaNuovoId(), "Consegna del cazzo di progetto di pao, aaaaaaaaaaaaaaalugdlijfuasigfinburdsybf rilcuvyrb ewiuotvby5reiowlutygv rbtvcilesbru sbtsrevson  tweilb 5r4vn tvw45ebl sctvt4vukb rystvluiyse4blitv bcye5rilosbcv twie45lbvucbtsioleedbvy owie45bsvyt oiwleb5cy libewoi7 bvwloiebtyuc il8sweybt4iol8b7wo lsbey t4v8ilsevb wci384bc yil8oasebnt c8lioq3ebv awtiw348ybcxiolaw87yv23ci 8ervtq2w43ail87v c64ewoa7v 8itc oi4latrv6alt", QDateTime(QDate(2026,4, 28), QTime(15,30,0)), 4);
+    s1->addPassaggio("GUI");
+    s1->addPassaggio("Test");
+    tempG.addAttivita(s1);
     QWidget* temp=new QWidget();
     setCentralWidget(temp);
     QHBoxLayout* layout=new QHBoxLayout(temp);
