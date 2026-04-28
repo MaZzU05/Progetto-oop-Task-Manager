@@ -2,19 +2,14 @@
 #include<QPushButton>
 #include<QHBoxLayout>
 #include<QIcon>
+#include"cardactivityvisitor.h"
 namespace gui
 {
 VistaDettaglio::VistaDettaglio(QWidget *parent): QWidget(parent)
 {
     setup();
 }
-/*    VistaDettaglio(QWidget *parent = nullptr);
-    void addWidget(QWidget* nuovaCard);
-private:
-    QScrollArea* areaScorrimento;
-    QWidget* contenitoreCentrale;
-    QVBoxLayout* layout;
-    void setup();*/
+
 void VistaDettaglio::setup()
 {
     layout=new QVBoxLayout(this);
@@ -28,14 +23,17 @@ void VistaDettaglio::setup()
     connect(backButton, &QPushButton::pressed, this, &VistaDettaglio::tornaIndietro);
     layout->addLayout(layoutAlto);
     areaScorrimento=new QScrollArea(this);
-    layout->addWidget(areaScorrimento);
+    areaScorrimento->setFrameShape(QFrame::NoFrame);
+    areaScorrimento->setStyleSheet("background-color: transparent;"); //mettendo lo sfondo trasparente cerco un effetto piu' elegante
     layout->addWidget(areaScorrimento);
     contenitoreCentrale=new QWidget(this);
     layoutCentrale=new QVBoxLayout(contenitoreCentrale);
+    layoutCentrale->setAlignment(Qt::AlignTop);
     areaScorrimento->setWidget(contenitoreCentrale);
+    areaScorrimento->setWidgetResizable(true);
 }
 
-void VistaDettaglio::addWidget(QWidget* nuovaCard)
+void VistaDettaglio::setWidget(QWidget* nuovaCard)
 {
     QLayoutItem* daEliminare=layoutCentrale->takeAt(0);
     if(daEliminare!=nullptr)
@@ -44,5 +42,14 @@ void VistaDettaglio::addWidget(QWidget* nuovaCard)
         delete daEliminare;
     }
     layoutCentrale->addWidget(nuovaCard);
+}
+
+void VistaDettaglio::mostraAttivita(modello::Attivita* a)
+{
+    attivitaCorrente=a;
+    CardActivityVisitor visitor;
+    attivitaCorrente->accept(&visitor);
+    CardAttivita* cardDaVisualizzare=visitor.getWidget();
+    setWidget(cardDaVisualizzare);
 }
 }

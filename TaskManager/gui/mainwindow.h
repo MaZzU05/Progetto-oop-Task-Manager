@@ -10,6 +10,8 @@
 #include "barralateralewidget.h"
 #include"vistaelenco.h"
 #include"vistadettaglio.h"
+#include"vistacalendario.h"
+#include"../modello/gestore.h"
 namespace gui
 {
 class MainWindow : public QMainWindow
@@ -20,10 +22,12 @@ public:
     MainWindow(QWidget *parent=nullptr);
 
 private:
+    modello::Gestore gestorePrincipale;
     QStackedWidget* finestraPrincipale;
     BarraLateraleWidget* barraLaterale;
     VistaElenco* centrale;
     VistaDettaglio* dettaglioCentrale;
+    VistaCalendario* calendarioCentrale;
     QPushButton* bottoneVistaLista;
     QPushButton* bottoneVistaCalendario;
     void connectSegnali();

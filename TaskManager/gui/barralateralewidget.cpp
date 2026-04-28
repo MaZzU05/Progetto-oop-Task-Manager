@@ -73,6 +73,7 @@ void BarraLateraleWidget::setup()
     listaTag->setSelectionMode(QAbstractItemView::MultiSelection);//necessario per abilitare la selezione mmultipla
     layout->addWidget(listaTag);
     reset=new QPushButton("Reset");
+    reset->setStyleSheet("QPushButton { background-color: transparent; padding: 5px; border: 1px solid grey; border-radius: 10px; } QPushButton:hover { background-color: lightblue; } QPushButton:pressed { background-color: #e0e0e0; border: 1px solid #b0b0b0; }");
     layout->addWidget(reset);
     layout->addStretch();
 }

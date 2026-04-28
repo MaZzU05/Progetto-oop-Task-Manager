@@ -83,8 +83,8 @@ FORMS += \
 #else: unix:!android: target.path = /opt/$${TARGET}/bin
 #!isEmpty(target.path): INSTALLS += target
 #workaroun che ho dovuto aggiungere per un problema di incompatibilità con clang di apple sui processopri arm
-#QMAKE_CXXFLAGS += -Wno-error=implicit-function-declaration
-#QMAKE_CXXFLAGS += -Wno-implicit-function-declaration
+QMAKE_CXXFLAGS += -Wno-error=implicit-function-declaration
+QMAKE_CXXFLAGS += -Wno-implicit-function-declaration
 
 RESOURCES += \
     resources.qrc
