@@ -11,7 +11,9 @@
 #include"vistaelenco.h"
 #include"vistadettaglio.h"
 #include"vistacalendario.h"
+#include"vistalibretto.h"
 #include"../modello/gestore.h"
+#include"../modello/libretto.h"
 namespace gui
 {
 class MainWindow : public QMainWindow
@@ -23,13 +25,16 @@ public:
 
 private:
     modello::Gestore gestorePrincipale;
+    modello::Libretto libretto;
     QStackedWidget* finestraPrincipale;
     BarraLateraleWidget* barraLaterale;
     VistaElenco* centrale;
     VistaDettaglio* dettaglioCentrale;
     VistaCalendario* calendarioCentrale;
+    VistaLibretto* librettoCentrale;
     QPushButton* bottoneVistaLista;
     QPushButton* bottoneVistaCalendario;
+    QPushButton* bottoneVistaLibretto;
     void connectSegnali();
 };
 }

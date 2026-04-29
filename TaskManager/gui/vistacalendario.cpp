@@ -41,6 +41,7 @@ void VistaCalendario::setup()
         giornoSett->setAlignment(Qt::AlignTop|Qt::AlignCenter);
         vecLayoutSettimana.push_back(giornoSett);
         QLabel* giorno=new QLabel();
+        giorno->setStyleSheet("color: #7e7f76; font-weight:bold;");
         switch(i){
             case 0:
                 giorno->setText("Lunedì");

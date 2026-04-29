@@ -5,7 +5,7 @@
 
 namespace modello
 {
-Libretto::Libretto(unsigned int cfu_totali,const std::vector<Attivita*>& attivita): cfu_totali(cfu_totali), attivita(attivita){}
+Libretto::Libretto(unsigned int cfu_totali, QString corsoDiLaurea, const std::vector<Attivita*>& attivita): cfu_totali(cfu_totali), corsoDiLaurea(corsoDiLaurea),attivita(attivita){}
 unsigned int Libretto::getCfuCompletati() const
 {
     unsigned int cfu=0;
@@ -76,5 +76,21 @@ std::vector<const Esame*> Libretto::getEsamiFuturi() const
                   }
                   );
     return aux;
+}
+const QString& Libretto::getCorsoLaurea() const
+{
+    return corsoDiLaurea;
+}
+void Libretto::setCorsoLaurea(const QString& nuovo)
+{
+    corsoDiLaurea=nuovo;
+}
+unsigned int Libretto::getCfu() const
+{
+    return cfu_totali;
+}
+void Libretto::setCfu(unsigned int cfu)
+{
+    cfu_totali=cfu;
 }
 }

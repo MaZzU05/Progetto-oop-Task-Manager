@@ -7,17 +7,21 @@
 namespace gui
 {
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
+    : QMainWindow(parent), libretto(180, "Informatica", gestorePrincipale.getAllAttivita())
 {
     this->setStyleSheet("gui--MainWindow QPushButton{border: 1px solid grey; border-radius: 10px;} gui--MainWindow QPushButton:hover { background-color: lightblue;} gui--MainWindow QPushButton:pressed{ background-color: #e0e0e0; border: 1px solid #b0b0b0;}");
     //test
     modello::Esame* e1=new modello::Esame("analisi", gestorePrincipale.generaNuovoId(), " ", "boh", 12,QDateTime(QDate(2024,12, 20), QTime(15,30,0)), 130 );
     e1->addTag("Esame");
     e1->addTag("Prova1");
+    e1->setVoto(27);
+    e1->setComplete(true);
     gestorePrincipale.addAttivita(e1);
     modello::Esame* e2=new modello::Esame("analisi 2", gestorePrincipale.generaNuovoId(), " ", "boh", 12,QDateTime(QDate(2025,12, 20), QTime(15,30,0)), 130 );
     e2->addTag("Esame");
     e2->addTag("Prova2");
+    e2->setVoto(17);
+    e2->setComplete(true);
     gestorePrincipale.addAttivita(e2);
     modello::Appuntamento* a1=new modello::Appuntamento("dentista", gestorePrincipale.generaNuovoId(), " ", QDateTime(QDate(2026,12, 20), QTime(15,30,0)), "boh", 15, true);
     a1->addTag("Prova3");
@@ -39,6 +43,8 @@ MainWindow::MainWindow(QWidget *parent)
     finestraPrincipale->addWidget(calendarioCentrale);
     dettaglioCentrale=new VistaDettaglio(this);
     finestraPrincipale->addWidget(dettaglioCentrale);
+    librettoCentrale=new VistaLibretto(&libretto);
+    finestraPrincipale->addWidget(librettoCentrale);
     barraLaterale=new BarraLateraleWidget(this);
     barraLaterale->popolaAnni(gestorePrincipale.getAnniPresenti());
     barraLaterale->popolaTag(gestorePrincipale.getTagPresenti());
@@ -52,10 +58,15 @@ MainWindow::MainWindow(QWidget *parent)
     bottoneVistaLista->setIconSize(QSize(24,24));
     layoutBottoni->addWidget(bottoneVistaLista);
     bottoneVistaCalendario=new QPushButton(this);
-    QIcon iconaCalendario(":/gui/assets/icona_calendario");
+    QIcon iconaCalendario(":/gui/assets/icona_calendario.png");
     bottoneVistaCalendario->setIcon(iconaCalendario);
     bottoneVistaCalendario->setIconSize(QSize(24,24));
     layoutBottoni->addWidget(bottoneVistaCalendario);
+    bottoneVistaLibretto=new QPushButton(this);
+    QIcon iconaLibretto(":/gui/assets/icona_scuola.png");
+    bottoneVistaLibretto->setIcon(iconaLibretto);
+    bottoneVistaLibretto->setIconSize(QSize(24,24));
+    layoutBottoni->addWidget(bottoneVistaLibretto);
     layoutCentrale->addLayout(layoutBottoni);
     layoutCentrale->addWidget(finestraPrincipale);
     layout->addLayout(layoutCentrale);
@@ -70,6 +81,7 @@ void MainWindow::connectSegnali()
 {
     connect(bottoneVistaLista, &QPushButton::pressed, this, [this](){finestraPrincipale->setCurrentIndex(0);});
     connect(bottoneVistaCalendario, &QPushButton::pressed, this, [this](){finestraPrincipale->setCurrentIndex(1);});
+    connect(bottoneVistaLibretto, &QPushButton::pressed, this, [this](){finestraPrincipale->setCurrentIndex(3);});
     connect(calendarioCentrale, &VistaCalendario::attivitaSelezionata, this, [this](modello::Attivita* a) {
         dettaglioCentrale->mostraAttivita(a);
         finestraPrincipale->setCurrentIndex(2);

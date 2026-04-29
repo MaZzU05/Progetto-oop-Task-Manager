@@ -23,6 +23,7 @@ SOURCES += \
     gui/vistacalendario.cpp \
     gui/vistadettaglio.cpp \
     gui/vistaelenco.cpp \
+    gui/vistalibretto.cpp \
     main.cpp \
     #test_modello.cpp \
     gui/mainwindow.cpp \
@@ -54,6 +55,7 @@ HEADERS += \
     gui/vistacalendario.h \
     gui/vistadettaglio.h \
     gui/vistaelenco.h \
+    gui/vistalibretto.h \
     modello/Filtri/filtroanno.h \
     modello/Filtri/filtroannocreazione.h \
     modello/Filtri/filtrocompletate.h \

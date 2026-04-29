@@ -35,8 +35,9 @@ void VistaDettaglio::setup()
 
 void VistaDettaglio::setWidget(QWidget* nuovaCard)
 {
-    QLayoutItem* daEliminare=layoutCentrale->takeAt(0);
-    if(daEliminare!=nullptr)
+    QLayoutItem* daEliminare;
+    //uso il while anche se ho un solo elemento, cosi' e' gia' robusta per eventuali modifiche
+    while((daEliminare=layoutCentrale->takeAt(0))!=nullptr)
     {QWidget* elementoInterno=daEliminare->widget();
         delete elementoInterno;
         delete daEliminare;
