@@ -28,9 +28,8 @@ public:
      unsigned int getAnnoSelezionato() const;
      QString getPrioritaSelezionata() const;
      std::vector<QString> getTagSelezionati() const;
-     bool isFiltroMeseAnnoOn() const; // true solo se mese E anno2 sono entrambi selezionati
-     int getMeseSelezionato() const;  // ritorna 1-12 (corrispondente a MeseTarget)
-     int getAnno2Selezionato() const;
+     bool isFiltroMeseAnnoOn() const; // true solo se mese E anno sono entrambi selezionati
+     unsigned int getMeseSelezionato() const;  // ritorna 1-12 (corrispondente a MeseTarget)
      void popolaAnni(const std::set<int>& s);
      void popolaTag(const std::set<QString>& t);
 private:
@@ -39,9 +38,8 @@ private:
      QLabel* labelTipo;
      QComboBox* comboTipo;
      QLabel* labelAnno;
+     QLabel* labelMese;
      QComboBox* comboAnno;
-     QLabel* labelMeseAnno;
-     QComboBox* comboAnno2;
      QComboBox* comboMese;
      QCheckBox* checkFiltroData;
      QDateEdit* modificaData;

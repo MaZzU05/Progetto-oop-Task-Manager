@@ -109,7 +109,7 @@ void VistaCalendario::coloraGiorni(int mese, int anno)
 {
     //coloro le caselle dei giorni nelle quali vi e' almeno una attivita'
     QTextCharFormat format;
-    format.setBackground(QColor("light blue")); //colore sfondo
+    format.setBackground(QColor("lightblue")); //colore sfondo
     format.setForeground(Qt::white); //colore testo
     format.setFontWeight(QFont::Bold); //mette il testo in grassetto
     for(int i=1; i<=QDate(anno, mese, 1).daysInMonth(); i++)

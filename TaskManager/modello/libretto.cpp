@@ -5,13 +5,13 @@
 
 namespace modello
 {
-Libretto::Libretto(unsigned int cfu_totali, QString corsoDiLaurea, const std::vector<Attivita*>& attivita): cfu_totali(cfu_totali), corsoDiLaurea(corsoDiLaurea),attivita(attivita){}
+Libretto::Libretto(unsigned int cfu_totali, QString corsoDiLaurea, std::vector<Attivita*>& attivita): cfu_totali(cfu_totali), corsoDiLaurea(corsoDiLaurea),attivita(attivita){}
 unsigned int Libretto::getCfuCompletati() const
 {
     unsigned int cfu=0;
-    std::vector<const Esame*> aux=getEsamiSuperati();
+    std::vector<Esame*> aux=getEsamiSuperati();
     std::for_each(aux.begin(), aux.end(),
-                  [&cfu](const Esame* e)
+                  [&cfu](Esame* e)
                   {
                       cfu+=e->getCFU();
                   });
@@ -27,10 +27,10 @@ double Libretto::getMediaPesata() const
 {
     unsigned int cfu=getCfuCompletati();
     if(!cfu) return 0;
-    std::vector<const Esame*> aux=getEsamiSuperati();
+    std::vector<Esame*> aux=getEsamiSuperati();
     double somma_pesata=0;
     std::for_each(aux.begin(), aux.end(),
-                  [&somma_pesata](const Esame* e)
+                  [&somma_pesata](Esame* e)
                   {
                       somma_pesata+=e->getVoto()*e->getCFU();
     });
@@ -41,37 +41,37 @@ double Libretto::getVotoFinaleAtteso() const
     double voto=(getMediaPesata()*110)/30;
     return voto;
 }
-std::vector<const Esame*> Libretto::getEsamiSuperati() const
+std::vector<Esame*> Libretto::getEsamiSuperati() const
 {
-    std::vector<const Esame*> aux;
+    std::vector<Esame*> aux;
     std::for_each(attivita.begin(), attivita.end(),
                   [&aux](Attivita* a)
                   {
-                      const Esame* e=dynamic_cast<const Esame*>(a);
+                      Esame* e=dynamic_cast<Esame*>(a);
         if(e&&e->isComplete()&&e->isPassed()) aux.push_back(e);
     }
                   );
     return aux;
 }
-std::vector<const Esame*> Libretto::getEsamiNonSuperati() const
+std::vector<Esame*> Libretto::getEsamiNonSuperati() const
 {
-    std::vector<const Esame*> aux;
+    std::vector<Esame*> aux;
     std::for_each(attivita.begin(), attivita.end(),
                   [&aux](Attivita* a)
                   {
-                      const Esame* e=dynamic_cast<const Esame*>(a);
+                      Esame* e=dynamic_cast<Esame*>(a);
                       if(e&&e->isComplete()&&!e->isPassed()) aux.push_back(e);
                   }
                   );
     return aux;
 }
-std::vector<const Esame*> Libretto::getEsamiFuturi() const
+std::vector<Esame*> Libretto::getEsamiFuturi() const
 {
-    std::vector<const Esame*> aux;
+    std::vector<Esame*> aux;
     std::for_each(attivita.begin(), attivita.end(),
                   [&aux](Attivita* a)
                   {
-                      const Esame* e=dynamic_cast<const Esame*>(a);
+                      Esame* e=dynamic_cast<Esame*>(a);
                       if(e&&!e->isComplete()) aux.push_back(e);
                   }
                   );
@@ -93,4 +93,16 @@ void Libretto::setCfu(unsigned int cfu)
 {
     cfu_totali=cfu;
 }
+
+Libretto& Libretto::operator=(const Libretto& l)
+{
+    if(this!=&l)
+    {
+        cfu_totali=l.cfu_totali;
+        corsoDiLaurea=l.corsoDiLaurea;
+        attivita=l.attivita;
+    }
+    return *this;
+}
+Libretto::Libretto(const Libretto& l): cfu_totali(l.cfu_totali), corsoDiLaurea(l.corsoDiLaurea), attivita(l.attivita) {}
 }

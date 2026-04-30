@@ -16,9 +16,10 @@ class VistaLibretto : public QWidget
     Q_OBJECT
 public:
     VistaLibretto(modello::Libretto* libretto, QWidget *parent=nullptr);
+    void aggiornaVista();
 private:
     void setup();
-    void aggiornaVista();
+    void connectSegnali();
     void setWidget(std::vector<const modello::Esame*> esami);
     modello::Libretto* libretto=nullptr;
     QScrollArea* areaScorrimento;
@@ -27,7 +28,7 @@ private:
     QHBoxLayout* layoutAlto;
     QVBoxLayout* layoutCentrale;
     QGridLayout* layoutBasso;
-    QPushButton* registraVoto;
+    QPushButton* modificaInfo;
     QLabel* labeltipoCorso;
     QLabel* labelnomeCorso;
     QLabel* labelCFU;

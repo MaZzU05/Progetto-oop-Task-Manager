@@ -4,10 +4,22 @@
 #include"../modello/appuntamento.h"
 #include"../modello/scadenza.h"
 #include<QIcon>
+#include<QInputDialog>
+#include<QMessageBox>
+#include"finestrainizializzazionelibretto.h"
+#include "../modello/Filtri/filtropriorita.h"
+#include"../modello/Filtri/filtrocongiuntivo.h"
+#include"../modello/Filtri/filtroanno.h"
+#include"../modello/Filtri/filtrocompletate.h"
+#include"../modello/Filtri/filtrotipo.h"
+#include"../modello/Filtri/filtrotag.h"
+#include"../modello/Filtri/filtronome.h"
+#include"../modello/Filtri/filtrodata.h"
+#include"../modello/Filtri/filtromeseanno.h"
 namespace gui
 {
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), libretto(180, "Informatica", gestorePrincipale.getAllAttivita())
+    : QMainWindow(parent)
 {
     this->setStyleSheet("gui--MainWindow QPushButton{border: 1px solid grey; border-radius: 10px;} gui--MainWindow QPushButton:hover { background-color: lightblue;} gui--MainWindow QPushButton:pressed{ background-color: #e0e0e0; border: 1px solid #b0b0b0;}");
     //test
@@ -43,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent)
     finestraPrincipale->addWidget(calendarioCentrale);
     dettaglioCentrale=new VistaDettaglio(this);
     finestraPrincipale->addWidget(dettaglioCentrale);
-    librettoCentrale=new VistaLibretto(&libretto);
+    librettoCentrale=new VistaLibretto(&gestorePrincipale.getLibretto());
     finestraPrincipale->addWidget(librettoCentrale);
     barraLaterale=new BarraLateraleWidget(this);
     barraLaterale->popolaAnni(gestorePrincipale.getAnniPresenti());
@@ -81,10 +93,167 @@ void MainWindow::connectSegnali()
 {
     connect(bottoneVistaLista, &QPushButton::pressed, this, [this](){finestraPrincipale->setCurrentIndex(0);});
     connect(bottoneVistaCalendario, &QPushButton::pressed, this, [this](){finestraPrincipale->setCurrentIndex(1);});
-    connect(bottoneVistaLibretto, &QPushButton::pressed, this, [this](){finestraPrincipale->setCurrentIndex(3);});
+    /*connect(bottoneVistaLibretto, &QPushButton::pressed, this, [this](){
+        //se non e' stata impostata la tipologia di laurea
+        if(libretto.getCfu()==0)
+        {
+            QStringList opzioni={"Laurea Triennale", "Lauerea Magistrale", "Laurea a Ciclo Unico"}; //creo una stringList con le opzioni che faccio selezionare
+            bool ok; //serve per verificare la scelta
+            QString scelta=QInputDialog::getItem(this, "Inserisci informazioni Laurea", "Seleziona tipologia:", opzioni, 0, false, &ok);
+            if(ok&&!scelta.isEmpty())
+            {
+                if(scelta=="Laurea Triennale")
+                {
+                    libretto.setCfu(180);
+                }
+                else if(scelta=="Lauerea Magistrale")
+                {
+                    libretto.setCfu(120);
+                }
+                else
+                {
+                    libretto.setCfu(300);
+                }
+                librettoCentrale->aggiornaVista();
+                finestraPrincipale->setCurrentIndex(3);
+            }
+            else
+            {
+                QMessageBox::warning(this, "Operazione bloccata", "Non e' possibile accedere a questa pagina senza selezionare la tipologia di laurea");
+
+            }
+
+
+        }
+        else
+        {
+            finestraPrincipale->setCurrentIndex(3);
+        }
+
+
+});*/
+    connect(bottoneVistaLibretto, &QPushButton::clicked, this, [this](){
+        modello::Libretto& libretto=gestorePrincipale.getLibretto();
+        if(libretto.getCfu()==0)
+        {
+            FinestraInizializzazioneLibretto finestraLibretto(this);
+            if(finestraLibretto.exec()==QDialog::Accepted)
+            {
+                libretto.setCfu(finestraLibretto.getCFU());
+                libretto.setCorsoLaurea(finestraLibretto.getNomeCorso());
+                librettoCentrale->aggiornaVista();
+                finestraPrincipale->setCurrentIndex(3);
+            }
+            else
+            {
+                QMessageBox::warning(this, "Operazione bloccata", "Non e' possibile accedere a questa pagina senza selezionare la tipologia di laurea");
+
+            }
+        }
+        else
+        {
+            finestraPrincipale->setCurrentIndex(3);
+        }
+
+    });
     connect(calendarioCentrale, &VistaCalendario::attivitaSelezionata, this, [this](modello::Attivita* a) {
         dettaglioCentrale->mostraAttivita(a);
         finestraPrincipale->setCurrentIndex(2);
     });
     connect(dettaglioCentrale, &VistaDettaglio::tornaIndietro, this, [this](){finestraPrincipale->setCurrentIndex(1);});
-}}
+    connect(barraLaterale, &BarraLateraleWidget::filtriCambiati, this, &MainWindow::applicaFiltri);
+}
+
+void MainWindow::applicaFiltri()
+{
+    //lavoro per filtro congiuntivo, per ogni filtro utilizzato, lo aggiungo al filtro congiuntivo
+    modello::filtro::FiltroCongiuntivo congiuntivo;
+    modello::filtro::FiltroNome* perNome=new modello::filtro::FiltroNome(barraLaterale->getTestoRicerca());
+    congiuntivo.addFiltro(perNome);
+    QString tipoSelezionato=barraLaterale->getTipoSelezionato();
+    if(tipoSelezionato!="Tutte")
+    {modello::filtro::FiltroTipo* perTipo;
+      if(tipoSelezionato=="Appuntamento")
+        {
+
+            perTipo=new modello::filtro::FiltroTipo(modello::filtro::FiltroTipo::ricercaTipo::cercaAppuntamento);
+        }
+        else if(tipoSelezionato=="Esame")
+        {
+            perTipo=new modello::filtro::FiltroTipo(modello::filtro::FiltroTipo::ricercaTipo::cercaEsame);
+        }
+        else if(tipoSelezionato=="Scadenza")
+        {
+            perTipo=new modello::filtro::FiltroTipo(modello::filtro::FiltroTipo::ricercaTipo::cercaScadenza);
+        }
+        else
+        {
+            perTipo=new modello::filtro::FiltroTipo(modello::filtro::FiltroTipo::ricercaTipo::cercaSport);
+        }
+        congiuntivo.addFiltro(perTipo);
+    }
+    QString stato=barraLaterale->getStatoSelezionato();
+    if(stato!="Tutte")
+      {
+        modello::filtro::FiltroCompletate* completate;
+        if(stato=="Completate")
+        {
+            completate=new modello::filtro::FiltroCompletate(true);
+        }
+        else
+        {
+            completate=new modello::filtro::FiltroCompletate(false);
+        }
+        congiuntivo.addFiltro(completate);
+      }
+    QString priorita=barraLaterale->getPrioritaSelezionata();
+      if(priorita!="Tutte")
+      {
+        modello::filtro::FiltroPriorita* perPriorita;
+        if(priorita=="Alta")
+          {
+            perPriorita=new modello::filtro::FiltroPriorita(modello::Priority::alta);
+
+          }
+        else if(priorita=="Media")
+          {
+            perPriorita=new modello::filtro::FiltroPriorita(modello::Priority::media);
+          }
+        else
+          {
+             perPriorita=new modello::filtro::FiltroPriorita(modello::Priority::bassa);
+          }
+          congiuntivo.addFiltro(perPriorita);
+      }
+      //aggiungo il filtro per anno solo se il filtro meseAnno e il filtroData non sono attivi, mi basta verificarli secondo questo ordine
+      if(barraLaterale->isFiltroDataOn())
+      {
+          modello::filtro::FiltroData* perData=new modello::filtro::FiltroData(barraLaterale->getDataSelezionata());
+          congiuntivo.addFiltro(perData);
+      }
+      else if(barraLaterale->isFiltroMeseAnnoOn())
+      {
+          modello::filtro::FiltroMeseAnno* perMeseAnno=new modello::filtro::FiltroMeseAnno(static_cast<modello::filtro::MeseTarget>(barraLaterale->getMeseSelezionato()), barraLaterale->getAnnoSelezionato());
+          congiuntivo.addFiltro(perMeseAnno);
+      }
+      else       if(barraLaterale->isFiltroAnnoOn())
+      {
+          modello::filtro::FiltroAnno* perAnno=new modello::filtro::FiltroAnno(barraLaterale->getAnnoSelezionato());
+          congiuntivo.addFiltro(perAnno);
+      }
+      std::vector<QString> tag=barraLaterale->getTagSelezionati();
+      //scorro tutti i tag selezionati, e per ogniuno aggiungo un filtro tag al filtro congiuntivo
+      for(const QString& t:tag)
+      {
+          modello::filtro::FiltroTag* perTag=new modello::filtro::FiltroTag(t);
+          congiuntivo.addFiltro(perTag);
+      }
+
+      //faccio il filtraggio
+      auto attivitaFiltrate=gestorePrincipale.filtra(congiuntivo);
+      centrale->popolaAttivita(attivitaFiltrate);
+      calendarioCentrale->popolaAttivita(attivitaFiltrate);
+
+}
+
+}

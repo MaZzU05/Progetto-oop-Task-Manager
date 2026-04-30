@@ -13,7 +13,6 @@
 #include"vistacalendario.h"
 #include"vistalibretto.h"
 #include"../modello/gestore.h"
-#include"../modello/libretto.h"
 namespace gui
 {
 class MainWindow : public QMainWindow
@@ -25,7 +24,6 @@ public:
 
 private:
     modello::Gestore gestorePrincipale;
-    modello::Libretto libretto;
     QStackedWidget* finestraPrincipale;
     BarraLateraleWidget* barraLaterale;
     VistaElenco* centrale;
@@ -36,6 +34,11 @@ private:
     QPushButton* bottoneVistaCalendario;
     QPushButton* bottoneVistaLibretto;
     void connectSegnali();
+    //private slots:
+private Q_SLOTS:
+    void applicaFiltri();
+
+
 };
 }
 #endif // MAINWINDOW_H

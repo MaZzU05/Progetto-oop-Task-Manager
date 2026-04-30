@@ -20,6 +20,7 @@ SOURCES += \
     gui/barralateralewidget.cpp \
     gui/cardactivityvisitor.cpp \
     gui/cardattivita.cpp \
+    gui/finestrainizializzazionelibretto.cpp \
     gui/vistacalendario.cpp \
     gui/vistadettaglio.cpp \
     gui/vistaelenco.cpp \
@@ -51,6 +52,7 @@ HEADERS += \
     gui/barralateralewidget.h \
     gui/cardactivityvisitor.h \
     gui/cardattivita.h \
+    gui/finestrainizializzazionelibretto.h \
     gui/mainwindow.h \
     gui/vistacalendario.h \
     gui/vistadettaglio.h \

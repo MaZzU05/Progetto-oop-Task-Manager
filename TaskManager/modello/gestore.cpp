@@ -18,7 +18,7 @@ Gestore::~Gestore()
         delete *it;
     }
 }
-Gestore::Gestore(const Gestore& g)
+Gestore::Gestore(const Gestore& g) :libretto(g.libretto)
 {
     for( Attivita* a:g.listaAttivita)
     {
@@ -29,6 +29,7 @@ Gestore& Gestore::operator=(const Gestore& g)
 {
     if(this!=&g)
     {
+        libretto=g.libretto;
         for(Attivita* a:listaAttivita) delete a;
         listaAttivita.clear();
         for(const Attivita* a:g.listaAttivita) listaAttivita.push_back(a->clone());
@@ -93,15 +94,22 @@ std::vector<Attivita*> Gestore::filtra(const filtro::AbstractFilter& af) const
 }
  bool Gestore::salva(const QString& nomeFile) const
 {
-     QJsonArray daSalvare;
+    //aggiungo la parte per i dati del libretto, metto tutto in un QJsonObject
+    QJsonObject daSalvare;
+    //dati del libretto
+    QJsonObject infoLibretto;
+    infoLibretto["corsoDiLaurea"]=libretto.getCorsoLaurea();
+    infoLibretto["cfu_totali"]=static_cast<int>(libretto.getCfu());
+    daSalvare["info_laurea"]=infoLibretto;
+    QJsonArray arrayAttivita;
     JsonSaverVisitor visitor;
      for(Attivita* a:listaAttivita)
      {
          a->accept(&visitor);
-         daSalvare.append(visitor.getJsonObject());
+         arrayAttivita.append(visitor.getJsonObject());
      }
-     QJsonDocument doc; //"contenitore" dove appoggio il QJsonArray, necessario prima del salvataggio
-     doc.setArray(daSalvare);
+     daSalvare["lista_attivita"]=arrayAttivita;
+     QJsonDocument doc(daSalvare); //"contenitore" dove appoggio il QJsonObject, necessario prima del salvataggio
      //va trasformato in sequenza di byte, uso indented che occupa piu' spazio ma e' piu' leggibile, almeno per essere sicuro funzioni correttamente
      QByteArray datiJson=doc.toJson(QJsonDocument::Indented);
      //apro il file
@@ -125,7 +133,12 @@ bool Gestore::carica(const QString& nomeFile)
     {
         QByteArray datiJson=file.readAll();
         QJsonDocument doc=QJsonDocument::fromJson(datiJson);
-        QJsonArray daCaricare=doc.array();
+        QJsonObject principale=doc.object();
+        QJsonObject info=principale["info_laurea"].toObject();
+        libretto.setCorsoLaurea(info["corsoDiLaurea"].toString());
+        libretto.setCfu(info["cfu_totali"].toInt());
+        //passo alla lista di attivita
+        QJsonArray daCaricare=principale["lista_attivita"].toArray();
         for (auto it=daCaricare.begin(); it!=daCaricare.end(); it++)
         {
             QJsonObject aux=(*it).toObject();
@@ -251,5 +264,10 @@ std::set<QString> Gestore::getTagPresenti() const
         std::for_each(temp.begin(), temp.end(), [&aux](const QString& tag)->void{aux.insert(tag);});
     }
     return aux;
+}
+
+Libretto& Gestore::getLibretto()
+{
+    return libretto;
 }
 }

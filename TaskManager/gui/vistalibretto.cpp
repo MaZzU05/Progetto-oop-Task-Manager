@@ -1,5 +1,8 @@
 #include "vistalibretto.h"
 #include"QLabel"
+#include<QInputDialog>
+#include<QMessageBox>
+#include"finestrainizializzazionelibretto.h"
 #include"cardactivityvisitor.h"
 namespace gui
 {
@@ -7,6 +10,7 @@ VistaLibretto::VistaLibretto(modello::Libretto* libretto, QWidget *parent): QWid
 {
     setup();
     aggiornaVista();
+    connectSegnali();
 }
 
 /*
@@ -39,13 +43,15 @@ void VistaLibretto::setup()
     layoutAlto->addWidget(labeltipoCorso);
     labelnomeCorso=new QLabel(this);
     layoutAlto->addWidget(labelnomeCorso);
-    registraVoto=new QPushButton("Registra voto", this);
-    registraVoto->setStyleSheet("QPushButton { background-color: transparent; padding: 5px; border: 1px solid grey; border-radius: 10px; } QPushButton:hover { background-color: lightblue; } QPushButton:pressed { background-color: #e0e0e0; border: 1px solid #b0b0b0; }");
-    layoutAlto->addWidget(registraVoto);
+    modificaInfo=new QPushButton("Modifica Tipologia Laurea", this);
+    modificaInfo->setStyleSheet("QPushButton { background-color: transparent; padding: 5px; border: 1px solid grey; border-radius: 10px; } QPushButton:hover { background-color: lightblue; } QPushButton:pressed { background-color: #e0e0e0; border: 1px solid #b0b0b0; }");
+    layoutAlto->addWidget(modificaInfo);
     layout->addLayout(layoutAlto);
     contenitoreCentrale=new QWidget(this);
     areaScorrimento=new QScrollArea(this);
     areaScorrimento->setWidget(contenitoreCentrale);
+    areaScorrimento->setFrameShape(QFrame::NoFrame);
+    areaScorrimento->setStyleSheet("background-color: transparent;"); //mettendo lo sfondo trasparente cerco un effetto piu' elegante
     areaScorrimento->setWidgetResizable(true);
     layout->addWidget(areaScorrimento);
     layoutCentrale=new QVBoxLayout(contenitoreCentrale);
@@ -64,6 +70,20 @@ void VistaLibretto::setup()
     barraCFU=new QProgressBar(this);
     layoutBasso->addWidget(barraCFU, 2, 1, 1, 2);
     layout->addLayout(layoutBasso);
+}
+
+void VistaLibretto::connectSegnali()
+{
+    connect(modificaInfo, &QPushButton::clicked, this, [this](){
+        FinestraInizializzazioneLibretto finestraLibretto(this);
+        if(finestraLibretto.exec()==QDialog::Accepted)
+        {
+            libretto->setCfu(finestraLibretto.getCFU());
+            libretto->setCorsoLaurea(finestraLibretto.getNomeCorso());
+            aggiornaVista();
+        }
+
+    });
 }
 void VistaLibretto::setWidget(std::vector<const modello::Esame*> esami)
 {

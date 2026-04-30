@@ -10,9 +10,11 @@ class Libretto
 private:
     unsigned int cfu_totali;
     QString corsoDiLaurea;
-    const std::vector<Attivita*>& attivita;
+    std::vector<Attivita*>& attivita;
 public:
-    Libretto(unsigned int cfu_totali, QString corsoDiLaurea, const std::vector<Attivita*>& attivita);
+    Libretto(unsigned int cfu_totali, QString corsoDiLaurea, std::vector<Attivita*>& attivita);
+    Libretto& operator=(const Libretto& l);
+    Libretto(const Libretto& l);
     unsigned int getCfuCompletati() const;
     unsigned int getCfuMancanti() const;
     double getMediaPesata() const;
@@ -21,9 +23,9 @@ public:
     void setCorsoLaurea(const QString&);
     unsigned int getCfu() const;
     void setCfu(unsigned int);
-    std::vector<const Esame*> getEsamiSuperati() const;
-    std::vector<const Esame*> getEsamiNonSuperati() const;
-    std::vector<const Esame*> getEsamiFuturi() const;
+    std::vector<Esame*> getEsamiSuperati() const;
+    std::vector<Esame*> getEsamiNonSuperati() const;
+    std::vector<Esame*> getEsamiFuturi() const;
 };
 }
 #endif // LIBRETTO_H

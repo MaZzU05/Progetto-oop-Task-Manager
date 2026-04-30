@@ -2,6 +2,7 @@
 #define GESTORE_H
 #include"attivita.h"
 #include"Filtri/abstractfilter.h"
+#include"libretto.h"
 #include<vector>
 #include<QString>
 #include<set>
@@ -11,8 +12,9 @@ class Gestore
 {
 private:
     std::vector<Attivita*> listaAttivita;
+    Libretto libretto;
 public:
-    Gestore()=default;
+    Gestore(): libretto(0, "", listaAttivita){}
     ~Gestore();
     //rule of three
     Gestore(const Gestore&);
@@ -20,6 +22,7 @@ public:
     unsigned int generaNuovoId() const;
     void addAttivita(Attivita* a);
     bool removeAttivita(unsigned int id);
+    Libretto& getLibretto();
     //per svuotare dopo salvataggio su json
     void svuota();
     const std::vector<Attivita*>& getAllAttivita() const;

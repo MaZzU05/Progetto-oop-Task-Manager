@@ -49,20 +49,18 @@ void BarraLateraleWidget::setup()
     layout->addWidget(labelAnno);
     comboAnno=new QComboBox(this);
     layout->addWidget(comboAnno);
-    labelMeseAnno=new QLabel("Mese-Anno:", this);
-    layout->addWidget(labelMeseAnno);
-    QHBoxLayout* layoutMeseAnno=new QHBoxLayout();
+    labelMese=new QLabel("Mese:", this);
+    layout->addWidget(labelMese);
     comboMese=new QComboBox(this);
+    comboMese->setEnabled(false); //di default la disabilito, se seleziono l'anno la riabilito
     popolaMesi();
-    layoutMeseAnno->addWidget(comboMese);
-    comboAnno2=new QComboBox(this);
-    layoutMeseAnno->addWidget(comboAnno2);
-    layout->addLayout(layoutMeseAnno);
+    layout->addWidget(comboMese);
     checkFiltroData=new QCheckBox("Filtra per data:", this);
     layout->addWidget(checkFiltroData);
     modificaData=new QDateEdit(QDate::currentDate());
     modificaData->setDisplayFormat("dd.MM.yyyy"); //cosi visualizzo il selettore in giorno-mese-anno
-    modificaData->setEnabled(false);//disabilito la visione automatica del calendartio, lo rendero' visibile col click del mouse
+    modificaData->setEnabled(false);//disabilito la visione automatica del selettore, lo rendero' visibile col click del mouse
+    //modificaData->setCalendarPopup(true);//permette di selezionare la data con un mini calendario, abbastanza invasivo, per ora lo disabilito
     layout->addWidget(modificaData);
     labelTag=new QLabel("Filtra per tag:", this);
     layout->addWidget(labelTag);
@@ -82,11 +80,9 @@ void BarraLateraleWidget::popolaAnni(const std::set<int>& s)
 {
     comboAnno->clear();
     comboAnno->addItem("Tutte");
-    comboAnno2->clear();
-    comboAnno2->addItem("Tutte");
     for(auto anno:s)
-    {comboAnno->addItem(QString::number(anno));
-    comboAnno2->addItem(QString::number(anno));
+    {
+    comboAnno->addItem(QString::number(anno));
     }
 }
 
@@ -164,20 +160,16 @@ std::vector<QString> BarraLateraleWidget::getTagSelezionati() const
 bool BarraLateraleWidget::isFiltroMeseAnnoOn() const
 {
     // attivo solo se sia il mese che l'anno sono selezionati (FiltroMeseAnno richiede entrambi)
-    return comboMese->currentIndex() != 0 && comboAnno2->currentText() != "Tutte";
+    return comboMese->currentIndex() != 0 && comboAnno->currentText() != "Tutte";
 }
 
-int BarraLateraleWidget::getMeseSelezionato() const
+unsigned int BarraLateraleWidget::getMeseSelezionato() const
 {
     // currentIndex() e' gia' 1-12: "Tutte"=0, "Gennaio"=1, ..., "Dicembre"=12
     // corrisponde direttamente ai valori del'enum MeseTarget del modello
     return comboMese->currentIndex();
 }
 
-int BarraLateraleWidget::getAnno2Selezionato() const
-{
-    return comboAnno2->currentText().toInt();
-}
 //scorro tutti gli elementi per indice di riga, li estraggo di volta in volta, e valuto se vi e' la sottostringa, se si le lascio visibili, se no le nascondo
 void BarraLateraleWidget::filtraRigheTag(const QString& testoCercato)
 {
@@ -196,7 +188,6 @@ void BarraLateraleWidget::azzeraFiltri()
     comboStato->setCurrentIndex(0);
     comboPriorita->setCurrentIndex(0);
     comboAnno->setCurrentIndex(0);
-    comboAnno2->setCurrentIndex(0);
     comboMese->setCurrentIndex(0);
     checkFiltroData->setChecked(false);
     modificaData->setEnabled(false);
@@ -218,15 +209,27 @@ void BarraLateraleWidget::connectSegnali()
     connect(reset, &QPushButton::pressed, this, &BarraLateraleWidget::azzeraFiltri);
     //selezione Tag
     connect(cercaTag, &QLineEdit::textChanged, this, &BarraLateraleWidget::filtraRigheTag);
+    //se filtro per data disabilito per mese e per anno
+    connect(checkFiltroData, &QCheckBox::toggled, this, [this](bool spuntato){
+        modificaData->setEnabled(spuntato);
+        comboAnno->setEnabled(!spuntato);
+        comboMese->setEnabled(!spuntato);
+    });
+    //rende cliccabile o meno il selettore di mese in base a quello di anno
+    connect(comboAnno, &QComboBox::currentTextChanged, this, [this](const QString& testo){
+        bool annoSelezionato=testo!="Tutte";
+        comboMese->setEnabled(annoSelezionato&& !checkFiltroData->isChecked());
+        if(!annoSelezionato) comboMese->setCurrentIndex(0); //se non e' selezionato l'anno, riporto anche mesi su Tutte
+    });
     //segnali modifiche verso la main window
     connect(barraRicerca, &QLineEdit::textChanged, this, &BarraLateraleWidget::filtriCambiati);
     connect(comboTipo, &QComboBox::currentIndexChanged, this, &BarraLateraleWidget::filtriCambiati);
     connect(comboStato, &QComboBox::currentIndexChanged, this, &BarraLateraleWidget::filtriCambiati);
     connect(comboPriorita, &QComboBox::currentIndexChanged, this, &BarraLateraleWidget::filtriCambiati);
     connect(comboAnno, &QComboBox::currentIndexChanged, this, &BarraLateraleWidget::filtriCambiati);
-    connect(comboAnno2, &QComboBox::currentIndexChanged, this, &BarraLateraleWidget::filtriCambiati);
     connect(comboMese, &QComboBox::currentIndexChanged, this, &BarraLateraleWidget::filtriCambiati);
     connect(checkFiltroData, &QCheckBox::toggled, this, &BarraLateraleWidget::filtriCambiati);
+    connect(modificaData, &QDateEdit::userDateChanged, this, &BarraLateraleWidget::filtriCambiati);
     connect(listaTag, &QListWidget::itemSelectionChanged, this, &BarraLateraleWidget::filtriCambiati);
 
 }
