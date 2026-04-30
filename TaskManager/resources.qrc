@@ -6,5 +6,9 @@
         <file>gui/assets/icona_calendario.png</file>
         <file>gui/assets/icona_lista.png</file>
         <file>gui/assets/icona_scuola.png</file>
+        <file>gui/assets/icona_apertura.png</file>
+        <file>gui/assets/icona_modifica.png</file>
+        <file>gui/assets/icona_salvataggio.png</file>
+        <file>gui/assets/icona_info.png</file>
     </qresource>
 </RCC>

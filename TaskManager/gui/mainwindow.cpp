@@ -1,11 +1,9 @@
 #include "mainwindow.h"
-//per test
-#include"../modello/esame.h"
-#include"../modello/appuntamento.h"
-#include"../modello/scadenza.h"
 #include<QIcon>
 #include<QInputDialog>
 #include<QMessageBox>
+#include<QFileDialog>
+#include<QDir>
 #include"finestrainizializzazionelibretto.h"
 #include "../modello/Filtri/filtropriorita.h"
 #include"../modello/Filtri/filtrocongiuntivo.h"
@@ -21,9 +19,11 @@ namespace gui
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    //preparo menu
+    preparaMenuAzioni();
     this->setStyleSheet("gui--MainWindow QPushButton{border: 1px solid grey; border-radius: 10px;} gui--MainWindow QPushButton:hover { background-color: lightblue;} gui--MainWindow QPushButton:pressed{ background-color: #e0e0e0; border: 1px solid #b0b0b0;}");
     //test
-    modello::Esame* e1=new modello::Esame("analisi", gestorePrincipale.generaNuovoId(), " ", "boh", 12,QDateTime(QDate(2024,12, 20), QTime(15,30,0)), 130 );
+    /*modello::Esame* e1=new modello::Esame("analisi", gestorePrincipale.generaNuovoId(), " ", "boh", 12,QDateTime(QDate(2024,12, 20), QTime(15,30,0)), 130 );
     e1->addTag("Esame");
     e1->addTag("Prova1");
     e1->setVoto(27);
@@ -42,7 +42,7 @@ MainWindow::MainWindow(QWidget *parent)
     modello::Scadenza* s1=new modello::Scadenza("Consegna Priogetto", gestorePrincipale.generaNuovoId(), "Consegna del cazzo di progetto di pao, aaaaaaaaaaaaaaalugdlijfuasigfinburdsybf rilcuvyrb ewiuotvby5reiowlutygv rbtvcilesbru sbtsrevson  tweilb 5r4vn tvw45ebl sctvt4vukb rystvluiyse4blitv bcye5rilosbcv twie45lbvucbtsioleedbvy owie45bsvyt oiwleb5cy libewoi7 bvwloiebtyuc il8sweybt4iol8b7wo lsbey t4v8ilsevb wci384bc yil8oasebnt c8lioq3ebv awtiw348ybcxiolaw87yv23ci 8ervtq2w43ail87v c64ewoa7v 8itc oi4latrv6alt", QDateTime(QDate(2026,4, 28), QTime(15,30,0)), 4);
     s1->addPassaggio("GUI");
     s1->addPassaggio("Test");
-    gestorePrincipale.addAttivita(s1);
+    gestorePrincipale.addAttivita(s1); */
     QWidget* temp=new QWidget();
     setCentralWidget(temp);
     finestraPrincipale=new QStackedWidget(this);
@@ -88,10 +88,83 @@ MainWindow::MainWindow(QWidget *parent)
     connectSegnali();
 
 }
+void MainWindow::preparaMenuAzioni()
+{
+    menuFile=this->menuBar()->addMenu("File");
+    azioneSalva=new QAction("Salva", this);
+    azioneSalva->setIcon(QIcon(":/gui/assets/icona_salvataggio.png"));
+    azioneSalva->setShortcut(QKeySequence::Save);//per le shortcut piu' comuni uso il selettore automatico
+    azioneSalva->setShortcutVisibleInContextMenu(true); //per vedere la shortcut scritta in parte all'elemento grafico
+    azioneCarica=new QAction("Carica", this);
+    azioneCarica->setIcon(QIcon(":/gui/assets/icona_apertura.png"));
+    azioneCarica->setShortcut(QKeySequence::Open);
+    azioneCarica->setShortcutVisibleInContextMenu(true);
+    menuFile->addAction(azioneSalva);
+    menuFile->addAction(azioneCarica);
+    menuAiuto=this->menuBar()->addMenu("Aiuto");
+    azioneAiuto=new QAction("Scorciatoie da Tastira", this);
+    azioneAiuto->setIcon(QIcon(":/gui/assets/icona_info.png"));
+    azioneAiuto->setShortcut(QKeySequence("Ctrl+I"));
+    azioneAiuto->setShortcutVisibleInContextMenu(true);
+    menuAiuto->addAction(azioneAiuto);
+}
+
+void MainWindow::salvataggio()
+{
+    //con QFileDialog salvo il path selezionato da un utente con una stringa, che passero' al gestore per il salvataggio vero e proprio
+    QString percorsoSalvataggio=QFileDialog::getSaveFileName(this, "Salva l'agenda", QDir::homePath(), "File JSON (*.json)"); //indico come directory di partenza la home, e come formato per il salvataggio il json
+    //verifico se l'utente ha scelto o ha premuto annulla
+    if(percorsoSalvataggio.isEmpty())
+    {
+        QMessageBox::warning(this, "Operazione annullata", "File non salvato");
+    }
+    else
+    {
+        if(gestorePrincipale.salva(percorsoSalvataggio))
+        {
+            QMessageBox::information(this, "File salvato", "Operazione avvenuta con successo");
+        }
+        else
+        {
+            QMessageBox::critical(this, "Errore", "File non salvato, riprova");
+        }
+    }
+
+}
+
+void MainWindow::caricaAgenda()
+{
+    QString percorsoFile=QFileDialog::getOpenFileName(this, "Carica l'agenda", QDir::homePath(), "File JSON (*.json)"); //analogo al salvataggio, sta volta per il caricamento
+    if(percorsoFile.isEmpty())
+    {
+        QMessageBox::warning(this, "Operazione annullata", "File non caricato");
+    }
+    else
+    {
+        if(gestorePrincipale.carica(percorsoFile))
+        {
+            QMessageBox::information(this, "File Caricato", "Operazione avvenuta con successo");
+            centrale->popolaAttivita(gestorePrincipale.getAllAttivita());
+            calendarioCentrale->popolaAttivita(gestorePrincipale.getAllAttivita());
+            librettoCentrale->aggiornaVista();//va refreshata
+            //devo refreshare in barraLaterale gli anni e i tag che si popolano dinamicamente in base alle attivita'
+            barraLaterale->popolaAnni(gestorePrincipale.getAnniPresenti());
+            barraLaterale->popolaTag(gestorePrincipale.getTagPresenti());
+        }
+        else
+        {
+            QMessageBox::critical(this, "Errore", "File non caricato correttamente, riprova");
+        }
+    }
+}
 
 void MainWindow::connectSegnali()
 {
-    connect(bottoneVistaLista, &QPushButton::pressed, this, [this](){finestraPrincipale->setCurrentIndex(0);});
+    //per ogni cambio vista imposto l'indice corrispondente, per tutte le viste mostro la barra laterale di ricerca, tranne per la vistaDettaglio e la vistaLibretto, dunque nelle altre la setto sempre visible, e viceversa
+    connect(bottoneVistaLista, &QPushButton::pressed, this, [this](){
+        barraLaterale->setVisible(true);
+        finestraPrincipale->setCurrentIndex(0);
+    });
     connect(bottoneVistaCalendario, &QPushButton::pressed, this, [this](){finestraPrincipale->setCurrentIndex(1);});
     /*connect(bottoneVistaLibretto, &QPushButton::pressed, this, [this](){
         //se non e' stata impostata la tipologia di laurea
@@ -143,6 +216,7 @@ void MainWindow::connectSegnali()
                 libretto.setCorsoLaurea(finestraLibretto.getNomeCorso());
                 librettoCentrale->aggiornaVista();
                 finestraPrincipale->setCurrentIndex(3);
+                barraLaterale->setVisible(false);
             }
             else
             {
@@ -153,15 +227,30 @@ void MainWindow::connectSegnali()
         else
         {
             finestraPrincipale->setCurrentIndex(3);
+            barraLaterale->setVisible(false);
         }
 
     });
     connect(calendarioCentrale, &VistaCalendario::attivitaSelezionata, this, [this](modello::Attivita* a) {
+        barraLaterale->setVisible(false);
         dettaglioCentrale->mostraAttivita(a);
         finestraPrincipale->setCurrentIndex(2);
     });
-    connect(dettaglioCentrale, &VistaDettaglio::tornaIndietro, this, [this](){finestraPrincipale->setCurrentIndex(1);});
+    //per ritornare alla vista calendario dalla vista dettaglio
+    connect(dettaglioCentrale, &VistaDettaglio::tornaIndietro, this, [this](){
+        barraLaterale->setVisible(true);
+        finestraPrincipale->setCurrentIndex(1);
+    });
+    //per ricerca real-time, ogni variazione nei filtri attiva il segnale
     connect(barraLaterale, &BarraLateraleWidget::filtriCambiati, this, &MainWindow::applicaFiltri);
+    //per salvare
+    connect(azioneSalva, &QAction::triggered, this, [this](){
+        salvataggio();
+    });
+    //per caricare i file
+    connect(azioneCarica, &QAction::triggered, this, [this](){
+        caricaAgenda();
+    });
 }
 
 void MainWindow::applicaFiltri()

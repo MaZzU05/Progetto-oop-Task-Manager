@@ -7,6 +7,9 @@
 #include <QHBoxLayout>
 #include <QWidget>
 #include<QPushButton>
+#include<QMenuBar>
+#include<QMenu>
+#include<QAction>
 #include "barralateralewidget.h"
 #include"vistaelenco.h"
 #include"vistadettaglio.h"
@@ -33,6 +36,14 @@ private:
     QPushButton* bottoneVistaLista;
     QPushButton* bottoneVistaCalendario;
     QPushButton* bottoneVistaLibretto;
+    QMenu* menuFile;
+    QMenu* menuAiuto;
+    QAction* azioneSalva;
+    QAction* azioneCarica;
+    QAction* azioneAiuto;
+    void preparaMenuAzioni();
+    void salvataggio();
+    void caricaAgenda();
     void connectSegnali();
     //private slots:
 private Q_SLOTS:
