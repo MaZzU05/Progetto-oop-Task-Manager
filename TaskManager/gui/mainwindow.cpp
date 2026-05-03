@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     //preparo menu
     preparaMenuAzioni();
+    //stile per i bottoni, usato in tutta l'applicazione
     this->setStyleSheet("gui--MainWindow QPushButton{border: 1px solid grey; border-radius: 10px;} gui--MainWindow QPushButton:hover { background-color: lightblue;} gui--MainWindow QPushButton:pressed{ background-color: #e0e0e0; border: 1px solid #b0b0b0;}");
     //test
     /*modello::Esame* e1=new modello::Esame("analisi", gestorePrincipale.generaNuovoId(), " ", "boh", 12,QDateTime(QDate(2024,12, 20), QTime(15,30,0)), 130 );
@@ -63,22 +64,48 @@ MainWindow::MainWindow(QWidget *parent)
     layout->addWidget(barraLaterale);
     QVBoxLayout* layoutCentrale=new QVBoxLayout();
     QHBoxLayout* layoutBottoni=new QHBoxLayout();
-    layoutBottoni->setAlignment(Qt::AlignRight);
+    QHBoxLayout* layoutBottoniVista=new QHBoxLayout();
+    layoutBottoniVista->setAlignment(Qt::AlignRight);
+    QHBoxLayout* layoutBottoniAzioni=new QHBoxLayout();
+    layoutBottoniAzioni->setAlignment(Qt::AlignLeft);
     bottoneVistaLista=new QPushButton(this);
     QIcon iconaLista(":/gui/assets/icona_lista.png");
     bottoneVistaLista->setIcon(iconaLista);
     bottoneVistaLista->setIconSize(QSize(24,24));
-    layoutBottoni->addWidget(bottoneVistaLista);
+    bottoneVistaLista->setToolTip("Vista a Lista"); //aggiunge il testo informativo quando vi si passa sopra
+    layoutBottoniVista->addWidget(bottoneVistaLista);
     bottoneVistaCalendario=new QPushButton(this);
     QIcon iconaCalendario(":/gui/assets/icona_calendario.png");
     bottoneVistaCalendario->setIcon(iconaCalendario);
     bottoneVistaCalendario->setIconSize(QSize(24,24));
-    layoutBottoni->addWidget(bottoneVistaCalendario);
+    bottoneVistaCalendario->setToolTip("Vista a Calendario");
+    layoutBottoniVista->addWidget(bottoneVistaCalendario);
     bottoneVistaLibretto=new QPushButton(this);
     QIcon iconaLibretto(":/gui/assets/icona_scuola.png");
     bottoneVistaLibretto->setIcon(iconaLibretto);
     bottoneVistaLibretto->setIconSize(QSize(24,24));
-    layoutBottoni->addWidget(bottoneVistaLibretto);
+    bottoneVistaLibretto->setToolTip("Vista a Libretto");
+    layoutBottoniVista->addWidget(bottoneVistaLibretto);
+    bottoneAggiungi=new QPushButton(this);
+    QIcon iconaAggiungi(":/gui/assets/icona_nuovoElemento.png");
+    bottoneAggiungi->setIcon(iconaAggiungi);
+    bottoneAggiungi->setIconSize(QSize(24,24));
+    bottoneAggiungi->setToolTip("Aggiungi Attività");
+    layoutBottoniAzioni->addWidget(bottoneAggiungi);
+    bottoneModifica=new QPushButton(this);
+    QIcon iconaModifica(":/gui/assets/icona_modificaElemento.png");
+    bottoneModifica->setIcon(iconaModifica);
+    bottoneModifica->setIconSize(QSize(24,24));
+    bottoneModifica->setToolTip("Modifica Attività");
+    layoutBottoniAzioni->addWidget(bottoneModifica);
+    bottoneElimina=new QPushButton(this);
+    QIcon iconaElimina(":/gui/assets/icona_rimuoviElemento.png");
+    bottoneElimina->setIcon(iconaElimina);
+    bottoneElimina->setIconSize(QSize(24,24));
+    bottoneElimina->setToolTip("Elimina Attività");
+    layoutBottoniAzioni->addWidget(bottoneElimina);
+    layoutBottoni->addLayout(layoutBottoniAzioni);
+    layoutBottoni->addLayout(layoutBottoniVista);
     layoutCentrale->addLayout(layoutBottoni);
     layoutCentrale->addWidget(finestraPrincipale);
     layout->addLayout(layoutCentrale);
@@ -86,6 +113,12 @@ MainWindow::MainWindow(QWidget *parent)
     layout->setStretchFactor(barraLaterale,1);
     layout->setStretchFactor(layoutCentrale,4);
     connectSegnali();
+
+}
+
+//per aggiornare la grafica, da fareeeee
+void MainWindow::refresh()
+{
 
 }
 void MainWindow::preparaMenuAzioni()
@@ -143,13 +176,13 @@ void MainWindow::caricaAgenda()
     {
         if(gestorePrincipale.carica(percorsoFile))
         {
-            QMessageBox::information(this, "File Caricato", "Operazione avvenuta con successo");
             centrale->popolaAttivita(gestorePrincipale.getAllAttivita());
             calendarioCentrale->popolaAttivita(gestorePrincipale.getAllAttivita());
             librettoCentrale->aggiornaVista();//va refreshata
             //devo refreshare in barraLaterale gli anni e i tag che si popolano dinamicamente in base alle attivita'
             barraLaterale->popolaAnni(gestorePrincipale.getAnniPresenti());
             barraLaterale->popolaTag(gestorePrincipale.getTagPresenti());
+            QMessageBox::information(this, "File Caricato", "Operazione avvenuta con successo");
         }
         else
         {

@@ -16,6 +16,11 @@ INCLUDEPATH += modello \
 
 
 SOURCES += \
+    gui/Card/abstractcardedit.cpp \
+    gui/Card/cardappuntamento.cpp \
+    gui/Card/cardesame.cpp \
+    gui/Card/cardscadenza.cpp \
+    gui/Card/cardsport.cpp \
     gui/abstractvistaattivita.cpp \
     gui/barralateralewidget.cpp \
     gui/cardactivityvisitor.cpp \
@@ -48,6 +53,11 @@ SOURCES += \
     modello/sport.cpp
 
 HEADERS += \
+    gui/Card/abstractcardedit.h \
+    gui/Card/cardappuntamento.h \
+    gui/Card/cardesame.h \
+    gui/Card/cardscadenza.h \
+    gui/Card/cardsport.h \
     gui/abstractvistaattivita.h \
     gui/barralateralewidget.h \
     gui/cardactivityvisitor.h \

@@ -36,6 +36,9 @@ private:
     QPushButton* bottoneVistaLista;
     QPushButton* bottoneVistaCalendario;
     QPushButton* bottoneVistaLibretto;
+    QPushButton* bottoneModifica;
+    QPushButton* bottoneElimina;
+    QPushButton* bottoneAggiungi;
     QMenu* menuFile;
     QMenu* menuAiuto;
     QAction* azioneSalva;
@@ -44,6 +47,7 @@ private:
     void preparaMenuAzioni();
     void salvataggio();
     void caricaAgenda();
+    void refresh();
     void connectSegnali();
     //private slots:
 private Q_SLOTS:

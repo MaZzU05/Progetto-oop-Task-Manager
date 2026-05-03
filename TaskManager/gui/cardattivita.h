@@ -12,7 +12,6 @@ class CardAttivita : public QWidget
 {
     Q_OBJECT
 private:
-    QWidget* Principale;
     QWidget* dettagliWidget;
     QVBoxLayout* layoutPrincipale;
     QLabel* titolo;

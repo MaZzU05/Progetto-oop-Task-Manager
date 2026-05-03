@@ -10,5 +10,8 @@
         <file>gui/assets/icona_modifica.png</file>
         <file>gui/assets/icona_salvataggio.png</file>
         <file>gui/assets/icona_info.png</file>
+        <file>gui/assets/icona_modificaElemento.png</file>
+        <file>gui/assets/icona_nuovoElemento.png</file>
+        <file>gui/assets/icona_rimuoviElemento.png</file>
     </qresource>
 </RCC>
