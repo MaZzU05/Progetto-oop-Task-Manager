@@ -8,11 +8,10 @@ CardEsame::CardEsame(QWidget* parent): AbstractCardEdit(parent)
 
 void CardEsame::setup()
 {
-    //uniformo lo stile dei bottoni
-    this->setStyleSheet("QPushButton { background-color: transparent; padding: 5px; border: 1px solid grey; border-radius: 10px; } QPushButton:hover { background-color: lightblue; } QPushButton:pressed { background-color: #e0e0e0; border: 1px solid #b0b0b0; }");
     contenitore=new QWidget(this);
     layoutPrincipale=new QVBoxLayout();
     QHBoxLayout* layoutCfu = new QHBoxLayout();
+    layoutCfu->setAlignment(Qt::AlignLeft);
     labelCFU=new QLabel("CFU: ", this);
     layoutCfu->addWidget(labelCFU);
     selezionaCFU=new QSpinBox(this);
@@ -21,6 +20,7 @@ void CardEsame::setup()
     layoutCfu->addWidget(selezionaCFU);
     layoutPrincipale->addLayout(layoutCfu);
     QHBoxLayout* layoutVoto=new QHBoxLayout();
+    layoutVoto->setAlignment(Qt::AlignLeft);
     labelVoto=new QLabel("Voto: (31 per lode)", this);
     layoutVoto->addWidget(labelVoto);
     selezionaVoto=new QSpinBox(this);
@@ -29,6 +29,7 @@ void CardEsame::setup()
     layoutVoto->addWidget(selezionaVoto);
     layoutPrincipale->addLayout(layoutVoto);
     QHBoxLayout* layoutSede=new QHBoxLayout();
+    layoutSede->setAlignment(Qt::AlignLeft);
     labelSede=new QLabel("Sede: ", this);
     layoutSede->addWidget(labelSede);
     inserisciSede=new QLineEdit(this);
@@ -36,6 +37,7 @@ void CardEsame::setup()
     layoutSede->addWidget(inserisciSede);
     layoutPrincipale->addLayout(layoutSede);
     QHBoxLayout* layoutProfessori=new QHBoxLayout();
+    layoutProfessori->setAlignment(Qt::AlignLeft);
     labelProfessori=new QLabel("Professori: ", this);
     layoutProfessori->addWidget(labelProfessori);
     QVBoxLayout* layoutProfessoriInterno=new QVBoxLayout();
@@ -88,7 +90,8 @@ modello::Esame* CardEsame::generaAttivita(unsigned int id)
 {
     modello::Esame* nuovoEsame=new modello::Esame(getTitle(), id, getNote(), inserisciSede->text(), selezionaCFU->value(), QDateTime(getDate(), getTime()), getDurata(), isComplete(), getPriorita());
     std::vector<QString> vecTag=getTag();
-    for(const QString& tag:vecTag) nuovoEsame->addTag(tag);
+    for(const QString& tag:vecTag)
+        nuovoEsame->addTag(tag);
     std::vector<QString> vecProf;
     for(int i=0; i<listaProfessori->count(); i++) vecProf.push_back(listaProfessori->item(i)->text());
     for(const QString& prof:vecProf) nuovoEsame->addProfessor(prof);
@@ -107,5 +110,15 @@ void CardEsame::popola(const modello::Esame* e)
     std::vector<QString> vecProf=e->getAllProf();
     for(const QString& prof:vecProf) listaProfessori->addItem(prof);
 
+}
+
+QString CardEsame::validaSelezioni()
+{
+    if(!validazioneBase().isEmpty())
+        return validazioneBase();
+    //il voto lo si puo' assegnare solo dopo l'esame
+    if(selezionaVoto->value()!=0&&QDate::currentDate().daysTo(getDate())>0)
+        return "Non puoi assegnare un voto ad un esame futuro";
+    return "";
 }
 }}

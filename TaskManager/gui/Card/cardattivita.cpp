@@ -2,6 +2,8 @@
 #include<vector>
 namespace gui
 {
+namespace card
+{
 CardAttivita::CardAttivita(QWidget *parent): QWidget(parent), espansa(false)
 {
     setup();
@@ -13,19 +15,19 @@ void CardAttivita::setup()
     this->setAttribute(Qt::WA_StyledBackground, true);
 
     //elemnti di stile css, il cazzo di tema scuro sminchia tutto, forzo i colori del testo
-    this->setStyleSheet("gui--CardAttivita { "
+    this->setStyleSheet("gui--card--CardAttivita { "
                         "   background-color: white; "
                         "   border: 1px solid #e0e0e0; "
                         "   border-radius: 10px; "
                         "   margin: 5px; "
                         "}"
-                        "gui--CardAttivita:hover { "
+                        "gui--card--CardAttivita:hover { "
                         "   border: 1px solid #2196F3; " // Cambia bordo al passaggio del mouse (Blu)
                         "}"
-                        "gui--CardAttivita QLabel {"
+                        "gui--card--CardAttivita QLabel {"
                         "   color: #333333;"
                         "}"
-                        "gui--CardAttivita QListWidget {color: #333333; background-color: transparent; border: none; }"
+                        "gui--card--CardAttivita QListWidget {color: #333333; background-color: transparent; border: none; }"
         );
     layoutPrincipale=new QVBoxLayout(this);
     layoutPrincipale->setContentsMargins(15, 12, 15, 12); // Piu' respiro ai bordi
@@ -101,5 +103,6 @@ void CardAttivita::mousePressEvent(QMouseEvent *event)
 void CardAttivita::addWidget(QWidget* w)
 {
     layoutDettagli->addWidget(w);
+}
 }
 }

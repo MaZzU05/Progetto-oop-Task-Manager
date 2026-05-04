@@ -8,6 +8,8 @@
 #include"../modello/attivita.h"
 namespace gui
 {
+namespace card
+{
 class CardAttivita : public QWidget
 {
     Q_OBJECT
@@ -41,6 +43,6 @@ Q_SIGNALS:
     //per selezionare l'attivita, espanderla e farvi operazioni, il bool lo sfrutto nella mainWindow, dato che voglio una sola attivita' espansa per volta
     void selezionata(CardAttivita*, bool);
 };
-
+}
 }
 #endif // CARDATTIVITA_H

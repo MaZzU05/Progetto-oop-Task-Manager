@@ -1,5 +1,5 @@
 #include "vistaelenco.h"
-#include "cardactivityvisitor.h"
+#include "Card/cardactivityvisitor.h"
 namespace gui {
 
 
@@ -43,11 +43,11 @@ void VistaElenco::popolaAttivita(const std::vector<modello::Attivita*>& vec)
     cardEspansaAttualmente=nullptr;
     for (modello::Attivita* a:vec)
     {
-        CardActivityVisitor visitor;
+        card::CardActivityVisitor visitor;
         a->accept(&visitor);
-        CardAttivita* nuovaCard=visitor.getWidget();
+        card::CardAttivita* nuovaCard=visitor.getWidget();
         layout->addWidget(nuovaCard);
-        connect(nuovaCard, &CardAttivita::selezionata, this, [this, a, nuovaCard](CardAttivita* c, bool espansa){
+        connect(nuovaCard, &card::CardAttivita::selezionata, this, [this, a, nuovaCard](card::CardAttivita* c, bool espansa){
             if(espansa)
              {
                 //se vi e' aperta una card diversa la chiudo
@@ -66,6 +66,7 @@ void VistaElenco::popolaAttivita(const std::vector<modello::Attivita*>& vec)
                 if(cardEspansaAttualmente==nuovaCard)
                  {
                      cardEspansaAttualmente=nullptr;
+                    Q_EMIT attivitaSelezionata(nullptr); //necessario per indicare la deselezione
                 }
              }
 

@@ -2,7 +2,7 @@
 #include<QPushButton>
 #include<QHBoxLayout>
 #include<QIcon>
-#include"cardactivityvisitor.h"
+#include"Card/cardactivityvisitor.h"
 namespace gui
 {
 VistaDettaglio::VistaDettaglio(QWidget *parent): QWidget(parent)
@@ -48,9 +48,9 @@ void VistaDettaglio::setWidget(QWidget* nuovaCard)
 void VistaDettaglio::mostraAttivita(modello::Attivita* a)
 {
     attivitaCorrente=a;
-    CardActivityVisitor visitor;
+    card::CardActivityVisitor visitor;
     attivitaCorrente->accept(&visitor);
-    CardAttivita* cardDaVisualizzare=visitor.getWidget();
+    card::CardAttivita* cardDaVisualizzare=visitor.getWidget();
     setWidget(cardDaVisualizzare);
 }
 }

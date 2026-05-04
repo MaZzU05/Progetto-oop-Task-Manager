@@ -8,11 +8,11 @@ CardScadenza::CardScadenza(QWidget* parent): AbstractCardEdit(parent)
 }
 void CardScadenza::setup()
 {
-    //uniformo lo stile dei bottoni
-    this->setStyleSheet("QPushButton { background-color: transparent; padding: 5px; border: 1px solid grey; border-radius: 10px; } QPushButton:hover { background-color: lightblue; } QPushButton:pressed { background-color: #e0e0e0; border: 1px solid #b0b0b0; }");
+    nascondiDurata();
     contenitore=new QWidget(this);
     layoutPrincipale=new QVBoxLayout();
     QHBoxLayout* layoutPreavviso=new QHBoxLayout();
+    layoutPreavviso->setAlignment(Qt::AlignLeft);
     labelPreavviso=new QLabel("Inserisci giorrni preavviso: ", this);
     layoutPreavviso->addWidget(labelPreavviso);
     selezionaPreavviso=new QSpinBox(this);
@@ -21,6 +21,7 @@ void CardScadenza::setup()
     layoutPreavviso->addWidget(selezionaPreavviso);
     layoutPrincipale->addLayout(layoutPreavviso);
     QHBoxLayout* layoutToDo=new QHBoxLayout();
+    layoutToDo->setAlignment(Qt::AlignLeft);
     labelToDoList=new QLabel("Inserisci le task da completare: ", this);
     layoutToDo->addWidget(labelToDoList);
     QVBoxLayout* layoutToDoInterno=new QVBoxLayout();
@@ -69,6 +70,9 @@ void CardScadenza::connectSegnali()
 modello::Scadenza* CardScadenza::generaAttivita(unsigned int id)
 {
     modello::Scadenza* nuovaScadenza=new modello::Scadenza(getTitle(), id, getNote(), QDateTime(getDate(), getTime()), selezionaPreavviso->value(), getDurata(),isComplete(), getPriorita());
+    std::vector<QString> vecTag=getTag();
+    for(const QString& tag:vecTag)
+        nuovaScadenza->addTag(tag);
     std::vector<QString> vecTask;
     for(int i=0; i<listaTask->count(); i++)
         vecTask.push_back(listaTask->item(i)->text());
@@ -91,6 +95,12 @@ void CardScadenza::popola(const modello::Scadenza* s)
         listaTask->addItem(sottoTask.first);
 
 
+}
+
+QString CardScadenza::validaSelezioni()
+{
+    //non ha bisogno di validazioni ulteriori
+    return validazioneBase();
 }
 
 }}

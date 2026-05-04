@@ -18,16 +18,18 @@ INCLUDEPATH += modello \
 SOURCES += \
     gui/Card/abstractcardedit.cpp \
     gui/Card/cardappuntamento.cpp \
+    gui/Card/cardeditactivityvisitor.cpp \
     gui/Card/cardesame.cpp \
     gui/Card/cardscadenza.cpp \
     gui/Card/cardsport.cpp \
     gui/abstractvistaattivita.cpp \
     gui/barralateralewidget.cpp \
-    gui/cardactivityvisitor.cpp \
-    gui/cardattivita.cpp \
+    gui/Card/cardactivityvisitor.cpp \
+    gui/Card/cardattivita.cpp \
     gui/finestrainizializzazionelibretto.cpp \
     gui/vistacalendario.cpp \
     gui/vistadettaglio.cpp \
+    gui/vistaedit.cpp \
     gui/vistaelenco.cpp \
     gui/vistalibretto.cpp \
     main.cpp \
@@ -55,17 +57,19 @@ SOURCES += \
 HEADERS += \
     gui/Card/abstractcardedit.h \
     gui/Card/cardappuntamento.h \
+    gui/Card/cardeditactivityvisitor.h \
     gui/Card/cardesame.h \
     gui/Card/cardscadenza.h \
     gui/Card/cardsport.h \
     gui/abstractvistaattivita.h \
     gui/barralateralewidget.h \
-    gui/cardactivityvisitor.h \
-    gui/cardattivita.h \
+    gui/Card/cardactivityvisitor.h \
+    gui/Card/cardattivita.h \
     gui/finestrainizializzazionelibretto.h \
     gui/mainwindow.h \
     gui/vistacalendario.h \
     gui/vistadettaglio.h \
+    gui/vistaedit.h \
     gui/vistaelenco.h \
     gui/vistalibretto.h \
     modello/Filtri/filtroanno.h \

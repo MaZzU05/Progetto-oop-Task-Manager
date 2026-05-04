@@ -12,6 +12,7 @@ public:
     CardScadenza(QWidget* parent=nullptr);
     modello::Scadenza* generaAttivita(unsigned int id) override;
     void popola(const modello::Scadenza* );
+    QString validaSelezioni() override;
 private:
     void setup();
     void connectSegnali();

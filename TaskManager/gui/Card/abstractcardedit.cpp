@@ -15,10 +15,12 @@ void AbstractCardEdit::setup()
 {
     //uniformo lo stile dei bottoni
     this->setStyleSheet("QPushButton { background-color: transparent; padding: 5px; border: 1px solid grey; border-radius: 10px; } QPushButton:hover { background-color: lightblue; } QPushButton:pressed { background-color: #e0e0e0; border: 1px solid #b0b0b0; }");
+
     layoutPrincipale=new QVBoxLayout(this);
     //la parte alta conterra' gli attributi della base, la parte bassa verra' popolata nelle derivate con le parti spedcifiche
     parteAlta=new QVBoxLayout();
     QHBoxLayout* layoutTitolo=new QHBoxLayout();
+    layoutTitolo->setAlignment(Qt::AlignLeft);
     labelTitolo=new QLabel("Titolo: ", this);
     layoutTitolo->addWidget(labelTitolo);
     inserisciTitolo=new QLineEdit(this);
@@ -26,20 +28,25 @@ void AbstractCardEdit::setup()
     layoutTitolo->addWidget(inserisciTitolo);
     parteAlta->addLayout(layoutTitolo);
     QHBoxLayout* layoutData=new QHBoxLayout();
+    layoutData->setAlignment(Qt::AlignLeft);
     labelData=new QLabel("Data: ", this);
     layoutData->addWidget(labelData);
     selezionaData=new QDateEdit(this);
+    selezionaData->setDate(QDate::currentDate());
     selezionaData->setDisplayFormat("dd.MM.yyyy");
     selezionaData->setCalendarPopup(true); //abilito il mini calendario per selezionare la data
-    layoutData->addWidget(selezionaData);
+    layoutData->addWidget(selezionaData); //li imposto al giorno attuale
     parteAlta->addLayout(layoutData);
     QHBoxLayout* layoutOra=new QHBoxLayout();
+    layoutOra->setAlignment(Qt::AlignLeft);
     labelOra=new QLabel("Orario: ", this);
     layoutOra->addWidget(labelOra);
     selezionaOra=new QTimeEdit(this);
+    selezionaOra->setTime(QTime::currentTime());//e all'ora attuale
     layoutOra->addWidget(selezionaOra);
     parteAlta->addLayout(layoutOra);
     QHBoxLayout* layoutDurata=new QHBoxLayout();
+    layoutDurata->setAlignment(Qt::AlignLeft);
     labelDurata=new QLabel("Durata in minuti: ", this);
     layoutDurata->addWidget(labelDurata);
     inserisciDurata=new QSpinBox(this);
@@ -48,12 +55,15 @@ void AbstractCardEdit::setup()
     layoutDurata->addWidget(inserisciDurata);
     parteAlta->addLayout(layoutDurata);
     QHBoxLayout* layoutStato=new QHBoxLayout();
+    layoutStato->setAlignment(Qt::AlignLeft);
     labelStato=new QLabel("Stato: ", this);
     layoutStato->addWidget(labelStato);
     boxStato=new QCheckBox(this);
+    boxStato->setText("Completata");
     layoutStato->addWidget(boxStato);
     parteAlta->addLayout(layoutStato);
     QHBoxLayout* layoutPriorita=new QHBoxLayout();
+    layoutPriorita->setAlignment(Qt::AlignLeft);
     labelPriorita=new QLabel("Priorità: ", this);
     layoutPriorita->addWidget(labelPriorita);
     comboPriorita=new QComboBox(this);
@@ -63,6 +73,7 @@ void AbstractCardEdit::setup()
     layoutPriorita->addWidget(comboPriorita);
     parteAlta->addLayout(layoutPriorita);
     QHBoxLayout* layoutTag=new QHBoxLayout();
+    layoutTag->setAlignment(Qt::AlignLeft);
     labelTag=new QLabel("Tag: ", this);
     layoutTag->addWidget(labelTag);
     QVBoxLayout* layoutTagInterno=new QVBoxLayout();
@@ -80,10 +91,13 @@ void AbstractCardEdit::setup()
     layoutTag->addLayout(layoutTagInterno);
     parteAlta->addLayout(layoutTag);
     QHBoxLayout* layoutNote=new QHBoxLayout();
+    layoutNote->setAlignment(Qt::AlignLeft);
     labelNote=new QLabel("Note: ", this);
     layoutNote->addWidget(labelNote);
-    inserisciNote=new QLineEdit(this);
+    inserisciNote=new QTextEdit(this);
     inserisciNote->setPlaceholderText("inserisci note");
+    //imposto lo stile del QTextEdit, se no risulta sgradevole non avendo contorni ne niente, mi uniformo con le parti dell cardAttivita
+    inserisciNote->setStyleSheet("QTextEdit { border: 1px solid #e0e0e0; border-radius: 10px; padding: 10px; background-color: transparent;}");
     layoutNote->addWidget(inserisciNote);
     parteAlta->addLayout(layoutNote);
     layoutPrincipale->addLayout(parteAlta);
@@ -95,8 +109,10 @@ void AbstractCardEdit::connectSegnali()
 {
     //per togliere il tag selezionato collego il click del bottone con una lambda che toglie l'elemento dalla list
     connect(bottoneTogliTag, &QPushButton::clicked, this, [this](){
-        QListWidgetItem* elementoSelezionato=listaTag->currentItem();
-        delete elementoSelezionato; //non serve controllo, delete su nullptr non da problemi
+        int riga=listaTag->currentRow(); //estraggo la riga
+        //controllo che ve ne sia una selezionata
+        if(riga!=-1)
+          delete listaTag->takeItem(riga);
     });
     connect(bottoneAggiungiTag, &QPushButton::clicked, this, [this](){
         //controllo che abbia inserito il testo
@@ -154,7 +170,7 @@ std::vector<QString> AbstractCardEdit::getTag() const
 }
 const QString AbstractCardEdit::getNote() const
 {
-    return inserisciNote->text();
+    return inserisciNote->toPlainText(); //per il QTextEdit essendo che accetta le formattazioni va usato questo
 }
 
 bool AbstractCardEdit::isComplete() const
@@ -176,7 +192,19 @@ void AbstractCardEdit::preparaBase(const modello::Attivita* a)
     std::vector<QString> aux=a->getAllTag();
     for(const QString& tag:aux)
         listaTag->addItem(tag);
-    inserisciNote->setText(a->getNote());
+    inserisciNote->setPlainText(a->getNote());
+}
+
+QString AbstractCardEdit::validazioneBase()
+{
+    //deve avere un titolo
+    if(inserisciTitolo->text().isEmpty())
+        return "Devi inserire un titolo!";
+    //non puo' esistere un attivita selezionata che deve ancora avvenire
+    if(boxStato->isChecked()&&QDate::currentDate().daysTo(getDate())<0)
+        return "Non puoi completare un attività futura";
+    return "";
+
 }
 
 }

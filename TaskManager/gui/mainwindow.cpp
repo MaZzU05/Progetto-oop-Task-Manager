@@ -4,6 +4,7 @@
 #include<QMessageBox>
 #include<QFileDialog>
 #include<QDir>
+#include<QTableWidget>
 #include"finestrainizializzazionelibretto.h"
 #include "../modello/Filtri/filtropriorita.h"
 #include"../modello/Filtri/filtrocongiuntivo.h"
@@ -58,6 +59,8 @@ MainWindow::MainWindow(QWidget *parent)
     finestraPrincipale->addWidget(dettaglioCentrale);
     librettoCentrale=new VistaLibretto(&gestorePrincipale.getLibretto());
     finestraPrincipale->addWidget(librettoCentrale);
+    editCentrale=new VistaEdit(this);
+    finestraPrincipale->addWidget(editCentrale);
     barraLaterale=new BarraLateraleWidget(this);
     barraLaterale->popolaAnni(gestorePrincipale.getAnniPresenti());
     barraLaterale->popolaTag(gestorePrincipale.getTagPresenti());
@@ -91,18 +94,23 @@ MainWindow::MainWindow(QWidget *parent)
     bottoneAggiungi->setIcon(iconaAggiungi);
     bottoneAggiungi->setIconSize(QSize(24,24));
     bottoneAggiungi->setToolTip("Aggiungi Attività");
+    bottoneAggiungi->setShortcut(QKeySequence("Ctrl+A"));//shortcut per aggiungere attivita
     layoutBottoniAzioni->addWidget(bottoneAggiungi);
     bottoneModifica=new QPushButton(this);
+    bottoneModifica->setEnabled(false); //di default non cliccabile
     QIcon iconaModifica(":/gui/assets/icona_modificaElemento.png");
     bottoneModifica->setIcon(iconaModifica);
     bottoneModifica->setIconSize(QSize(24,24));
     bottoneModifica->setToolTip("Modifica Attività");
+    bottoneModifica->setShortcut(QKeySequence("Ctrl+E"));//shortcut per modificare attivita
     layoutBottoniAzioni->addWidget(bottoneModifica);
     bottoneElimina=new QPushButton(this);
+    bottoneElimina->setEnabled(false);
     QIcon iconaElimina(":/gui/assets/icona_rimuoviElemento.png");
     bottoneElimina->setIcon(iconaElimina);
     bottoneElimina->setIconSize(QSize(24,24));
     bottoneElimina->setToolTip("Elimina Attività");
+    bottoneElimina->setShortcut(QKeySequence("Ctrl+Backspace"));//shortcut per cancellare attivita
     layoutBottoniAzioni->addWidget(bottoneElimina);
     layoutBottoni->addLayout(layoutBottoniAzioni);
     layoutBottoni->addLayout(layoutBottoniVista);
@@ -119,7 +127,14 @@ MainWindow::MainWindow(QWidget *parent)
 //per aggiornare la grafica, da fareeeee
 void MainWindow::refresh()
 {
-
+    //centrale->popolaAttivita(gestorePrincipale.getAllAttivita());
+    //calendarioCentrale->popolaAttivita(gestorePrincipale.getAllAttivita());
+    //al posto di rigenerare le viste, invalidando i filtri attualmente selezionati, chiamo direttamente applica filtri
+    applicaFiltri();
+    librettoCentrale->aggiornaVista();//va refreshata
+    //devo refreshare in barraLaterale gli anni e i tag che si popolano dinamicamente in base alle attivita'
+    barraLaterale->popolaAnni(gestorePrincipale.getAnniPresenti());
+    barraLaterale->popolaTag(gestorePrincipale.getTagPresenti());
 }
 void MainWindow::preparaMenuAzioni()
 {
@@ -134,12 +149,28 @@ void MainWindow::preparaMenuAzioni()
     azioneCarica->setShortcutVisibleInContextMenu(true);
     menuFile->addAction(azioneSalva);
     menuFile->addAction(azioneCarica);
+    //creo un menu con azioni non cliccabili che saranno delle voci che rappresentano tutte le scorciatoie da tastiera
     menuAiuto=this->menuBar()->addMenu("Aiuto");
-    azioneAiuto=new QAction("Scorciatoie da Tastira", this);
-    azioneAiuto->setIcon(QIcon(":/gui/assets/icona_info.png"));
-    azioneAiuto->setShortcut(QKeySequence("Ctrl+I"));
-    azioneAiuto->setShortcutVisibleInContextMenu(true);
-    menuAiuto->addAction(azioneAiuto);
+    QMenu* sottoMenuScorciatoie=menuAiuto->addMenu("Scorciatoie da tastiera");
+    sottoMenuScorciatoie->setIcon(QIcon(":/gui/assets/icona_info.png"));
+    QAction* voceSalva=new QAction("Salva Ctrl+S");
+    voceSalva->setEnabled(false);//non cliccabile
+    sottoMenuScorciatoie->addAction(voceSalva);
+    QAction* voceCarica=new QAction("Carica Ctrl+O");
+    voceCarica->setEnabled(false);
+    sottoMenuScorciatoie->addAction(voceCarica);
+    QAction* voceInfo=new QAction("Questa pagina Ctrl+I");
+    voceInfo->setEnabled(false);
+    sottoMenuScorciatoie->addAction(voceInfo);
+    QAction* voceAggiungi=new QAction("Aggiungi Attivita Ctrl+A");
+    voceAggiungi->setEnabled(false);
+    sottoMenuScorciatoie->addAction(voceAggiungi);
+    QAction* voceElimina=new QAction("Elimina Attivita Selezionata Ctrl+Backspace");
+    voceElimina->setEnabled(false);
+    sottoMenuScorciatoie->addAction(voceElimina);
+    QAction* voceModifica=new QAction("Modifica Attivita Selezionata Ctrl+E");
+    voceModifica->setEnabled(false);
+    sottoMenuScorciatoie->addAction(voceModifica);
 }
 
 void MainWindow::salvataggio()
@@ -176,12 +207,14 @@ void MainWindow::caricaAgenda()
     {
         if(gestorePrincipale.carica(percorsoFile))
         {
+            /*
             centrale->popolaAttivita(gestorePrincipale.getAllAttivita());
             calendarioCentrale->popolaAttivita(gestorePrincipale.getAllAttivita());
             librettoCentrale->aggiornaVista();//va refreshata
             //devo refreshare in barraLaterale gli anni e i tag che si popolano dinamicamente in base alle attivita'
             barraLaterale->popolaAnni(gestorePrincipale.getAnniPresenti());
-            barraLaterale->popolaTag(gestorePrincipale.getTagPresenti());
+            barraLaterale->popolaTag(gestorePrincipale.getTagPresenti());*/
+            refresh();
             QMessageBox::information(this, "File Caricato", "Operazione avvenuta con successo");
         }
         else
@@ -196,59 +229,37 @@ void MainWindow::connectSegnali()
     //per ogni cambio vista imposto l'indice corrispondente, per tutte le viste mostro la barra laterale di ricerca, tranne per la vistaDettaglio e la vistaLibretto, dunque nelle altre la setto sempre visible, e viceversa
     connect(bottoneVistaLista, &QPushButton::pressed, this, [this](){
         barraLaterale->setVisible(true);
+        //mostro i bottoni di modifica ecc
+        bottoneAggiungi->setVisible(true);
+        bottoneModifica->setVisible(true);
+        bottoneElimina->setVisible(true);
         finestraPrincipale->setCurrentIndex(0);
     });
-    connect(bottoneVistaCalendario, &QPushButton::pressed, this, [this](){finestraPrincipale->setCurrentIndex(1);});
-    /*connect(bottoneVistaLibretto, &QPushButton::pressed, this, [this](){
-        //se non e' stata impostata la tipologia di laurea
-        if(libretto.getCfu()==0)
-        {
-            QStringList opzioni={"Laurea Triennale", "Lauerea Magistrale", "Laurea a Ciclo Unico"}; //creo una stringList con le opzioni che faccio selezionare
-            bool ok; //serve per verificare la scelta
-            QString scelta=QInputDialog::getItem(this, "Inserisci informazioni Laurea", "Seleziona tipologia:", opzioni, 0, false, &ok);
-            if(ok&&!scelta.isEmpty())
-            {
-                if(scelta=="Laurea Triennale")
-                {
-                    libretto.setCfu(180);
-                }
-                else if(scelta=="Lauerea Magistrale")
-                {
-                    libretto.setCfu(120);
-                }
-                else
-                {
-                    libretto.setCfu(300);
-                }
-                librettoCentrale->aggiornaVista();
-                finestraPrincipale->setCurrentIndex(3);
-            }
-            else
-            {
-                QMessageBox::warning(this, "Operazione bloccata", "Non e' possibile accedere a questa pagina senza selezionare la tipologia di laurea");
-
-            }
-
-
-        }
-        else
-        {
-            finestraPrincipale->setCurrentIndex(3);
-        }
-
-
-});*/
+    connect(bottoneVistaCalendario, &QPushButton::pressed, this, [this](){
+        barraLaterale->setVisible(true);
+        //nascondo i bottoni di modifica ecc
+        bottoneAggiungi->setVisible(false);
+        bottoneModifica->setVisible(false);
+        bottoneElimina->setVisible(false);
+     finestraPrincipale->setCurrentIndex(1);
+    });
     connect(bottoneVistaLibretto, &QPushButton::clicked, this, [this](){
         modello::Libretto& libretto=gestorePrincipale.getLibretto();
         if(libretto.getCfu()==0)
         {
+            //creo e lancio la finestra di selezione
             FinestraInizializzazioneLibretto finestraLibretto(this);
             if(finestraLibretto.exec()==QDialog::Accepted)
             {
+
                 libretto.setCfu(finestraLibretto.getCFU());
                 libretto.setCorsoLaurea(finestraLibretto.getNomeCorso());
                 librettoCentrale->aggiornaVista();
                 finestraPrincipale->setCurrentIndex(3);
+                //nascondo i bottoni di modifica ecc
+                bottoneAggiungi->setVisible(false);
+                bottoneModifica->setVisible(false);
+                bottoneElimina->setVisible(false);
                 barraLaterale->setVisible(false);
             }
             else
@@ -260,18 +271,121 @@ void MainWindow::connectSegnali()
         else
         {
             finestraPrincipale->setCurrentIndex(3);
+            bottoneAggiungi->setVisible(false);
+            bottoneModifica->setVisible(false);
+            bottoneElimina->setVisible(false);
             barraLaterale->setVisible(false);
         }
 
     });
+    connect(bottoneAggiungi, &QPushButton::clicked, this, [this](){
+        editCentrale->impostaPerCreazione(gestorePrincipale.generaNuovoId());
+        finestraPrincipale->setCurrentIndex(4);
+        //nascondo parti da non visualizzare
+        bottoneAggiungi->setVisible(false);
+        bottoneModifica->setVisible(false);
+        bottoneElimina->setVisible(false);
+        barraLaterale->setVisible(false);
+    });
+    connect(bottoneModifica, &QPushButton::clicked, this, [this](){
+        if(attivitaSelezionata)
+            {
+            editCentrale->impostaPerModifca(attivitaSelezionata);
+            finestraPrincipale->setCurrentIndex(4);
+            //nascondo parti da non visualizzare
+            bottoneAggiungi->setVisible(false);
+            bottoneModifica->setVisible(false);
+            bottoneElimina->setVisible(false);
+            barraLaterale->setVisible(false);
+        }
+    });
+    connect(bottoneElimina, &QPushButton::clicked, this, [this](){
+        if(attivitaSelezionata)
+            {
+            //chiedo conferma dell'eliminazione
+            QMessageBox::StandardButton risposta= QMessageBox::question(this, "Conferma Eliminazione", "Sei sicuro di voler eliminare definitivamente questa attività?");
+            //guardo se ha selezionato yes
+            if(risposta==QMessageBox::Yes)
+            {
+                gestorePrincipale.removeAttivita(attivitaSelezionata->getID());
+                attivitaSelezionata=nullptr;
+                bottoneModifica->setEnabled(false);
+                bottoneElimina->setEnabled(false);
+                //aggiornamento elementi grafici
+                /*
+                centrale->popolaAttivita(gestorePrincipale.getAllAttivita());
+                calendarioCentrale->popolaAttivita(gestorePrincipale.getAllAttivita());
+                barraLaterale->popolaAnni(gestorePrincipale.getAnniPresenti());
+                barraLaterale->popolaTag(gestorePrincipale.getTagPresenti());
+*/
+                refresh();
+
+            }
+        }
+    });
+    connect(editCentrale, &VistaEdit::operazioneConfermata, this, [this](modello::Attivita* a){
+        gestorePrincipale.removeAttivita(a->getID()); //se sto creando non fa nulla e va bene cosi
+        attivitaSelezionata=nullptr;
+        bottoneModifica->setEnabled(false);
+        bottoneElimina->setEnabled(false);
+        gestorePrincipale.addAttivita(a);
+        finestraPrincipale->setCurrentIndex(0);//va alla vista dettaglio
+        // e reimposta le parti visibili
+        barraLaterale->setVisible(true);
+        bottoneAggiungi->setVisible(true);
+        bottoneModifica->setVisible(true);
+        bottoneElimina->setVisible(true);
+        //aggiorno gli elementi grafici
+        /*
+        centrale->popolaAttivita(gestorePrincipale.getAllAttivita());
+        calendarioCentrale->popolaAttivita(gestorePrincipale.getAllAttivita());
+        barraLaterale->popolaAnni(gestorePrincipale.getAnniPresenti());
+        barraLaterale->popolaTag(gestorePrincipale.getTagPresenti());
+*/
+        refresh();
+
+    });
+    connect(editCentrale, &VistaEdit::operazioneAnnulata, this, [this]()
+            {
+        finestraPrincipale->setCurrentIndex(0);//va alla vista dettaglio
+        // e reimposta le parti visibili
+        barraLaterale->setVisible(true);
+        bottoneAggiungi->setVisible(true);
+        bottoneModifica->setVisible(true);
+        bottoneElimina->setVisible(true);
+
+    });
+    connect(centrale, &VistaElenco::attivitaSelezionata, this, [this](modello::Attivita* a){
+        //se e' un attivita selezionata
+        if(a)
+            {
+            bottoneModifica->setEnabled(true);
+            bottoneElimina->setEnabled(true);
+            attivitaSelezionata=a;
+        }
+        else
+            {
+            bottoneModifica->setEnabled(false);
+            bottoneElimina->setEnabled(false);
+            attivitaSelezionata=a;
+        }
+    });
     connect(calendarioCentrale, &VistaCalendario::attivitaSelezionata, this, [this](modello::Attivita* a) {
         barraLaterale->setVisible(false);
         dettaglioCentrale->mostraAttivita(a);
+        //mostro i bottoni di modifica ecc ma non quello di aggiunta
+        bottoneAggiungi->setVisible(false);
+        bottoneModifica->setVisible(true);
+        bottoneElimina->setVisible(true);
         finestraPrincipale->setCurrentIndex(2);
     });
     //per ritornare alla vista calendario dalla vista dettaglio
     connect(dettaglioCentrale, &VistaDettaglio::tornaIndietro, this, [this](){
         barraLaterale->setVisible(true);
+        //nascondo i bottoni di modifica ecc
+        bottoneAggiungi->setVisible(false);
+        bottoneModifica->setVisible(false);
+        bottoneElimina->setVisible(false);
         finestraPrincipale->setCurrentIndex(1);
     });
     //per ricerca real-time, ogni variazione nei filtri attiva il segnale

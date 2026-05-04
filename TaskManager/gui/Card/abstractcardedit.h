@@ -6,6 +6,7 @@
 #include<QLabel>
 #include<QPushButton>
 #include<QLineEdit>
+#include<QTextEdit>
 #include<QSpinBox>
 #include<QDateEdit>
 #include<QGroupBox>
@@ -46,13 +47,14 @@ private:
     QLineEdit* inserisciTag;
     QListWidget* listaTag;
     QLabel* labelNote;
-    QLineEdit* inserisciNote;
+    QTextEdit* inserisciNote;
     void setup();
     void connectSegnali();
 
 public:
      AbstractCardEdit(QWidget *parent = nullptr);
      virtual modello::Attivita* generaAttivita(unsigned int id)=0;
+     virtual QString validaSelezioni()=0;
  protected:
      void addWidget(QWidget*); //per aggiungere elementi grafici nelle derivate
      //tutti i getter degli elementi della base selezionati, da utilizzare per la costruzione nella derivata
@@ -65,6 +67,7 @@ public:
      const QString getNote() const;
      void nascondiDurata(); //per scadenza che non ha durata
      bool isComplete() const;
+     QString validazioneBase(); //validazione della parte della base
      void preparaBase(const modello::Attivita*); //popola gli elementi con quelli dell'attivita eventualmente d a modificare, da usare nelle derivate
 
 

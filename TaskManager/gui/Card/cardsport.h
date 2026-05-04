@@ -13,6 +13,7 @@ public:
     CardSport(QWidget* parent=nullptr);
     modello::Sport* generaAttivita(unsigned int id) override;
     void popola(const modello::Sport* );
+    QString validaSelezioni() override;
 private:
     void setup();
     //void connectSegnali();

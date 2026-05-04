@@ -9,6 +9,7 @@
 #include<vector>
 namespace gui
 {
+namespace card{
 void CardActivityVisitor::visit(const modello::Esame* e)
 {
     widget=new CardAttivita();
@@ -34,6 +35,8 @@ void CardActivityVisitor::visit(const modello::Esame* e)
     }
     layoutVoto->addWidget(labelVoto);
     QProgressBar* barraVoto=new QProgressBar();
+    barraVoto->setStyleSheet("QProgressBar { border: 1px solid grey; border-radius: 5px; text-align: center; }"
+                             "QProgressBar::chunk { background-color: #4CAF50; width: 10px; margin: 1px; }");
     barraVoto->setRange(0, 30);
     barraVoto->setValue(e->getVoto());
     barraVoto->setFormat("%v/%m");
@@ -41,11 +44,16 @@ void CardActivityVisitor::visit(const modello::Esame* e)
     layoutEsame->addLayout(layoutVoto);
     QLabel* labelSede=new QLabel("Sede: "+e->getSede());
     layoutEsame->addWidget(labelSede);
+    QHBoxLayout* layoutProfessori=new QHBoxLayout();
+    layoutProfessori->setAlignment(Qt::AlignLeft);
+    QLabel* labelProfessori=new QLabel("Professori: ");
+    layoutProfessori->addWidget(labelProfessori);
     QListWidget* listaProfessori=new QListWidget();
     listaProfessori->setSelectionMode(QAbstractItemView::NoSelection);
     std::vector<QString> professoriVec=e->getAllProf();
     for(const QString& p:professoriVec) listaProfessori->addItem(p);
-    layoutEsame->addWidget(listaProfessori);
+    layoutProfessori->addWidget(listaProfessori);
+    layoutEsame->addLayout(layoutProfessori);
     widget->addWidget(widgetEsame);
 
 }
@@ -72,6 +80,8 @@ void CardActivityVisitor::visit(const modello::Scadenza* s)
     barraGiorni->setFormat("%v/%m giorni alla scadenza");
     layoutPreavviso->addWidget(barraGiorni);
     layoutScadenza->addLayout(layoutPreavviso);
+    QLabel* labelSottoTask=new QLabel("Task: ");
+    layoutScadenza->addWidget(labelSottoTask);
     std::vector<std::pair<QString, bool>> aux=s->getAllSottoTask();
     QListWidget* listaSottoTask=new QListWidget();
     for(const std::pair<QString, bool>& task:aux)
@@ -102,11 +112,16 @@ void CardActivityVisitor::visit(const modello::Appuntamento* i)
     else labelInPresenza->setText("On-Line");
     layoutLuogo->addWidget(labelInPresenza);
     layoutAppuntamento->addLayout(layoutLuogo);
+    QHBoxLayout* layoutPartecipanti=new QHBoxLayout();
+    layoutPartecipanti->setAlignment(Qt::AlignLeft);
+    QLabel* labelPartecipanti=new QLabel("Partecipanti: ");
+    layoutPartecipanti->addWidget(labelPartecipanti);
     std::vector<QString> partecipantiVec=i->getAllPartecipanti();
     QListWidget* listaPartecipanti=new QListWidget();
     listaPartecipanti->setSelectionMode(QAbstractItemView::NoSelection);
     for(const QString& p:partecipantiVec) listaPartecipanti->addItem(p);
-    layoutAppuntamento->addWidget(listaPartecipanti);
+    layoutPartecipanti->addWidget(listaPartecipanti);
+    layoutAppuntamento->addLayout(layoutPartecipanti);
     widget->addWidget(widgetAppuntamento);
 
 
@@ -160,4 +175,4 @@ CardAttivita* CardActivityVisitor::getWidget()
 {
     return widget;
 }
-}
+}}

@@ -15,6 +15,7 @@ public:
     CardAppuntamento(QWidget* parent=nullptr);
     modello::Appuntamento* generaAttivita(unsigned int id) override;
     void popola(const modello::Appuntamento* );
+    QString validaSelezioni() override;
 private:
     void setup();
     void connectSegnali();

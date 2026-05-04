@@ -12,6 +12,7 @@ public:
     CardEsame(QWidget* parent=nullptr);
     modello::Esame* generaAttivita(unsigned int id) override;
     void popola(const modello::Esame* );
+    QString validaSelezioni() override;
 private:
     void setup();
     void connectSegnali();

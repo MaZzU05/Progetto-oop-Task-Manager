@@ -12,6 +12,7 @@ void CardSport::setup()
     contenitore=new QWidget(this);
     layoutPrincipale=new QVBoxLayout();
     QHBoxLayout* layoutLuogo=new QHBoxLayout();
+    layoutLuogo->setAlignment(Qt::AlignLeft);
     labelLuogo=new QLabel("Luogo: ", this);
     layoutLuogo->addWidget(labelLuogo);
     inserisciLuogo=new QLineEdit(this);
@@ -19,13 +20,16 @@ void CardSport::setup()
     layoutLuogo->addWidget(inserisciLuogo);
     layoutPrincipale->addLayout(layoutLuogo);
     QHBoxLayout* layoutDataInizio=new QHBoxLayout();
+    layoutDataInizio->setAlignment(Qt::AlignLeft);
     labelDataInizio=new QLabel("Data inizio: ", this);
     layoutDataInizio->addWidget(labelDataInizio);
     selezionaDataInizio=new QDateEdit(this);
+    selezionaDataInizio->setDate(QDate::currentDate());
     selezionaDataInizio->setCalendarPopup(true); //attiva la selezione a calendario
     layoutDataInizio->addWidget(selezionaDataInizio);
     layoutPrincipale->addLayout(layoutDataInizio);
     QHBoxLayout* layoutGiorniSport=new QHBoxLayout();
+    layoutGiorniSport->setAlignment(Qt::AlignLeft);
     labelGiorniSport=new QLabel("Seleziona gioni ripetizione: ", this);
     layoutGiorniSport->addWidget(labelGiorniSport);
     listaGiorniSport=new QListWidget(this);
@@ -46,6 +50,9 @@ void CardSport::setup()
 modello::Sport* CardSport::generaAttivita(unsigned int id)
 {
     modello::Sport* nuovoSport=new modello::Sport(getTitle(), id, getNote(), QDateTime(getDate(), getTime()), getDurata(), selezionaDataInizio->date(), inserisciLuogo->text(), isComplete(), getPriorita());
+    std::vector<QString> vecTag=getTag();
+    for(const QString& tag:vecTag)
+        nuovoSport->addTag(tag);
     std::vector<Qt::DayOfWeek> vecGiorni;
     for(QListWidgetItem* selezionato:listaGiorniSport->selectedItems())
     {
@@ -78,7 +85,7 @@ void CardSport::popola(const modello::Sport* s)
     listaGiorniSport->clearSelection(); //deseleziono tutto per sicurezza
     for(Qt::DayOfWeek giorno:vecGiorni)
     {
-        QListWidgetItem* elemento;
+        QListWidgetItem* elemento=nullptr;
         switch(giorno)
         {
         case Qt::DayOfWeek::Monday:
@@ -103,7 +110,20 @@ void CardSport::popola(const modello::Sport* s)
             elemento=listaGiorniSport->item(6);
             break;
         }
-        elemento->setSelected(true);
+        if(elemento)
+            elemento->setSelected(true);
     }
+}
+
+QString CardSport::validaSelezioni()
+{
+    if(!validazioneBase().isEmpty())
+        return validazioneBase();
+    //un attivita' sportiva non puo' iniziare dopo la fine
+    if(selezionaDataInizio->date().daysTo(getDate())<0)
+        return "Non può iniziare dopo la data di fine!";
+    if(listaGiorniSport->selectedItems().empty())
+        return "Devi selezionare almeno un giorno!";
+    return "";
 }
 }}

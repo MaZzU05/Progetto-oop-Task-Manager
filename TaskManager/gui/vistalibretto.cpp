@@ -3,7 +3,7 @@
 #include<QInputDialog>
 #include<QMessageBox>
 #include"finestrainizializzazionelibretto.h"
-#include"cardactivityvisitor.h"
+#include"Card/cardactivityvisitor.h"
 namespace gui
 {
 VistaLibretto::VistaLibretto(modello::Libretto* libretto, QWidget *parent): QWidget(parent), libretto(libretto)
@@ -95,9 +95,9 @@ void VistaLibretto::setWidget(std::vector<const modello::Esame*> esami)
     }
     for(const modello::Esame* esame:esami)
     {
-        CardActivityVisitor visitor;
+        card::CardActivityVisitor visitor;
         esame->accept(&visitor);
-        CardAttivita* nuovaCard=visitor.getWidget();
+        card::CardAttivita* nuovaCard=visitor.getWidget();
         layoutCentrale->addWidget(nuovaCard);
 
     }

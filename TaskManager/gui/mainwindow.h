@@ -16,6 +16,7 @@
 #include"vistacalendario.h"
 #include"vistalibretto.h"
 #include"../modello/gestore.h"
+#include"vistaedit.h"
 namespace gui
 {
 class MainWindow : public QMainWindow
@@ -27,12 +28,14 @@ public:
 
 private:
     modello::Gestore gestorePrincipale;
+    modello::Attivita* attivitaSelezionata=nullptr;//mi serve per la modifica
     QStackedWidget* finestraPrincipale;
     BarraLateraleWidget* barraLaterale;
     VistaElenco* centrale;
     VistaDettaglio* dettaglioCentrale;
     VistaCalendario* calendarioCentrale;
     VistaLibretto* librettoCentrale;
+    VistaEdit* editCentrale;
     QPushButton* bottoneVistaLista;
     QPushButton* bottoneVistaCalendario;
     QPushButton* bottoneVistaLibretto;
@@ -43,7 +46,6 @@ private:
     QMenu* menuAiuto;
     QAction* azioneSalva;
     QAction* azioneCarica;
-    QAction* azioneAiuto;
     void preparaMenuAzioni();
     void salvataggio();
     void caricaAgenda();

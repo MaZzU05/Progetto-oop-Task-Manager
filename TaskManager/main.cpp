@@ -1,11 +1,17 @@
 #include "gui/mainwindow.h"
-
+#include<QFile>
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+
+    QApplication app(argc, argv);
+    app.setWindowIcon(QIcon(":/gui/assets/icona_app.png"));
+    //carico il file di stile
+    QFile fileStile(":/gui/assets/stile.qss");
+    if(fileStile.open(QFile::ReadOnly))
+      app.setStyleSheet(fileStile.readAll());
     gui::MainWindow w;
     w.show();
-    return a.exec();
+    return app.exec();
 }

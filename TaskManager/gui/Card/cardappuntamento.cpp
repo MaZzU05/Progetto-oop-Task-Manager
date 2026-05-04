@@ -13,11 +13,10 @@ CardAppuntamento::CardAppuntamento(QWidget* parent): AbstractCardEdit(parent)
 
 void CardAppuntamento::setup()
 {
-    //uniformo lo stile dei bottoni
-    this->setStyleSheet("QPushButton { background-color: transparent; padding: 5px; border: 1px solid grey; border-radius: 10px; } QPushButton:hover { background-color: lightblue; } QPushButton:pressed { background-color: #e0e0e0; border: 1px solid #b0b0b0; }");
     contenitore=new QWidget(this);
     layoutPrincipale=new QVBoxLayout();
     QHBoxLayout* layoutLuogo=new QHBoxLayout();
+    layoutLuogo->setAlignment(Qt::AlignLeft);
     labelLuogo=new QLabel("Luogo: ", this);
     layoutLuogo->addWidget(labelLuogo);
     inserisciLuogo=new QLineEdit(this);
@@ -25,19 +24,21 @@ void CardAppuntamento::setup()
     layoutLuogo->addWidget(inserisciLuogo);
     layoutPrincipale->addLayout(layoutLuogo);
     QHBoxLayout* layoutInPresenza=new QHBoxLayout();
+    layoutInPresenza->setAlignment(Qt::AlignLeft);
     labelInPresenza=new QLabel("Modalita appuntamento: ", this);
     layoutInPresenza->addWidget(labelInPresenza);
-    //provo con anche il testo nella QGroupBox poi valuto
-    groupModalita=new QGroupBox("Modalita Appuntamento: ", this);
+    groupModalita=new QGroupBox(this);
     QHBoxLayout* layoutModalita=new QHBoxLayout(groupModalita);
+    layoutModalita->setAlignment(Qt::AlignLeft);
     radPresenza=new QRadioButton("In presenza", this);
     radPresenza->setChecked(true); //selezione di default
     layoutModalita->addWidget(radPresenza);
     radOnline=new QRadioButton("Online", this);
     layoutModalita->addWidget(radOnline);
-    layoutInPresenza->addLayout(layoutModalita);
+    layoutInPresenza->addWidget(groupModalita);
     layoutPrincipale->addLayout(layoutInPresenza);
     QHBoxLayout* layoutPartecipanti=new QHBoxLayout();
+    layoutPartecipanti->setAlignment(Qt::AlignLeft);
     labelPartecipanti=new QLabel("Partecipanti: ", this);
     layoutPartecipanti->addWidget(labelPartecipanti);
     QVBoxLayout* layoutPartecipantiInterno=new QVBoxLayout();
@@ -86,6 +87,9 @@ void CardAppuntamento::connectSegnali()
 modello::Appuntamento* CardAppuntamento::generaAttivita(unsigned int id)
 {
     modello::Appuntamento* nuovoAppuntamento=new modello::Appuntamento(getTitle(), id, getNote(), QDateTime(getDate(), getTime()), inserisciLuogo->text(), getDurata(), radPresenza->isChecked(), isComplete(), getPriorita());
+    std::vector<QString> vecTag=getTag();
+    for(const QString& tag:vecTag)
+        nuovoAppuntamento->addTag(tag);
     std::vector<QString> vecPartecipanti;
     for(int i=0; i<listaPartecipanti->count(); i++)
         vecPartecipanti.push_back(listaPartecipanti->item(i)->text());
@@ -111,6 +115,12 @@ void CardAppuntamento::popola(const modello::Appuntamento* a)
     std::vector<QString> vecPartecipanti=a->getAllPartecipanti();
     for(const QString& partecipante:vecPartecipanti)
         listaPartecipanti->addItem(partecipante);
+
+}
+QString CardAppuntamento::validaSelezioni()
+{
+    //non necessita di controlli aggiuntivi
+    return validazioneBase();
 
 }
 

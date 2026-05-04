@@ -4,6 +4,8 @@
 #include"../modello/constactivityvisitorinterface.h"
 namespace gui
 {
+namespace card
+{
 class CardActivityVisitor:public modello::ConstActivityVisitorInterface
 {
 private:
@@ -15,5 +17,5 @@ public:
     void visit(const modello::Sport* s) override;
     CardAttivita* getWidget();
 };
-}
+}}
 #endif // CARDACTIVITYVISITOR_H

@@ -2,7 +2,7 @@
 #define VISTAELENCO_H
 
 #include "abstractvistaattivita.h"
-#include"cardattivita.h"
+#include"Card/cardattivita.h"
 #include<QScrollArea>
 #include<QVBoxLayout>
 namespace gui
@@ -16,7 +16,7 @@ private:
     QWidget* contenitoreCentrale;
     QVBoxLayout* layout;
     void setup();
-    CardAttivita* cardEspansaAttualmente = nullptr;
+    card::CardAttivita* cardEspansaAttualmente = nullptr;
 public:
     VistaElenco(QWidget *parent = nullptr);
     void popolaAttivita(const std::vector<modello::Attivita*>& vec) override;
