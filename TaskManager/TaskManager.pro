@@ -45,6 +45,7 @@ SOURCES += \
     modello/Filtri/filtropriorita.cpp \
     modello/Filtri/filtrotag.cpp \
     modello/Filtri/filtrotipo.cpp \
+    modello/Filtri/filtrourgente.cpp \
     modello/appuntamento.cpp \
     modello/attivita.cpp \
     modello/esame.cpp \
@@ -83,6 +84,7 @@ HEADERS += \
     modello/Filtri/filtrotag.h \
     modello/Filtri/filtrotipo.h \
     modello/Filtri/abstractfilter.h \
+    modello/Filtri/filtrourgente.h \
     modello/activityvisitorinterface.h \
     modello/appuntamento.h \
     modello/attivita.h \

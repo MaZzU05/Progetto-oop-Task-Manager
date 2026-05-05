@@ -5,6 +5,7 @@
 #include<QFileDialog>
 #include<QDir>
 #include<QTableWidget>
+#include "../modello/Filtri/filtrourgente.h"
 #include"finestrainizializzazionelibretto.h"
 #include "../modello/Filtri/filtropriorita.h"
 #include"../modello/Filtri/filtrocongiuntivo.h"
@@ -441,6 +442,20 @@ void MainWindow::applicaFiltri()
             completate=new modello::filtro::FiltroCompletate(false);
         }
         congiuntivo.addFiltro(completate);
+      }
+    QString urgenza=barraLaterale->getUrgenzaSelezionata();
+      if(urgenza!="Tutte")
+    {
+        modello::filtro::FiltroUrgente* urgente;
+        if(urgenza=="Urgente")
+          {
+            urgente=new modello::filtro::FiltroUrgente(true);
+        }
+        else
+        {
+            urgente=new modello::filtro::FiltroUrgente(false);
+        }
+        congiuntivo.addFiltro(urgente);
       }
     QString priorita=barraLaterale->getPrioritaSelezionata();
       if(priorita!="Tutte")

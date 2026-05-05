@@ -21,6 +21,7 @@ private:
     QLabel* durata;
     QLabel* Completata;
     QLabel* dataCreazione;
+    QLabel* urgente;
     QLabel* tag;
     QLabel* note;
     QLabel* priorita;

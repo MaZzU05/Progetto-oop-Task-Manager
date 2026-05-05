@@ -47,6 +47,8 @@ void CardAttivita::setup()
     layoutDettagli=new QVBoxLayout(dettagliWidget);
     dataCreazione=new QLabel(this);
     layoutDettagli->addWidget(dataCreazione);
+    urgente=new QLabel(this);
+    layoutDettagli->addWidget(urgente);
     priorita=new QLabel(this);
     layoutDettagli->addWidget(priorita);
     tag=new QLabel(this);
@@ -67,6 +69,10 @@ void CardAttivita::popolaAttivita(const modello::Attivita* a)
     if(a->isComplete()) Completata->setText("Stato: Completata");
     else Completata->setText("Stato: Non completata");
     dataCreazione->setText("Data creazione: "+a->getDataCreazione().toString());
+    if(a->isUrgente())
+        urgente->setText("Urgente");
+    else
+        urgente->setText("Non urgente");
     QString prior;
     if(a->getPriority()==modello::Priority::bassa) prior="bassa";
     else if(a->getPriority()==modello::Priority::media) prior="media";

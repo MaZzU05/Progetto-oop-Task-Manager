@@ -37,6 +37,13 @@ void BarraLateraleWidget::setup()
     comboStato->addItem("Completate");
     comboStato->addItem("Non completate");
     layout->addWidget(comboStato);
+    labelUrgenza=new QLabel("Urgenza:", this);
+    layout->addWidget(labelUrgenza);
+    comboUrgenza=new QComboBox(this);
+    comboUrgenza->addItem("Tutte");
+    comboUrgenza->addItem("Urgente");
+    comboUrgenza->addItem("Non Urgente");
+    layout->addWidget(comboUrgenza);
     labelPriorita=new QLabel("Priorita:", this);
     layout->addWidget(labelPriorita);
     comboPriorita=new QComboBox(this);
@@ -134,6 +141,11 @@ QString BarraLateraleWidget::getStatoSelezionato() const //da aggiungere il camp
     return comboStato->currentText();
 }
 
+QString BarraLateraleWidget::getUrgenzaSelezionata() const
+{
+    return comboUrgenza->currentText();
+}
+
 unsigned int BarraLateraleWidget::getAnnoSelezionato() const
 {
     return comboAnno->currentText().toInt();
@@ -225,6 +237,7 @@ void BarraLateraleWidget::connectSegnali()
     connect(barraRicerca, &QLineEdit::textChanged, this, &BarraLateraleWidget::filtriCambiati);
     connect(comboTipo, &QComboBox::currentIndexChanged, this, &BarraLateraleWidget::filtriCambiati);
     connect(comboStato, &QComboBox::currentIndexChanged, this, &BarraLateraleWidget::filtriCambiati);
+    connect(comboUrgenza, &QComboBox::currentIndexChanged, this, &BarraLateraleWidget::filtriCambiati);
     connect(comboPriorita, &QComboBox::currentIndexChanged, this, &BarraLateraleWidget::filtriCambiati);
     connect(comboAnno, &QComboBox::currentIndexChanged, this, &BarraLateraleWidget::filtriCambiati);
     connect(comboMese, &QComboBox::currentIndexChanged, this, &BarraLateraleWidget::filtriCambiati);

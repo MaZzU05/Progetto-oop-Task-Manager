@@ -22,6 +22,7 @@ public:
      QString getTestoRicerca() const;
      QString getTipoSelezionato() const;
      QString getStatoSelezionato() const;
+     QString getUrgenzaSelezionata() const;
      QDate getDataSelezionata() const;
      bool isFiltroDataOn() const;
      bool isFiltroAnnoOn() const;
@@ -45,6 +46,8 @@ private:
      QDateEdit* modificaData;
      QLabel* labelStato;
      QComboBox* comboStato;
+     QLabel* labelUrgenza;
+     QComboBox* comboUrgenza;
      QLabel* labelPriorita;
      QComboBox* comboPriorita;
      QLabel* labelTag;
