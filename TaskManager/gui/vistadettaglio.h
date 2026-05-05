@@ -25,7 +25,7 @@ private:
 //signals:
 Q_SIGNALS:
     void tornaIndietro();
-
+    void attivitaSelezionata(modello::Attivita*);
 };
 }
 #endif // VISTADETTAGLIO_H

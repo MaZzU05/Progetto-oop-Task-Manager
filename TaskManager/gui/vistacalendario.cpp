@@ -169,4 +169,8 @@ void VistaCalendario::costruisciSettimana(QDate giornoSelezionato)
         i++;
     }
 }
+void VistaCalendario::notify(modello::Gestore& gestore)
+{
+    popolaAttivita(gestore.getAttivitaFiltrate());
+}
 }

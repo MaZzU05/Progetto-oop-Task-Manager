@@ -6,7 +6,7 @@ FiltroUrgente::FiltroUrgente(bool isUrgente): isUrgente(isUrgente) {}
 
 bool FiltroUrgente::filtra(const Attivita* a) const
 {
-    return a->isUrgente();
+    return a->isUrgente() == isUrgente;
 }
 
 }}

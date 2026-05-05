@@ -7,15 +7,18 @@
 #include<QHBoxLayout>
 #include<QScrollArea>
 #include "abstractvistaattivita.h"
+#include "../modello/gestoreobserverinterface.h"
+#include "../modello/gestore.h"
 #include"../modello/attivita.h"
 namespace gui
 {
-class VistaCalendario : public AbstractVistaAttivita
+class VistaCalendario : public AbstractVistaAttivita, public modello::GestoreObserverInterface
 {
     Q_OBJECT
 public:
     VistaCalendario(QWidget *parent = nullptr);
     void popolaAttivita(const std::vector<modello::Attivita*>& vec) override;
+    void notify(modello::Gestore& gestore) override;
 private:
     void setup();
     void connectSegnali();

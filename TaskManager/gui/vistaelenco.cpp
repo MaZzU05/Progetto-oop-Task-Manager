@@ -47,7 +47,7 @@ void VistaElenco::popolaAttivita(const std::vector<modello::Attivita*>& vec)
         a->accept(&visitor);
         card::CardAttivita* nuovaCard=visitor.getWidget();
         layout->addWidget(nuovaCard);
-        connect(nuovaCard, &card::CardAttivita::selezionata, this, [this, a, nuovaCard](card::CardAttivita* c, bool espansa){
+        connect(nuovaCard, &card::CardAttivita::selezionata, this, [this, a, nuovaCard](card::CardAttivita*, bool espansa){
             if(espansa)
              {
                 //se vi e' aperta una card diversa la chiudo
@@ -73,5 +73,9 @@ void VistaElenco::popolaAttivita(const std::vector<modello::Attivita*>& vec)
         });
     }
     layout->addStretch();
+}
+void VistaElenco::notify(modello::Gestore& gestore)
+{
+    popolaAttivita(gestore.getAttivitaFiltrate());
 }
 }

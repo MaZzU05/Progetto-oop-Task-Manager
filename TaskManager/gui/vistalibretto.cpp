@@ -140,4 +140,9 @@ void VistaLibretto::aggiornaVista()
 
 
 }
+
+void VistaLibretto::notify(modello::Gestore&)
+{
+    aggiornaVista();
+}
 }

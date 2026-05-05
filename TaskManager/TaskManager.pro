@@ -91,6 +91,7 @@ HEADERS += \
     modello/constactivityvisitorinterface.h \
     modello/esame.h \
     modello/gestore.h \
+    modello/gestoreobserverinterface.h \
     modello/jsonsavervisitor.h \
     modello/libretto.h \
     modello/scadenza.h \

@@ -32,6 +32,52 @@ void VistaDettaglio::setup()
     areaScorrimento->setWidget(contenitoreCentrale);
     areaScorrimento->setWidgetResizable(true);
 }
+/*
+void VistaElenco::popolaAttivita(const std::vector<modello::Attivita*>& vec)
+{
+    QLayoutItem* daEliminare;
+    //devo svuotare il layout dai widget contenuti prima di caricarlo, non essendoci un clear faccio un loop eliminandoli uno ad uno dal primo fintanto che non e' vuoto
+    while((daEliminare=layout->takeAt(0)))//estraggo il primo elemento
+    {
+        QWidget* elementoInterno=daEliminare->widget();//estraggo il vidget contenuto
+        delete elementoInterno;
+        delete daEliminare;
+    }
+    cardEspansaAttualmente=nullptr;
+    for (modello::Attivita* a:vec)
+    {
+        card::CardActivityVisitor visitor;
+        a->accept(&visitor);
+        card::CardAttivita* nuovaCard=visitor.getWidget();
+        layout->addWidget(nuovaCard);
+        connect(nuovaCard, &card::CardAttivita::selezionata, this, [this, a, nuovaCard](card::CardAttivita*, bool espansa){
+            if(espansa)
+             {
+                //se vi e' aperta una card diversa la chiudo
+                if(cardEspansaAttualmente!=nullptr&&cardEspansaAttualmente!=nuovaCard)
+                {
+                    cardEspansaAttualmente->setSelezionata(false);
+                }
+                //segno che ora e' aperta questa
+                cardEspansaAttualmente=nuovaCard;
+                //lo dico alla mainWindow
+                //emit attivitaSelezionata(a);
+                Q_EMIT attivitaSelezionata(a);
+             }
+             else {
+                 //la si sta chiudendo
+                if(cardEspansaAttualmente==nuovaCard)
+                 {
+                     cardEspansaAttualmente=nullptr;
+                    Q_EMIT attivitaSelezionata(nullptr); //necessario per indicare la deselezione
+                }
+             }
+
+        });
+    }
+    layout->addStretch();
+}
+ */
 
 void VistaDettaglio::setWidget(QWidget* nuovaCard)
 {
@@ -47,10 +93,25 @@ void VistaDettaglio::setWidget(QWidget* nuovaCard)
 
 void VistaDettaglio::mostraAttivita(modello::Attivita* a)
 {
+    //replico il pattern per la emit di VistaElenco, rivolto ad una singola attivita
     attivitaCorrente=a;
     card::CardActivityVisitor visitor;
     attivitaCorrente->accept(&visitor);
     card::CardAttivita* cardDaVisualizzare=visitor.getWidget();
     setWidget(cardDaVisualizzare);
+    connect(cardDaVisualizzare, &card::CardAttivita::selezionata, this, [this, a](card::CardAttivita*, bool espansa){
+        if(espansa)
+        {
+            //lo dico alla mainWindow
+            //emit attivitaSelezionata(a);
+            Q_EMIT attivitaSelezionata(a);
+        }
+        else {
+            //la si sta chiudendo
+                Q_EMIT attivitaSelezionata(nullptr); //necessario per indicare la deselezione
+
+        }
+    });
 }
 }
+

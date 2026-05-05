@@ -55,6 +55,7 @@ void BarraLateraleWidget::setup()
     labelAnno=new QLabel("Anno:", this);
     layout->addWidget(labelAnno);
     comboAnno=new QComboBox(this);
+    comboAnno->addItem("Tutte");
     layout->addWidget(comboAnno);
     labelMese=new QLabel("Mese:", this);
     layout->addWidget(labelMese);
@@ -85,12 +86,24 @@ void BarraLateraleWidget::setup()
 
 void BarraLateraleWidget::popolaAnni(const std::set<int>& s)
 {
+    comboAnno->blockSignals(true);
+
+    // Salva la selezione corrente per non perderla durante l'aggiornamento
+    QString current = comboAnno->currentText();
+
     comboAnno->clear();
     comboAnno->addItem("Tutte");
     for(auto anno:s)
     {
-    comboAnno->addItem(QString::number(anno));
+        comboAnno->addItem(QString::number(anno));
     }
+
+    // Ripristina la selezione precedente se esiste ancora, altrimenti torna a "Tutte"
+    int index = comboAnno->findText(current);
+    if (index >= 0) comboAnno->setCurrentIndex(index);
+    else comboAnno->setCurrentIndex(0);
+
+    comboAnno->blockSignals(false);
 }
 
 void BarraLateraleWidget::popolaMesi()
@@ -112,8 +125,29 @@ void BarraLateraleWidget::popolaMesi()
 
 void BarraLateraleWidget::popolaTag(const std::set<QString>& t)
 {
+    //ho dovuto bloccare i segnali perche' quando ho implementato l'observer, ad ogni update i segnali venivano inviati e si creava la lista, portando ad una ricorsione infinita che causava stack overflow
+    listaTag->blockSignals(true);
+
+    // Salva le selezioni correnti
+    std::vector<QString> selectedTags;
+    for(QListWidgetItem* item : listaTag->selectedItems()) {
+        selectedTags.push_back(item->text());
+    }
+
     listaTag->clear();
-    for(const QString &tag:t) listaTag->addItem(tag);
+    for(const QString &tag:t) {
+        listaTag->addItem(tag);
+    }
+
+    // Ripristina le selezioni
+    for(int i = 0; i < listaTag->count(); i++) {
+        QListWidgetItem* item = listaTag->item(i);
+        if (std::find(selectedTags.begin(), selectedTags.end(), item->text()) != selectedTags.end()) {
+            item->setSelected(true);
+        }
+    }
+
+    listaTag->blockSignals(false);
 }
 
 bool BarraLateraleWidget::isFiltroDataOn() const
@@ -245,5 +279,11 @@ void BarraLateraleWidget::connectSegnali()
     connect(modificaData, &QDateEdit::userDateChanged, this, &BarraLateraleWidget::filtriCambiati);
     connect(listaTag, &QListWidget::itemSelectionChanged, this, &BarraLateraleWidget::filtriCambiati);
 
+}
+
+void BarraLateraleWidget::notify(modello::Gestore& gestore)
+{
+    popolaAnni(gestore.getAnniPresenti());
+    popolaTag(gestore.getTagPresenti());
 }
 }

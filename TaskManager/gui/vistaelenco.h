@@ -2,12 +2,14 @@
 #define VISTAELENCO_H
 
 #include "abstractvistaattivita.h"
+#include "../modello/gestoreobserverinterface.h"
+#include "../modello/gestore.h"
 #include"Card/cardattivita.h"
 #include<QScrollArea>
 #include<QVBoxLayout>
 namespace gui
 {
-class VistaElenco : public AbstractVistaAttivita
+class VistaElenco : public AbstractVistaAttivita, public modello::GestoreObserverInterface
 {
     Q_OBJECT
 private:
@@ -20,6 +22,7 @@ private:
 public:
     VistaElenco(QWidget *parent = nullptr);
     void popolaAttivita(const std::vector<modello::Attivita*>& vec) override;
+    void notify(modello::Gestore& gestore) override;
 };
 }
 #endif // VISTAELENCO_H

@@ -51,10 +51,10 @@ MainWindow::MainWindow(QWidget *parent)
     finestraPrincipale=new QStackedWidget(this);
     QHBoxLayout* layout=new QHBoxLayout(temp);
     centrale=new VistaElenco(this);
-    centrale->popolaAttivita(gestorePrincipale.getAllAttivita());
+    //centrale->popolaAttivita(gestorePrincipale.getAllAttivita());
     finestraPrincipale->addWidget(centrale);
     calendarioCentrale=new VistaCalendario(this);
-    calendarioCentrale->popolaAttivita(gestorePrincipale.getAllAttivita());
+    //calendarioCentrale->popolaAttivita(gestorePrincipale.getAllAttivita());
     finestraPrincipale->addWidget(calendarioCentrale);
     dettaglioCentrale=new VistaDettaglio(this);
     finestraPrincipale->addWidget(dettaglioCentrale);
@@ -63,8 +63,8 @@ MainWindow::MainWindow(QWidget *parent)
     editCentrale=new VistaEdit(this);
     finestraPrincipale->addWidget(editCentrale);
     barraLaterale=new BarraLateraleWidget(this);
-    barraLaterale->popolaAnni(gestorePrincipale.getAnniPresenti());
-    barraLaterale->popolaTag(gestorePrincipale.getTagPresenti());
+    //barraLaterale->popolaAnni(gestorePrincipale.getAnniPresenti());
+    //barraLaterale->popolaTag(gestorePrincipale.getTagPresenti());
     layout->addWidget(barraLaterale);
     QVBoxLayout* layoutCentrale=new QVBoxLayout();
     QHBoxLayout* layoutBottoni=new QHBoxLayout();
@@ -121,22 +121,15 @@ MainWindow::MainWindow(QWidget *parent)
     //provo a dare le dimensioni, 1/5 barra laterale, 4/5 vista centrale
     layout->setStretchFactor(barraLaterale,1);
     layout->setStretchFactor(layoutCentrale,4);
+    gestorePrincipale.registraObserver(centrale);
+    gestorePrincipale.registraObserver(calendarioCentrale);
+    gestorePrincipale.registraObserver(barraLaterale);
+    gestorePrincipale.registraObserver(librettoCentrale);
+    applicaFiltri(); //serve per creare il filtro iniziale vuoto e notificare tutte le viste
     connectSegnali();
 
 }
 
-//per aggiornare la grafica, da fareeeee
-void MainWindow::refresh()
-{
-    //centrale->popolaAttivita(gestorePrincipale.getAllAttivita());
-    //calendarioCentrale->popolaAttivita(gestorePrincipale.getAllAttivita());
-    //al posto di rigenerare le viste, invalidando i filtri attualmente selezionati, chiamo direttamente applica filtri
-    applicaFiltri();
-    librettoCentrale->aggiornaVista();//va refreshata
-    //devo refreshare in barraLaterale gli anni e i tag che si popolano dinamicamente in base alle attivita'
-    barraLaterale->popolaAnni(gestorePrincipale.getAnniPresenti());
-    barraLaterale->popolaTag(gestorePrincipale.getTagPresenti());
-}
 void MainWindow::preparaMenuAzioni()
 {
     menuFile=this->menuBar()->addMenu("File");
@@ -215,7 +208,7 @@ void MainWindow::caricaAgenda()
             //devo refreshare in barraLaterale gli anni e i tag che si popolano dinamicamente in base alle attivita'
             barraLaterale->popolaAnni(gestorePrincipale.getAnniPresenti());
             barraLaterale->popolaTag(gestorePrincipale.getTagPresenti());*/
-            refresh();
+
             QMessageBox::information(this, "File Caricato", "Operazione avvenuta con successo");
         }
         else
@@ -253,9 +246,7 @@ void MainWindow::connectSegnali()
             if(finestraLibretto.exec()==QDialog::Accepted)
             {
 
-                libretto.setCfu(finestraLibretto.getCFU());
-                libretto.setCorsoLaurea(finestraLibretto.getNomeCorso());
-                librettoCentrale->aggiornaVista();
+                gestorePrincipale.inizializzaLibretto(finestraLibretto.getNomeCorso(), finestraLibretto.getCFU());
                 finestraPrincipale->setCurrentIndex(3);
                 //nascondo i bottoni di modifica ecc
                 bottoneAggiungi->setVisible(false);
@@ -312,6 +303,10 @@ void MainWindow::connectSegnali()
                 attivitaSelezionata=nullptr;
                 bottoneModifica->setEnabled(false);
                 bottoneElimina->setEnabled(false);
+                finestraPrincipale->setCurrentIndex(0); //se sono nella vista dettaglio, dato che si svuota, mi sposto nella vista elemco
+                //e rendo visibili le parti nascoste
+                barraLaterale->setVisible(true);
+                bottoneAggiungi->setVisible(true);
                 //aggiornamento elementi grafici
                 /*
                 centrale->popolaAttivita(gestorePrincipale.getAllAttivita());
@@ -319,7 +314,6 @@ void MainWindow::connectSegnali()
                 barraLaterale->popolaAnni(gestorePrincipale.getAnniPresenti());
                 barraLaterale->popolaTag(gestorePrincipale.getTagPresenti());
 */
-                refresh();
 
             }
         }
@@ -343,7 +337,6 @@ void MainWindow::connectSegnali()
         barraLaterale->popolaAnni(gestorePrincipale.getAnniPresenti());
         barraLaterale->popolaTag(gestorePrincipale.getTagPresenti());
 */
-        refresh();
 
     });
     connect(editCentrale, &VistaEdit::operazioneAnnulata, this, [this]()
@@ -356,21 +349,11 @@ void MainWindow::connectSegnali()
         bottoneElimina->setVisible(true);
 
     });
-    connect(centrale, &VistaElenco::attivitaSelezionata, this, [this](modello::Attivita* a){
-        //se e' un attivita selezionata
-        if(a)
-            {
-            bottoneModifica->setEnabled(true);
-            bottoneElimina->setEnabled(true);
-            attivitaSelezionata=a;
-        }
-        else
-            {
-            bottoneModifica->setEnabled(false);
-            bottoneElimina->setEnabled(false);
-            attivitaSelezionata=a;
-        }
-    });
+    //per abilitare i bottoni di modifica ed elimina in vistaElenco
+    connect(centrale, &VistaElenco::attivitaSelezionata, this, &MainWindow::modificaSelezionata);
+  //come sopra ma per la vista dettaglio
+    connect(dettaglioCentrale, &VistaDettaglio::attivitaSelezionata, this, &MainWindow::modificaSelezionata);
+
     connect(calendarioCentrale, &VistaCalendario::attivitaSelezionata, this, [this](modello::Attivita* a) {
         barraLaterale->setVisible(false);
         dettaglioCentrale->mostraAttivita(a);
@@ -404,9 +387,9 @@ void MainWindow::connectSegnali()
 void MainWindow::applicaFiltri()
 {
     //lavoro per filtro congiuntivo, per ogni filtro utilizzato, lo aggiungo al filtro congiuntivo
-    modello::filtro::FiltroCongiuntivo congiuntivo;
+    modello::filtro::FiltroCongiuntivo* congiuntivo= new modello::filtro::FiltroCongiuntivo();;
     modello::filtro::FiltroNome* perNome=new modello::filtro::FiltroNome(barraLaterale->getTestoRicerca());
-    congiuntivo.addFiltro(perNome);
+    congiuntivo->addFiltro(perNome);
     QString tipoSelezionato=barraLaterale->getTipoSelezionato();
     if(tipoSelezionato!="Tutte")
     {modello::filtro::FiltroTipo* perTipo;
@@ -427,7 +410,7 @@ void MainWindow::applicaFiltri()
         {
             perTipo=new modello::filtro::FiltroTipo(modello::filtro::FiltroTipo::ricercaTipo::cercaSport);
         }
-        congiuntivo.addFiltro(perTipo);
+        congiuntivo->addFiltro(perTipo);
     }
     QString stato=barraLaterale->getStatoSelezionato();
     if(stato!="Tutte")
@@ -441,7 +424,7 @@ void MainWindow::applicaFiltri()
         {
             completate=new modello::filtro::FiltroCompletate(false);
         }
-        congiuntivo.addFiltro(completate);
+        congiuntivo->addFiltro(completate);
       }
     QString urgenza=barraLaterale->getUrgenzaSelezionata();
       if(urgenza!="Tutte")
@@ -455,7 +438,7 @@ void MainWindow::applicaFiltri()
         {
             urgente=new modello::filtro::FiltroUrgente(false);
         }
-        congiuntivo.addFiltro(urgente);
+        congiuntivo->addFiltro(urgente);
       }
     QString priorita=barraLaterale->getPrioritaSelezionata();
       if(priorita!="Tutte")
@@ -474,37 +457,51 @@ void MainWindow::applicaFiltri()
           {
              perPriorita=new modello::filtro::FiltroPriorita(modello::Priority::bassa);
           }
-          congiuntivo.addFiltro(perPriorita);
+          congiuntivo->addFiltro(perPriorita);
       }
       //aggiungo il filtro per anno solo se il filtro meseAnno e il filtroData non sono attivi, mi basta verificarli secondo questo ordine
       if(barraLaterale->isFiltroDataOn())
       {
           modello::filtro::FiltroData* perData=new modello::filtro::FiltroData(barraLaterale->getDataSelezionata());
-          congiuntivo.addFiltro(perData);
+          congiuntivo->addFiltro(perData);
       }
       else if(barraLaterale->isFiltroMeseAnnoOn())
       {
           modello::filtro::FiltroMeseAnno* perMeseAnno=new modello::filtro::FiltroMeseAnno(static_cast<modello::filtro::MeseTarget>(barraLaterale->getMeseSelezionato()), barraLaterale->getAnnoSelezionato());
-          congiuntivo.addFiltro(perMeseAnno);
+          congiuntivo->addFiltro(perMeseAnno);
       }
       else       if(barraLaterale->isFiltroAnnoOn())
       {
           modello::filtro::FiltroAnno* perAnno=new modello::filtro::FiltroAnno(barraLaterale->getAnnoSelezionato());
-          congiuntivo.addFiltro(perAnno);
+          congiuntivo->addFiltro(perAnno);
       }
       std::vector<QString> tag=barraLaterale->getTagSelezionati();
       //scorro tutti i tag selezionati, e per ogniuno aggiungo un filtro tag al filtro congiuntivo
       for(const QString& t:tag)
       {
           modello::filtro::FiltroTag* perTag=new modello::filtro::FiltroTag(t);
-          congiuntivo.addFiltro(perTag);
+          congiuntivo->addFiltro(perTag);
       }
+      gestorePrincipale.setFiltro(congiuntivo);
 
-      //faccio il filtraggio
-      auto attivitaFiltrate=gestorePrincipale.filtra(congiuntivo);
-      centrale->popolaAttivita(attivitaFiltrate);
-      calendarioCentrale->popolaAttivita(attivitaFiltrate);
+}
 
+void MainWindow::modificaSelezionata(modello::Attivita* a)
+{
+    //se e' un attivita selezionata
+    if(a)
+    {
+        bottoneModifica->setEnabled(true);
+        bottoneElimina->setEnabled(true);
+        attivitaSelezionata=a;
+    }
+    else
+    {
+        //altrimenti deseleziono
+        bottoneModifica->setEnabled(false);
+        bottoneElimina->setEnabled(false);
+        attivitaSelezionata=a;
+    }
 }
 
 }

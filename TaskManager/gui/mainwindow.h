@@ -49,11 +49,11 @@ private:
     void preparaMenuAzioni();
     void salvataggio();
     void caricaAgenda();
-    void refresh();
     void connectSegnali();
     //private slots:
 private Q_SLOTS:
     void applicaFiltri();
+    void modificaSelezionata(modello::Attivita*);
 
 
 };

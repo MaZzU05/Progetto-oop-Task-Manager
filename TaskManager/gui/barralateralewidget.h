@@ -11,10 +11,12 @@
 #include<QDateEdit>
 #include<QPushButton>
 #include<QListWidget>
+#include "../modello/gestoreobserverinterface.h"
+#include "../modello/gestore.h"
 #include<set>
 #include<vector>
 namespace gui{
-class BarraLateraleWidget : public QWidget
+class BarraLateraleWidget : public QWidget, public modello::GestoreObserverInterface
 {
     Q_OBJECT
 public:
@@ -31,8 +33,7 @@ public:
      std::vector<QString> getTagSelezionati() const;
      bool isFiltroMeseAnnoOn() const; // true solo se mese E anno sono entrambi selezionati
      unsigned int getMeseSelezionato() const;  // ritorna 1-12 (corrispondente a MeseTarget)
-     void popolaAnni(const std::set<int>& s);
-     void popolaTag(const std::set<QString>& t);
+     void notify(modello::Gestore& gestore) override;
 private:
      QVBoxLayout* layout;
      QLineEdit* barraRicerca; //per scrivere il testo
@@ -55,6 +56,8 @@ private:
      QListWidget* listaTag; //se avessi usato la QComboBox come in precedenza non avrei potuto usare la selezione multipla
      QPushButton* reset;
      void popolaMesi();
+     void popolaAnni(const std::set<int>& s);
+     void popolaTag(const std::set<QString>& t);
      void setup(); //uso una funzione dove compongo i vari layout ecc. per non avere un costruttore troppo complesso
      void connectSegnali(); //usato per connettere i segnali agli slot
 //signals: conflitto con compilatore Appleclang in macos che da errore

@@ -1,40 +1,46 @@
 #ifndef GESTORE_H
 #define GESTORE_H
-#include"attivita.h"
-#include"Filtri/abstractfilter.h"
-#include"libretto.h"
-#include<vector>
-#include<QString>
-#include<set>
-namespace modello
-{
-class Gestore
-{
+#include "Filtri/abstractfilter.h"
+#include "gestoreobserverinterface.h"
+#include"Filtri/filtrocongiuntivo.h"
+#include "attivita.h"
+#include "libretto.h"
+#include <QString>
+#include <set>
+#include <vector>
+namespace modello {
+class Gestore {
 private:
-    std::vector<Attivita*> listaAttivita;
-    Libretto libretto;
-public:
-    Gestore(): libretto(0, "", listaAttivita){}
-    ~Gestore();
-    //rule of three
-    Gestore(const Gestore&);
-    Gestore& operator=(const Gestore&);
-    unsigned int generaNuovoId() const;
-    void addAttivita(Attivita* a);
-    bool removeAttivita(unsigned int id);
-    Libretto& getLibretto();
-    //per svuotare dopo salvataggio su json
-    void svuota();
-    const std::vector<Attivita*>& getAllAttivita() const;
-    Attivita* getAttivitaById(unsigned int id) const;
-    std::vector<Attivita*> filtra(const filtro::AbstractFilter& af) const;
-    bool salva(const QString& nomeFile = "dati_salvati.json") const;
-    bool carica(const QString& nomeFile = "dati_salvati.json");
-    //aggiunto per avere tutti gli anni presenti, utile per la gui
-    std::set<int> getAnniPresenti() const;
-    //aggiunto per avere una occorrenza di ogni tag presente, sempre per la gui
-    std::set<QString> getTagPresenti() const;
+  std::vector<Attivita *> listaAttivita;
+  std::vector<GestoreObserverInterface*> observers;
+  filtro::FiltroCongiuntivo* filtroAttivo=nullptr;
+  std::vector<Attivita *> filtra(const filtro::AbstractFilter &af) const;
+  Libretto libretto;
 
+public:
+  Gestore() : libretto(0, "", listaAttivita) {}
+  ~Gestore();
+  // rule of three
+  Gestore(const Gestore &);
+  Gestore &operator=(const Gestore &);
+  void registraObserver(GestoreObserverInterface* observer);
+  void setFiltro(filtro::FiltroCongiuntivo* nuovoFiltro);
+  std::vector<Attivita*> getAttivitaFiltrate() const;
+  unsigned int generaNuovoId() const;
+  void addAttivita(Attivita *a);
+  bool removeAttivita(unsigned int id);
+  Libretto &getLibretto();
+  void inizializzaLibretto(const QString& corso, int cfu);
+  // per svuotare dopo salvataggio su json
+  void svuota();
+  const std::vector<Attivita *> &getAllAttivita() const;
+  Attivita *getAttivitaById(unsigned int id) const;
+  bool salva(const QString &nomeFile = "dati_salvati.json") const;
+  bool carica(const QString &nomeFile = "dati_salvati.json");
+  // aggiunto per avere tutti gli anni presenti, utile per la gui
+  std::set<int> getAnniPresenti() const;
+  // aggiunto per avere una occorrenza di ogni tag presente, sempre per la gui
+  std::set<QString> getTagPresenti() const;
 };
-}
+} // namespace modello
 #endif // GESTORE_H

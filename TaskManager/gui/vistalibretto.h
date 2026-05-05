@@ -9,14 +9,16 @@
 #include<QProgressBar>
 #include<QPushButton>
 #include"../modello/libretto.h"
+#include "../modello/gestoreobserverinterface.h"
+#include "../modello/gestore.h"
 namespace gui
 {
-class VistaLibretto : public QWidget
+class VistaLibretto : public QWidget, public modello::GestoreObserverInterface
 {
     Q_OBJECT
 public:
     VistaLibretto(modello::Libretto* libretto, QWidget *parent=nullptr);
-    void aggiornaVista();
+    void notify(modello::Gestore&) override;
 private:
     void setup();
     void connectSegnali();
@@ -37,6 +39,7 @@ private:
     QProgressBar* barraMedia;
     QLabel* labelVotoAtteso;
     QProgressBar* barraVotoAtteso;
+    void aggiornaVista();
 };
 }
 #endif // VISTALIBRETTO_H
