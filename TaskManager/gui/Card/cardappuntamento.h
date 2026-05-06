@@ -13,7 +13,7 @@ class CardAppuntamento : public AbstractCardEdit
     Q_OBJECT
 public:
     CardAppuntamento(QWidget* parent=nullptr);
-    modello::Appuntamento* generaAttivita(unsigned int id) override;
+    modello::Appuntamento* generaAttivita(unsigned int id, QDateTime dataCreazione) override;
     void popola(const modello::Appuntamento* );
     QString validaSelezioni() override;
 private:

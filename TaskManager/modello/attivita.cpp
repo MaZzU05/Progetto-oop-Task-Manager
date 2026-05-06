@@ -36,6 +36,15 @@ void Attivita::addTag(const QString& t)
 {
     if(!tagIsIn(t)) tag.push_back(t);
 }
+
+bool Attivita::removeTag(const QString& t)
+{
+    if(!tagIsIn(t))
+        return false;
+    auto it=std::find(tag.begin(), tag.end(), t);
+    tag.erase(it);
+    return true;
+}
 Priority Attivita::getPriority() const
 {
     return priorita;
@@ -95,10 +104,4 @@ void Attivita::changeDataCreazione(const QDateTime& d)
     dataCreazione=d;
 }
 }
-
-
-
-
-
-
 

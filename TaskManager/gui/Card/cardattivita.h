@@ -5,6 +5,7 @@
 #include<QVBoxLayout>
 #include<QLabel>
 #include<QListWidget>
+#include<QPushButton>
 #include"../modello/attivita.h"
 namespace gui
 {
@@ -20,6 +21,7 @@ private:
     QLabel* data_ora;
     QLabel* durata;
     QLabel* Completata;
+    QPushButton* bottoneCambiaStato;
     QLabel* dataCreazione;
     QLabel* urgente;
     QLabel* tag;
@@ -29,12 +31,13 @@ private:
     QVBoxLayout* layoutDettagli;
     bool espansa;
     void setup();
-    const modello::Attivita* attivitaRappresentata;
+    modello::Attivita* attivitaRappresentata;
 public:
     CardAttivita(QWidget *parent = nullptr);
     void setSelezionata(bool stato);
-    void popolaAttivita(const modello::Attivita*);
+    void popolaAttivita(modello::Attivita*);
     void addWidget(QWidget*);
+    void nascondiBottoneCambiaStato();
 protected:
     //per fare in modo che vi sia l'evento del tocco del mouse sul mio widget, dato che qwidget non ce l'ha, ho dovuto farne l'override
     void mousePressEvent(QMouseEvent *event) override;

@@ -49,6 +49,7 @@ private:
     void preparaMenuAzioni();
     void salvataggio();
     void caricaAgenda();
+    void setup();
     void connectSegnali();
     //private slots:
 private Q_SLOTS:

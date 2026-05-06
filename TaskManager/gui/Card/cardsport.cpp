@@ -47,9 +47,10 @@ void CardSport::setup()
     addWidget(contenitore);
 }
 
-modello::Sport* CardSport::generaAttivita(unsigned int id)
+modello::Sport* CardSport::generaAttivita(unsigned int id, QDateTime dataCreazione)
 {
     modello::Sport* nuovoSport=new modello::Sport(getTitle(), id, getNote(), QDateTime(getDate(), getTime()), getDurata(), selezionaDataInizio->date(), inserisciLuogo->text(), isComplete(), getPriorita());
+    nuovoSport->changeDataCreazione(dataCreazione);
     std::vector<QString> vecTag=getTag();
     for(const QString& tag:vecTag)
         nuovoSport->addTag(tag);

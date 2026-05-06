@@ -38,7 +38,7 @@ void AbstractCardEdit::setup()
         "QCalendarWidget QWidget#qt_calendar_navigationbar { background-color: palette(window); color: palette(window-text); } "
     );
 */
-    this->setStyleSheet("QPushButton { background-color: transparent; padding: 5px; border: 1px solid grey; border-radius: 10px; } QPushButton:hover { background-color: lightblue; } QPushButton:pressed { background-color: #e0e0e0; border: 1px solid #b0b0b0; }");
+   //this->setStyleSheet("QPushButton { background-color: transparent; padding: 5px; border: 1px solid grey; border-radius: 10px; } QPushButton:hover { background-color: lightblue; } QPushButton:pressed { background-color: #e0e0e0; border: 1px solid #b0b0b0; }");
     layoutPrincipale=new QVBoxLayout(this);
     //la parte alta conterra' gli attributi della base, la parte bassa verra' popolata nelle derivate con le parti spedcifiche
     parteAlta=new QVBoxLayout();
@@ -120,7 +120,7 @@ void AbstractCardEdit::setup()
     inserisciNote=new QTextEdit(this);
     inserisciNote->setPlaceholderText("inserisci note");
     //imposto lo stile del QTextEdit, se no risulta sgradevole non avendo contorni ne niente, mi uniformo con le parti dell cardAttivita
-    inserisciNote->setStyleSheet("QTextEdit { border: 1px solid #e0e0e0; border-radius: 10px; padding: 10px; background-color: transparent;}");
+    //inserisciNote->setStyleSheet("QTextEdit { border: 1px solid #e0e0e0; border-radius: 10px; padding: 10px; background-color: transparent;}");
     layoutNote->addWidget(inserisciNote);
     parteAlta->addLayout(layoutNote);
     layoutPrincipale->addLayout(parteAlta);

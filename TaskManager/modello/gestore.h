@@ -16,6 +16,7 @@ private:
   filtro::FiltroCongiuntivo* filtroAttivo=nullptr;
   std::vector<Attivita *> filtra(const filtro::AbstractFilter &af) const;
   Libretto libretto;
+  void notifyObserves();
 
 public:
   Gestore() : libretto(0, "", listaAttivita) {}

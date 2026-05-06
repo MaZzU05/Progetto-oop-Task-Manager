@@ -14,17 +14,18 @@ VistaElenco::VistaElenco(QWidget *parent): AbstractVistaAttivita(parent)
  */
 void VistaElenco::setup()
 {
-    this->setStyleSheet("background-color: #f5f5f5;"); //grigio chiaro
+    //this->setAttribute(Qt::WA_StyledBackground, true);
+    //this->setStyleSheet("background-color: #f5f5f5;"); //grigio chiaro
     QVBoxLayout* principale=new QVBoxLayout(this);
     principale->setContentsMargins(10,10,10,10);
     areaScorrimento=new QScrollArea(this);
     //per rimuovere il bordo nero
     areaScorrimento->setFrameShape(QFrame::NoFrame);
-    areaScorrimento->setStyleSheet("background-color: transparent;"); //mettendo lo sfondo trasparente cerco un effetto piu' elegante
+    //areaScorrimento->setStyleSheet("background-color: transparent;"); //mettendo lo sfondo trasparente cerco un effetto piu' elegante
     principale->addWidget(areaScorrimento);
     contenitoreCentrale=new QWidget();
     layout=new QVBoxLayout(contenitoreCentrale);
-    contenitoreCentrale->setStyleSheet("background-color: transparent;");
+    //contenitoreCentrale->setStyleSheet("background-color: transparent;");
     layout->setSpacing(15); //imposto lo spazio tra una "card' e la successiva
     layout->addStretch();
     areaScorrimento->setWidget(contenitoreCentrale);

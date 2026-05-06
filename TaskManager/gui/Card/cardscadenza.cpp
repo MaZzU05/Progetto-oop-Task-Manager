@@ -67,9 +67,10 @@ void CardScadenza::connectSegnali()
     });
 }
 
-modello::Scadenza* CardScadenza::generaAttivita(unsigned int id)
+modello::Scadenza* CardScadenza::generaAttivita(unsigned int id, QDateTime dataCreazione)
 {
     modello::Scadenza* nuovaScadenza=new modello::Scadenza(getTitle(), id, getNote(), QDateTime(getDate(), getTime()), selezionaPreavviso->value(), getDurata(),isComplete(), getPriorita());
+    nuovaScadenza->changeDataCreazione(dataCreazione);
     std::vector<QString> vecTag=getTag();
     for(const QString& tag:vecTag)
         nuovaScadenza->addTag(tag);

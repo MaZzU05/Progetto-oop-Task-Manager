@@ -86,9 +86,10 @@ void CardEsame::connectSegnali()
     });
 }
 
-modello::Esame* CardEsame::generaAttivita(unsigned int id)
+modello::Esame* CardEsame::generaAttivita(unsigned int id, QDateTime dataCreazione)
 {
     modello::Esame* nuovoEsame=new modello::Esame(getTitle(), id, getNote(), inserisciSede->text(), selezionaCFU->value(), QDateTime(getDate(), getTime()), getDurata(), isComplete(), getPriorita());
+    nuovoEsame->changeDataCreazione(dataCreazione);
     std::vector<QString> vecTag=getTag();
     for(const QString& tag:vecTag)
         nuovoEsame->addTag(tag);

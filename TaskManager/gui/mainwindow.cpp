@@ -21,10 +21,17 @@ namespace gui
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    setup();
+    connectSegnali();
+
+}
+
+void MainWindow::setup()
+{
     //preparo menu
     preparaMenuAzioni();
     //stile per i bottoni, usato in tutta l'applicazione
-    this->setStyleSheet("gui--MainWindow QPushButton{border: 1px solid grey; border-radius: 10px;} gui--MainWindow QPushButton:hover { background-color: lightblue;} gui--MainWindow QPushButton:pressed{ background-color: #e0e0e0; border: 1px solid #b0b0b0;}");
+    //this->setStyleSheet("gui--MainWindow QPushButton{border: 1px solid grey; border-radius: 10px;} gui--MainWindow QPushButton:hover { background-color: lightblue;} gui--MainWindow QPushButton:pressed{ background-color: #e0e0e0; border: 1px solid #b0b0b0;}");
     //test
     /*modello::Esame* e1=new modello::Esame("analisi", gestorePrincipale.generaNuovoId(), " ", "boh", 12,QDateTime(QDate(2024,12, 20), QTime(15,30,0)), 130 );
     e1->addTag("Esame");
@@ -73,42 +80,36 @@ MainWindow::MainWindow(QWidget *parent)
     QHBoxLayout* layoutBottoniAzioni=new QHBoxLayout();
     layoutBottoniAzioni->setAlignment(Qt::AlignLeft);
     bottoneVistaLista=new QPushButton(this);
-    QIcon iconaLista(":/gui/assets/icona_lista.png");
-    bottoneVistaLista->setIcon(iconaLista);
+    bottoneVistaLista->setIcon(QIcon(QPixmap(":/gui/assets/icona_lista.png").scaled(24,24,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
     bottoneVistaLista->setIconSize(QSize(24,24));
     bottoneVistaLista->setToolTip("Vista a Lista"); //aggiunge il testo informativo quando vi si passa sopra
     layoutBottoniVista->addWidget(bottoneVistaLista);
     bottoneVistaCalendario=new QPushButton(this);
-    QIcon iconaCalendario(":/gui/assets/icona_calendario.png");
-    bottoneVistaCalendario->setIcon(iconaCalendario);
+    bottoneVistaCalendario->setIcon(QIcon(QPixmap(":/gui/assets/icona_calendario.png").scaled(24,24,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
     bottoneVistaCalendario->setIconSize(QSize(24,24));
     bottoneVistaCalendario->setToolTip("Vista a Calendario");
     layoutBottoniVista->addWidget(bottoneVistaCalendario);
     bottoneVistaLibretto=new QPushButton(this);
-    QIcon iconaLibretto(":/gui/assets/icona_scuola.png");
-    bottoneVistaLibretto->setIcon(iconaLibretto);
+    bottoneVistaLibretto->setIcon(QIcon(QPixmap(":/gui/assets/icona_scuola.png").scaled(24,24,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
     bottoneVistaLibretto->setIconSize(QSize(24,24));
     bottoneVistaLibretto->setToolTip("Vista a Libretto");
     layoutBottoniVista->addWidget(bottoneVistaLibretto);
     bottoneAggiungi=new QPushButton(this);
-    QIcon iconaAggiungi(":/gui/assets/icona_nuovoElemento.png");
-    bottoneAggiungi->setIcon(iconaAggiungi);
+    bottoneAggiungi->setIcon(QIcon(QPixmap(":/gui/assets/icona_nuovoElemento.png").scaled(24,24,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
     bottoneAggiungi->setIconSize(QSize(24,24));
     bottoneAggiungi->setToolTip("Aggiungi Attività");
-    bottoneAggiungi->setShortcut(QKeySequence("Ctrl+A"));//shortcut per aggiungere attivita
+    bottoneAggiungi->setShortcut(QKeySequence("Ctrl+N"));//shortcut per aggiungere attivita
     layoutBottoniAzioni->addWidget(bottoneAggiungi);
     bottoneModifica=new QPushButton(this);
     bottoneModifica->setEnabled(false); //di default non cliccabile
-    QIcon iconaModifica(":/gui/assets/icona_modificaElemento.png");
-    bottoneModifica->setIcon(iconaModifica);
+    bottoneModifica->setIcon(QIcon(QPixmap(":/gui/assets/icona_modificaElemento.png").scaled(24,24,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
     bottoneModifica->setIconSize(QSize(24,24));
     bottoneModifica->setToolTip("Modifica Attività");
     bottoneModifica->setShortcut(QKeySequence("Ctrl+E"));//shortcut per modificare attivita
     layoutBottoniAzioni->addWidget(bottoneModifica);
     bottoneElimina=new QPushButton(this);
     bottoneElimina->setEnabled(false);
-    QIcon iconaElimina(":/gui/assets/icona_rimuoviElemento.png");
-    bottoneElimina->setIcon(iconaElimina);
+    bottoneElimina->setIcon(QIcon(QPixmap(":/gui/assets/icona_rimuoviElemento.png").scaled(24,24,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
     bottoneElimina->setIconSize(QSize(24,24));
     bottoneElimina->setToolTip("Elimina Attività");
     bottoneElimina->setShortcut(QKeySequence("Ctrl+Backspace"));//shortcut per cancellare attivita
@@ -126,8 +127,6 @@ MainWindow::MainWindow(QWidget *parent)
     gestorePrincipale.registraObserver(barraLaterale);
     gestorePrincipale.registraObserver(librettoCentrale);
     applicaFiltri(); //serve per creare il filtro iniziale vuoto e notificare tutte le viste
-    connectSegnali();
-
 }
 
 void MainWindow::preparaMenuAzioni()
@@ -156,7 +155,7 @@ void MainWindow::preparaMenuAzioni()
     QAction* voceInfo=new QAction("Questa pagina Ctrl+I");
     voceInfo->setEnabled(false);
     sottoMenuScorciatoie->addAction(voceInfo);
-    QAction* voceAggiungi=new QAction("Aggiungi Attivita Ctrl+A");
+    QAction* voceAggiungi=new QAction("Aggiungi Attivita Ctrl+N");
     voceAggiungi->setEnabled(false);
     sottoMenuScorciatoie->addAction(voceAggiungi);
     QAction* voceElimina=new QAction("Elimina Attivita Selezionata Ctrl+Backspace");

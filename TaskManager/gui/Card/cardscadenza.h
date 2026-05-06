@@ -10,7 +10,7 @@ class CardScadenza : public AbstractCardEdit
     Q_OBJECT
 public:
     CardScadenza(QWidget* parent=nullptr);
-    modello::Scadenza* generaAttivita(unsigned int id) override;
+    modello::Scadenza* generaAttivita(unsigned int id, QDateTime dataCreazione) override;
     void popola(const modello::Scadenza* );
     QString validaSelezioni() override;
 private:

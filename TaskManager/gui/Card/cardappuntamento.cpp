@@ -84,9 +84,10 @@ void CardAppuntamento::connectSegnali()
         }
     });
 }
-modello::Appuntamento* CardAppuntamento::generaAttivita(unsigned int id)
+modello::Appuntamento* CardAppuntamento::generaAttivita(unsigned int id, QDateTime dataCreazione)
 {
     modello::Appuntamento* nuovoAppuntamento=new modello::Appuntamento(getTitle(), id, getNote(), QDateTime(getDate(), getTime()), inserisciLuogo->text(), getDurata(), radPresenza->isChecked(), isComplete(), getPriorita());
+    nuovoAppuntamento->changeDataCreazione(dataCreazione);
     std::vector<QString> vecTag=getTag();
     for(const QString& tag:vecTag)
         nuovoAppuntamento->addTag(tag);

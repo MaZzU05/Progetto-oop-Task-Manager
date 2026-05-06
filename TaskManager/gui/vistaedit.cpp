@@ -4,6 +4,7 @@
 #include"Card/cardesame.h"
 #include"Card/cardscadenza.h"
 #include"Card/cardsport.h"
+#include<QDateTime>
 #include<QHBoxLayout>
 #include<QMessageBox>
 namespace gui
@@ -33,7 +34,7 @@ private:
     QPushButton* bottoneSalva;*/
 void VistaEdit::setup()
 {
-    this->setStyleSheet("QPushButton { background-color: transparent; padding: 5px; border: 1px solid grey; border-radius: 10px; } QPushButton:hover { background-color: lightblue; } QPushButton:pressed { background-color: #e0e0e0; border: 1px solid #b0b0b0; }");
+    //this->setStyleSheet("QPushButton { background-color: transparent; padding: 5px; border: 1px solid grey; border-radius: 10px; } QPushButton:hover { background-color: lightblue; } QPushButton:pressed { background-color: #e0e0e0; border: 1px solid #b0b0b0; }");
     layout=new QVBoxLayout(this);
     QHBoxLayout* layoutAlto=new QHBoxLayout();
     layoutAlto->setAlignment(Qt::AlignLeft);
@@ -48,7 +49,7 @@ void VistaEdit::setup()
     layout->addLayout(layoutAlto);
     areaScorrimento=new QScrollArea(this);
     areaScorrimento->setFrameShape(QFrame::NoFrame); //come su tutte disabilito il contorno
-    areaScorrimento->setStyleSheet("background-color: transparent;");//mantengo la coerenza grafica
+    //areaScorrimento->setStyleSheet("background-color: transparent;");//mantengo la coerenza grafica
     layout->addWidget(areaScorrimento);
     contenitoreCentrale=new QWidget(this);
     layoutCentrale=new QVBoxLayout(contenitoreCentrale);
@@ -113,7 +114,7 @@ void VistaEdit::impostaPerCreazione(unsigned int id_daSalvare)
 {
     comboTipo->setVisible(true);
     id=id_daSalvare;
-
+    dataCreazione=QDateTime::currentDateTime();
     //simulo un cambio indice per far generare la card
     comboTipo->setCurrentIndex(-1);//resetta
     comboTipo->setCurrentIndex(0);
@@ -121,8 +122,9 @@ void VistaEdit::impostaPerCreazione(unsigned int id_daSalvare)
 
 void VistaEdit::impostaPerModifca(const modello::Attivita* a)
 {
-    comboTipo->setVisible(false);//lo nascondo, perche' un attivita' gia' creata non puo' cambiare tipo
+    comboTipo->setEnabled(false);//lo disattivo, perche' un attivita' gia' creata non puo' cambiare tipo
     id=a->getID();
+    dataCreazione=a->getDataCreazione(); //cosi non si resetta ad ogni modifica
     card::CardEditActivityVisitor visitor;
     a->accept(&visitor);
     //controllo come sopra
@@ -139,6 +141,6 @@ void VistaEdit::impostaPerModifca(const modello::Attivita* a)
 
 modello::Attivita* VistaEdit::getAttivita()  const
 {
-    return cardVisualizzata->generaAttivita(id);
+    return cardVisualizzata->generaAttivita(id, dataCreazione);
 }
 }

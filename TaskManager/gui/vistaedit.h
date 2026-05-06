@@ -23,6 +23,7 @@ private:
     void setup();
     void connectSegnali();
     unsigned int id;
+    QDateTime dataCreazione;
     card::AbstractCardEdit* cardVisualizzata=nullptr;
     QScrollArea* areaScorrimento;
     QWidget* contenitoreCentrale;

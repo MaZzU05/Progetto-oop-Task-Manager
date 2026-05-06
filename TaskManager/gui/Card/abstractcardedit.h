@@ -53,7 +53,7 @@ private:
 
 public:
      AbstractCardEdit(QWidget *parent = nullptr);
-     virtual modello::Attivita* generaAttivita(unsigned int id)=0;
+     virtual modello::Attivita* generaAttivita(unsigned int id, QDateTime dataCreazione)=0;
      virtual QString validaSelezioni()=0;
  protected:
      void addWidget(QWidget*); //per aggiungere elementi grafici nelle derivate

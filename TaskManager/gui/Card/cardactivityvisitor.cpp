@@ -10,10 +10,11 @@
 namespace gui
 {
 namespace card{
-void CardActivityVisitor::visit(const modello::Esame* e)
+void CardActivityVisitor::visit(modello::Esame* e)
 {
     widget=new CardAttivita();
     widget->popolaAttivita(e);
+    widget->nascondiBottoneCambiaStato(); //nascondo la modifica stato dato che in esame non la voglio
     QWidget* widgetEsame=new QWidget();
     QVBoxLayout* layoutEsame=new QVBoxLayout(widgetEsame);
     QLabel* labelCFU=new QLabel("CFU: "+QString::number(e->getCFU()));
@@ -35,8 +36,8 @@ void CardActivityVisitor::visit(const modello::Esame* e)
     }
     layoutVoto->addWidget(labelVoto);
     QProgressBar* barraVoto=new QProgressBar();
-    barraVoto->setStyleSheet("QProgressBar { border: 1px solid grey; border-radius: 5px; text-align: center; }"
-                             "QProgressBar::chunk { background-color: #4CAF50; width: 10px; margin: 1px; }");
+    //barraVoto->setStyleSheet("QProgressBar { border: 1px solid grey; border-radius: 5px; text-align: center; }"
+    //                         "QProgressBar::chunk { background-color: #4CAF50; width: 10px; margin: 1px; }");
     barraVoto->setRange(0, 30);
     barraVoto->setValue(e->getVoto());
     barraVoto->setFormat("%v/%m");
@@ -44,21 +45,18 @@ void CardActivityVisitor::visit(const modello::Esame* e)
     layoutEsame->addLayout(layoutVoto);
     QLabel* labelSede=new QLabel("Sede: "+e->getSede());
     layoutEsame->addWidget(labelSede);
-    QHBoxLayout* layoutProfessori=new QHBoxLayout();
-    layoutProfessori->setAlignment(Qt::AlignLeft);
     QLabel* labelProfessori=new QLabel("Professori: ");
-    layoutProfessori->addWidget(labelProfessori);
+    layoutEsame->addWidget(labelProfessori);
     QListWidget* listaProfessori=new QListWidget();
     listaProfessori->setSelectionMode(QAbstractItemView::NoSelection);
     std::vector<QString> professoriVec=e->getAllProf();
     for(const QString& p:professoriVec) listaProfessori->addItem(p);
-    layoutProfessori->addWidget(listaProfessori);
-    layoutEsame->addLayout(layoutProfessori);
+    layoutEsame->addWidget(listaProfessori);
     widget->addWidget(widgetEsame);
 
 }
 
-void CardActivityVisitor::visit(const modello::Scadenza* s)
+void CardActivityVisitor::visit(modello::Scadenza* s)
 {
     widget=new CardAttivita();
     widget->popolaAttivita(s);
@@ -94,17 +92,22 @@ void CardActivityVisitor::visit(const modello::Scadenza* s)
         listaSottoTask->addItem(sottoTask);
     }
     layoutScadenza->addWidget(listaSottoTask);
+    //indico il cambiamento del check della task
+    CardAttivita::connect(listaSottoTask, &QListWidget::itemChanged, widget, [s](QListWidgetItem* item) {
+            s->setPassaggioCompletato(item->text(), item->checkState() == Qt::Checked);
+        });
     widget->addWidget(widgetScadenza);
 
 }
 
-void CardActivityVisitor::visit(const modello::Appuntamento* i)
+void CardActivityVisitor::visit(modello::Appuntamento* i)
 {
     widget=new CardAttivita();
     widget->popolaAttivita(i);
     QWidget* widgetAppuntamento=new QWidget();
     QVBoxLayout* layoutAppuntamento=new QVBoxLayout(widgetAppuntamento);
     QHBoxLayout* layoutLuogo=new QHBoxLayout();
+    layoutLuogo->setAlignment(Qt::AlignLeft);
     QLabel* labelLuogo=new QLabel("Luogo: "+i->getLuogo());
     layoutLuogo->addWidget(labelLuogo);
     QLabel* labelInPresenza=new QLabel();
@@ -127,7 +130,7 @@ void CardActivityVisitor::visit(const modello::Appuntamento* i)
 
 }
 
-void CardActivityVisitor::visit(const modello::Sport* s)
+void CardActivityVisitor::visit(modello::Sport* s)
 {
     widget=new CardAttivita();
     widget->popolaAttivita(s);

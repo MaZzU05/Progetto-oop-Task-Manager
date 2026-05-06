@@ -40,6 +40,7 @@ public:
     const std::vector<QString>& getAllTag() const;
     void addTag(const QString& t);
     bool tagIsIn(const QString& t) const; //verifica tag presente o meno
+    bool removeTag(const QString& t);
     Priority getPriority() const;
     void changePriority(Priority nuova);
     bool isComplete() const;

@@ -22,7 +22,7 @@ public:
 private:
     void setup();
     void connectSegnali();
-    void setWidget(std::vector<const modello::Esame*> esami);
+    void setWidget(std::vector<modello::Esame*> esami);
     modello::Libretto* libretto=nullptr;
     QScrollArea* areaScorrimento;
     QWidget* contenitoreCentrale;

@@ -11,10 +11,11 @@ CardAttivita::CardAttivita(QWidget *parent): QWidget(parent), espansa(false)
 
 void CardAttivita::setup()
 {
-    //per "personalizzare lo sfondo"
+    //per "personalizzare lo sfondo" mi serve per mostrare le modifiche estetiche applicate alle card
     this->setAttribute(Qt::WA_StyledBackground, true);
 
     //elemnti di stile css, il cazzo di tema scuro sminchia tutto, forzo i colori del testo
+    /*
     this->setStyleSheet("gui--card--CardAttivita { "
                         "   background-color: white; "
                         "   border: 1px solid #e0e0e0; "
@@ -29,6 +30,7 @@ void CardAttivita::setup()
                         "}"
                         "gui--card--CardAttivita QListWidget {color: #333333; background-color: transparent; border: none; }"
         );
+*/
     layoutPrincipale=new QVBoxLayout(this);
     layoutPrincipale->setContentsMargins(15, 12, 15, 12); // Piu' respiro ai bordi
     layoutPrincipale->setSpacing(10); // Spazio tra titolo e dettagli
@@ -45,6 +47,11 @@ void CardAttivita::setup()
     layoutPrincipale->addLayout(layoutAlto);
     dettagliWidget=new QWidget();
     layoutDettagli=new QVBoxLayout(dettagliWidget);
+    QHBoxLayout* layoutCambiaStato=new QHBoxLayout();
+    layoutCambiaStato->setAlignment(Qt::AlignLeft);
+    bottoneCambiaStato=new QPushButton("Cambia lo stato di completamento", this);
+    layoutCambiaStato->addWidget(bottoneCambiaStato);
+    layoutDettagli->addLayout(layoutCambiaStato);
     dataCreazione=new QLabel(this);
     layoutDettagli->addWidget(dataCreazione);
     urgente=new QLabel(this);
@@ -59,12 +66,15 @@ void CardAttivita::setup()
     layoutPrincipale->addWidget(dettagliWidget);
 }
 
-void CardAttivita::popolaAttivita(const modello::Attivita* a)
+void CardAttivita::popolaAttivita(modello::Attivita* a)
 {
     attivitaRappresentata=a;
     titolo->setText("Titolo: "+a->getTitle());
     // titolo->setStyleSheet("font-weight: bold; font-size: 14px; color: #333;");
     data_ora->setText("Data-ora: "+a->getDate().toString());
+    //se non e' ancora passata l'attivita' non la rendo flaggabile come completata
+    if(QDate::currentDate().daysTo(a->getDate().date())>0)
+        nascondiBottoneCambiaStato();
     durata->setText("Durata: "+QString::number(a->getDurata())+" minuti");
     if(a->isComplete()) Completata->setText("Stato: Completata");
     else Completata->setText("Stato: Non completata");
@@ -89,8 +99,25 @@ void CardAttivita::popolaAttivita(const modello::Attivita* a)
     tag->setWordWrap(true); //va automaticamenta a capo se sono troppi
     note->setText("Note: "+a->getNote());
     note->setWordWrap(true);
-}
+    connect(bottoneCambiaStato, &QPushButton::clicked, this, [this]() {
+        attivitaRappresentata->setComplete(!attivitaRappresentata->isComplete());
+        // aggiorno la label per coerenza visiva immediata
+        if(attivitaRappresentata->isComplete())
+            Completata->setText("Stato: Completata");
+        else
+            Completata->setText("Stato: Non completata");
+        // aggiorno anche l'urgenza dato che dipende dallo stato di completamento
+        if(attivitaRappresentata->isUrgente())
+            urgente->setText("Urgente");
+        else
+            urgente->setText("Non urgente");
+    });
 
+}
+void CardAttivita::nascondiBottoneCambiaStato()
+{
+    bottoneCambiaStato->setVisible(false);
+}
 void CardAttivita::setSelezionata(bool stato)
 {
     espansa=stato;

@@ -156,7 +156,7 @@ void VistaCalendario::costruisciSettimana(QDate giornoSelezionato)
             if(a->avvieneInData(giornoCheck))
             {
                 QPushButton* bottoneAttivita=new QPushButton(a->getTitle());
-                bottoneAttivita->setStyleSheet("QPushButton { background-color: transparent; padding: 5px; border: 1px solid grey; border-radius: 10px; } QPushButton:hover { background-color: lightblue; } QPushButton:pressed { background-color: #e0e0e0; border: 1px solid #b0b0b0; }");
+                //bottoneAttivita->setStyleSheet("QPushButton { background-color: transparent; padding: 5px; border: 1px solid grey; border-radius: 10px; } QPushButton:hover { background-color: lightblue; } QPushButton:pressed { background-color: #e0e0e0; border: 1px solid #b0b0b0; }");
                 //devo chiamare la connect qua, dato che e' una variabile creata dentro la funzione e connectSegnali non la puo' vedere, siccome devo passare l'attivita nel segnale, uso una lambda e faccio l'emit dentro
                 connect(bottoneAttivita, &QPushButton::pressed, this, [this, a](){
                     //emit VistaCalendario::attivitaSelezionata(a);

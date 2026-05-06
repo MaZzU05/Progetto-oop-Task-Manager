@@ -16,10 +16,10 @@ Gestore::~Gestore() {
   }
   delete filtroAttivo;
 }
-Gestore::Gestore(const Gestore &g) : libretto(g.libretto) {
-  for (Attivita *a : g.listaAttivita) {
-    listaAttivita.push_back(a->clone());
-  }
+Gestore::Gestore(const Gestore &g) : libretto(g.libretto.getCfu(), g.libretto.getCorsoLaurea(), listaAttivita) {
+    for (Attivita *a : g.listaAttivita) {
+        listaAttivita.push_back(a->clone());
+    }
 }
 Gestore &Gestore::operator=(const Gestore &g) {
   if (this != &g) {
@@ -29,6 +29,8 @@ Gestore &Gestore::operator=(const Gestore &g) {
     listaAttivita.clear();
     for (const Attivita *a : g.listaAttivita)
       listaAttivita.push_back(a->clone());
+    delete filtroAttivo;
+    filtroAttivo=nullptr;
   }
   return *this;
 }
@@ -46,11 +48,8 @@ void Gestore::addAttivita(Attivita *a) {
   if (it == listaAttivita.end())
   {
     listaAttivita.push_back(a);
-      //ciclo di notifica
-      for(auto it=observers.begin(); it!=observers.end(); it++)
-      {
-          (*it)->notify(*this);
-      }
+      //notifico
+      notifyObserves();
   }
 }
 //***** OCIO: ritorna true se trova l'attivita' e la rimuove, false se non
@@ -60,7 +59,7 @@ bool Gestore::removeAttivita(unsigned int id) {
   // unsigned int check=listaAttivita.size();
   // listaAttivita.erase(std::remove_if(listaAttivita.begin(),
   // listaAttivita.end(), [id](Attivita* a){return
-  // a->getID()==id;}),listaAttivita.end()); non dealloca la memoria mannaggia a
+  // a->getID()==id;}),listaAttivita.end()); non dealloca la memoria mannaggia a me
   // return check==listaAttivita.size();
   auto it = listaAttivita.begin();
   for (; it != listaAttivita.end() && (*it)->getID() != id; it++)
@@ -68,11 +67,8 @@ bool Gestore::removeAttivita(unsigned int id) {
   if (it != listaAttivita.end()) {
     delete *it;
     listaAttivita.erase(it);
-    //ciclo di notifica
-    for(auto it2=observers.begin(); it2!=observers.end(); it2++)
-    {
-        (*it2)->notify(*this);
-    }
+    //notifico
+    notifyObserves();
     return true;
   }
   return false;
@@ -247,11 +243,8 @@ bool Gestore::carica(const QString &nomeFile) {
       }
     }
     file.close();
-    //ciclo di notifica
-    for(auto it=observers.begin(); it!=observers.end(); it++)
-    {
-        (*it)->notify(*this);
-    }
+    //notifico
+    notifyObserves();
     return true;
   }
   return false;
@@ -279,17 +272,24 @@ void Gestore::registraObserver(GestoreObserverInterface* observer)
 {
     observers.push_back(observer);
 }
+
+void Gestore::notifyObserves()
+{
+    //ciclo di notifica
+    for(auto it=observers.begin(); it!=observers.end(); it++)
+    {
+        (*it)->notify(*this);
+    }
+}
+
 void Gestore::setFiltro(filtro::FiltroCongiuntivo* nuovoFiltro)
 {
     //se filtro allocato in memoria, lo elimino, poi copio il nuovo
     if(filtroAttivo)
         delete filtroAttivo;
     filtroAttivo=nuovoFiltro;
-    //ciclo di notifica
-    for(auto it=observers.begin(); it!=observers.end(); it++)
-    {
-        (*it)->notify(*this);
-    }
+    //notifico
+    notifyObserves();
 }
 std::vector<Attivita*> Gestore::getAttivitaFiltrate() const
 {
@@ -303,11 +303,8 @@ void Gestore::inizializzaLibretto(const QString& corso, int cfu)
 {
     libretto.setCorsoLaurea(corso);
     libretto.setCfu(cfu);
-    //ciclo di notifica
-    for(auto it=observers.begin(); it!=observers.end(); it++)
-    {
-        (*it)->notify(*this);
-    }
+    //notifico
+    notifyObserves();
 
 }
 } // namespace modello

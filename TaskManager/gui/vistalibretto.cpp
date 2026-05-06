@@ -44,14 +44,14 @@ void VistaLibretto::setup()
     labelnomeCorso=new QLabel(this);
     layoutAlto->addWidget(labelnomeCorso);
     modificaInfo=new QPushButton("Modifica Tipologia Laurea", this);
-    modificaInfo->setStyleSheet("QPushButton { background-color: transparent; padding: 5px; border: 1px solid grey; border-radius: 10px; } QPushButton:hover { background-color: lightblue; } QPushButton:pressed { background-color: #e0e0e0; border: 1px solid #b0b0b0; }");
+    //modificaInfo->setStyleSheet("QPushButton { background-color: transparent; padding: 5px; border: 1px solid grey; border-radius: 10px; } QPushButton:hover { background-color: lightblue; } QPushButton:pressed { background-color: #e0e0e0; border: 1px solid #b0b0b0; }");
     layoutAlto->addWidget(modificaInfo);
     layout->addLayout(layoutAlto);
     contenitoreCentrale=new QWidget(this);
     areaScorrimento=new QScrollArea(this);
     areaScorrimento->setWidget(contenitoreCentrale);
     areaScorrimento->setFrameShape(QFrame::NoFrame);
-    areaScorrimento->setStyleSheet("background-color: transparent;"); //mettendo lo sfondo trasparente cerco un effetto piu' elegante
+    //areaScorrimento->setStyleSheet("background-color: transparent;"); //mettendo lo sfondo trasparente cerco un effetto piu' elegante
     areaScorrimento->setWidgetResizable(true);
     layout->addWidget(areaScorrimento);
     layoutCentrale=new QVBoxLayout(contenitoreCentrale);
@@ -85,7 +85,7 @@ void VistaLibretto::connectSegnali()
 
     });
 }
-void VistaLibretto::setWidget(std::vector<const modello::Esame*> esami)
+void VistaLibretto::setWidget(std::vector<modello::Esame*> esami)
 {
     QLayoutItem* daEliminare;
     while((daEliminare=layoutCentrale->takeAt(0))!=nullptr)
@@ -93,7 +93,7 @@ void VistaLibretto::setWidget(std::vector<const modello::Esame*> esami)
         delete elementoInterno;
         delete daEliminare;
     }
-    for(const modello::Esame* esame:esami)
+    for(modello::Esame* esame:esami)
     {
         card::CardActivityVisitor visitor;
         esame->accept(&visitor);
@@ -129,7 +129,7 @@ void VistaLibretto::aggiornaVista()
     labelVotoAtteso->setText("Voto Finale Atteso: "+QString::number(libretto->getVotoFinaleAtteso())+"/110");
     barraVotoAtteso->setRange(0,110);
     barraVotoAtteso->setValue(libretto->getVotoFinaleAtteso());
-    std::vector<const modello::Esame*> vecEsami;
+    std::vector<modello::Esame*> vecEsami;
     auto vecFuturi=libretto->getEsamiFuturi();
     auto vecSuperati=libretto->getEsamiSuperati();
     auto vecNonSuperati=libretto->getEsamiNonSuperati();
