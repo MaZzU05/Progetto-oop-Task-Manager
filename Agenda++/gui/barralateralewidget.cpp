@@ -211,7 +211,7 @@ bool BarraLateraleWidget::isFiltroMeseAnnoOn() const
 
 unsigned int BarraLateraleWidget::getMeseSelezionato() const
 {
-    // currentIndex() e' gia' 1-12: "Tutte"=0, "Gennaio"=1, ..., "Dicembre"=12
+    // currentIndex() e' gia' 1-12: Tutte=0, Gennaio=1, ..., Dicembre=12
     // corrisponde direttamente ai valori del'enum MeseTarget del modello
     return comboMese->currentIndex();
 }
@@ -235,6 +235,7 @@ void BarraLateraleWidget::azzeraFiltri()
     comboPriorita->setCurrentIndex(0);
     comboAnno->setCurrentIndex(0);
     comboMese->setCurrentIndex(0);
+    comboUrgenza->setCurrentIndex(0);
     checkFiltroData->setChecked(false);
     modificaData->setEnabled(false);
     cercaTag->clear();

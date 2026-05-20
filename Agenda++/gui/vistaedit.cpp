@@ -15,26 +15,9 @@ VistaEdit::VistaEdit(QWidget *parent)
     setup();
     connectSegnali();
 }
-/*public:
-     VistaEdit(QWidget *parent = nullptr);
-     void impostaPerCreazione(); //crea  una card vergine per crearne una nuova
-     void impostaPerModifca(const modello::Attivita*);//imposta card per modifica
-private:
-    void setup();
-    void connectSegnali();
-    unsigned int id;
-    card::AbstractCardEdit* cardVisualizzata=nullptr;
-    QScrollArea* areaScorrimento;
-    QWidget* contenitoreCentrale;
-    QVBoxLayout* layout;
-    QVBoxLayout* layoutCentrale;
-    QLabel* labelTipo;
-    QComboBox* comboTipo;
-    QPushButton* bottoneAnnulla;
-    QPushButton* bottoneSalva;*/
+
 void VistaEdit::setup()
 {
-    //this->setStyleSheet("QPushButton { background-color: transparent; padding: 5px; border: 1px solid grey; border-radius: 10px; } QPushButton:hover { background-color: lightblue; } QPushButton:pressed { background-color: #e0e0e0; border: 1px solid #b0b0b0; }");
     layout=new QVBoxLayout(this);
     QHBoxLayout* layoutAlto=new QHBoxLayout();
     layoutAlto->setAlignment(Qt::AlignLeft);
@@ -49,7 +32,6 @@ void VistaEdit::setup()
     layout->addLayout(layoutAlto);
     areaScorrimento=new QScrollArea(this);
     areaScorrimento->setFrameShape(QFrame::NoFrame); //come su tutte disabilito il contorno
-    //areaScorrimento->setStyleSheet("background-color: transparent;");//mantengo la coerenza grafica
     layout->addWidget(areaScorrimento);
     contenitoreCentrale=new QWidget(this);
     layoutCentrale=new QVBoxLayout(contenitoreCentrale);
@@ -112,7 +94,7 @@ void VistaEdit::connectSegnali()
 
 void VistaEdit::impostaPerCreazione(unsigned int id_daSalvare)
 {
-    comboTipo->setVisible(true);
+    comboTipo->setEnabled(true);
     id=id_daSalvare;
     dataCreazione=QDateTime::currentDateTime();
     //simulo un cambio indice per far generare la card

@@ -21,8 +21,6 @@ void VistaDettaglio::setup() {
   layout->addLayout(layoutAlto);
   areaScorrimento = new QScrollArea(this);
   areaScorrimento->setFrameShape(QFrame::NoFrame);
-  // areaScorrimento->setStyleSheet("background-color: transparent;");
-  // //mettendo lo sfondo trasparente cerco un effetto piu' elegante
   layout->addWidget(areaScorrimento);
   contenitoreCentrale = new QWidget(this);
   layoutCentrale = new QVBoxLayout(contenitoreCentrale);

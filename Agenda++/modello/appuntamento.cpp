@@ -33,14 +33,12 @@ void Appuntamento::setPresenza(bool p)
 {
     inPresenza=p;
 }
-//verifica con un espressione regolare se la mail è in un formato valido, non serve che verifico nella gui, lo faccio già qua, o forse meglio farlo dopo
-//***togliliere controllo se lo faccio da gui!!!!!***
 bool Appuntamento::addPartecipante(const QString& partecipante)
 {
     //R" per non avere problemi con caratteri speciali, organizzata in due blocchi, 1 accetta tutti i caratteri normali, poi chiocciola, poi nome dominio
     //seguito da . estensione di almeno due caratteri, \. cerca il punto, {2,} riempito almeno 2 volte, quindi per domini>=2
     //restituisce falso se mail non valida, senza inserirla, vero se valida, se già presente non la inserisce
-    QRegularExpression re(R"(^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$)");
+    QRegularExpression re(R"(^[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$)");
     QRegularExpressionMatch match=re.match(partecipante);
     if(match.hasMatch())
     {

@@ -11,16 +11,7 @@ VistaCalendario::VistaCalendario(QWidget* parent): AbstractVistaAttivita(parent)
     connectSegnali();
 }
 
-/*
- *  QVBoxLayout* layoutPrincipale;
-    QCalendarWidget* calendario;
-    QScrollArea* AreaScorrimento;
-    QWidget* contenitoreCentrale;
-    //creo un layout composito di 7 layout verticali per le attività settimanali
-    QHBoxLayout* layoutSettimana;
-    std::vector<QVBoxLayout*> vecLayoutSettimana;
-    std::vector<modello::Attivita*> vecAttivita;
- */
+
 void VistaCalendario::setup()
 {
     layoutPrincipale=new QVBoxLayout(this);
@@ -91,8 +82,6 @@ void VistaCalendario::connectSegnali()
     });
 }
 
-/*    bool inRange=dataInizio.daysTo(giorno)>=0&&giorno.daysTo(getDate().date())>=0;
-    if(inRange&&isGiornoAllenamento(static_cast<Qt::DayOfWeek>(giorno.dayOfWeek()))) return true; */
 void VistaCalendario::popolaAttivita(const std::vector<modello::Attivita*>& vec)
 {
     vecAttivita=vec;
@@ -156,7 +145,6 @@ void VistaCalendario::costruisciSettimana(QDate giornoSelezionato)
             if(a->avvieneInData(giornoCheck))
             {
                 QPushButton* bottoneAttivita=new QPushButton(a->getTitle());
-                //bottoneAttivita->setStyleSheet("QPushButton { background-color: transparent; padding: 5px; border: 1px solid grey; border-radius: 10px; } QPushButton:hover { background-color: lightblue; } QPushButton:pressed { background-color: #e0e0e0; border: 1px solid #b0b0b0; }");
                 //devo chiamare la connect qua, dato che e' una variabile creata dentro la funzione e connectSegnali non la puo' vedere, siccome devo passare l'attivita nel segnale, uso una lambda e faccio l'emit dentro
                 connect(bottoneAttivita, &QPushButton::pressed, this, [this, a](){
                     //emit VistaCalendario::attivitaSelezionata(a);

@@ -1,0 +1,282 @@
+{
+    "info_laurea": {
+        "cfu_totali": 180,
+        "corsoDiLaurea": "Informatica"
+    },
+    "lista_attivita": [
+        {
+            "Tipo": "Esame",
+            "cfu": 10,
+            "complete": true,
+            "dataCreazione": "2026-05-20T12:06:33",
+            "dataFine": "2026-02-16T11:00:09",
+            "durata": 90,
+            "id": 2,
+            "lode": false,
+            "note": "Esame di Programmazione ad Oggetti, concentrarsi su esercizi di stampe e scrittura di funzioni con uso di polimorfismo, con tutte le sfaccettature. ",
+            "priorita": 2,
+            "professori": [
+                "Prof. Alan Turing",
+                "Prof. Linus Torvalds",
+                "Prof. Salvatore Sanfilippo"
+            ],
+            "sede": "Lum'250, Aule Luzzati, Via Paolotti",
+            "tag": [
+                "Università",
+                "Informatica"
+            ],
+            "title": "Programmazione ad Oggetti",
+            "voto": 26
+        },
+        {
+            "Tipo": "Esame",
+            "cfu": 12,
+            "complete": true,
+            "dataCreazione": "2026-05-20T12:01:08",
+            "dataFine": "2025-01-27T10:30:15",
+            "durata": 120,
+            "id": 1,
+            "lode": false,
+            "note": "Esame di Analisi Matematica 1",
+            "priorita": 0,
+            "professori": [
+                "Prof. Andrea Rossi",
+                "Prof. Giacomo Lagrange"
+            ],
+            "sede": "Lum-250, Aule Luzzati, via Paolotti",
+            "tag": [
+                "Università",
+                "Matematica"
+            ],
+            "title": "Analisi 1",
+            "voto": 30
+        },
+        {
+            "Tipo": "Esame",
+            "cfu": 12,
+            "complete": true,
+            "dataCreazione": "2026-05-20T12:18:34",
+            "dataFine": "2026-02-08T14:30:07",
+            "durata": 120,
+            "id": 4,
+            "lode": false,
+            "note": "Analisi 2, non so niente!!!",
+            "priorita": 2,
+            "professori": [
+                "Prof. Couchy Couchy",
+                "Prof. Leonardo Fibonacci"
+            ],
+            "sede": "Lum-250, Aule Luzzati, Via Paolotti",
+            "tag": [
+                "Università",
+                "Matematica"
+            ],
+            "title": "Analisi 2",
+            "voto": 16
+        },
+        {
+            "Tipo": "Appuntamento",
+            "complete": false,
+            "dataCreazione": "2026-05-20T12:25:57",
+            "dataFine": "2026-06-22T11:25:57",
+            "durata": 30,
+            "id": 5,
+            "inPresenza": true,
+            "luogo": "Ufficio Professore, Torre Archimede",
+            "note": "Ricevimento per progetto di Basi",
+            "partecipanti": [
+                "raymond.boyce@unipd.it",
+                "gianni.assistente@unipd.it"
+            ],
+            "priorita": 1,
+            "tag": [
+                "Università"
+            ],
+            "title": "Ricevimento Professore"
+        },
+        {
+            "Tipo": "Appuntamento",
+            "complete": true,
+            "dataCreazione": "2026-05-20T12:29:09",
+            "dataFine": "2026-05-19T14:30:09",
+            "durata": 180,
+            "id": 6,
+            "inPresenza": false,
+            "luogo": "Discord",
+            "note": "Stesura relazione sul progetto di Basi",
+            "partecipanti": [
+                "francesco.totti@studenti.unipd.it",
+                "alessandro.delpiero@studenti.unipd.it"
+            ],
+            "priorita": 1,
+            "tag": [
+                "Università",
+                "Progetto"
+            ],
+            "title": "Stesura Relazione Progetto Basi in Gruppo"
+        },
+        {
+            "Tipo": "Scadenza",
+            "complete": false,
+            "dataCreazione": "2026-05-20T12:31:38",
+            "dataFine": "2026-06-15T23:59:51",
+            "durata": 0,
+            "giorniPreavviso": 4,
+            "id": 7,
+            "note": "Consegnare il progetto di Pao entro la mezzanotte, su moodle, ricordati di inserire il file json nella zip",
+            "priorita": 2,
+            "tag": [
+                "Università",
+                "Progetto"
+            ],
+            "title": "Conesgna Progetto OOP",
+            "todoList": [
+                {
+                    "completa": true,
+                    "descrizione": "progettazione modello"
+                },
+                {
+                    "completa": true,
+                    "descrizione": "scrittura modello"
+                },
+                {
+                    "completa": true,
+                    "descrizione": "studio e progettazione GUI in Qt"
+                },
+                {
+                    "completa": false,
+                    "descrizione": "Test "
+                },
+                {
+                    "completa": false,
+                    "descrizione": "Scrittura relazione"
+                }
+            ]
+        },
+        {
+            "Tipo": "Scadenza",
+            "complete": true,
+            "dataCreazione": "2026-05-20T12:35:14",
+            "dataFine": "2026-05-15T23:59:16",
+            "durata": 0,
+            "giorniPreavviso": 7,
+            "id": 8,
+            "note": "Pagare le tasse universitarie",
+            "priorita": 2,
+            "tag": [
+                "Università",
+                "DaPagare"
+            ],
+            "title": "Pagamento Tasse",
+            "todoList": [
+                {
+                    "completa": false,
+                    "descrizione": "caricare i soldi sul conto"
+                },
+                {
+                    "completa": false,
+                    "descrizione": "abilitare pagamenti on-line"
+                }
+            ]
+        },
+        {
+            "Tipo": "Sport",
+            "complete": false,
+            "dataCreazione": "2026-05-20T12:37:21",
+            "dataFine": "2026-08-23T23:59:32",
+            "dataInizio": "2025-10-06",
+            "durata": 90,
+            "giorni_sport": [
+                1,
+                3,
+                5
+            ],
+            "id": 9,
+            "luogo": "FirstFit Moneslice",
+            "note": "Devo rimettermi in forma in vista dell'estate",
+            "priorita": 0,
+            "tag": [
+                "Sport",
+                "Palestra"
+            ],
+            "title": "Palestra"
+        },
+        {
+            "Tipo": "Sport",
+            "complete": true,
+            "dataCreazione": "2026-05-20T12:39:58",
+            "dataFine": "2026-05-13T17:40:11",
+            "dataInizio": "2026-05-13",
+            "durata": 90,
+            "giorni_sport": [
+                3
+            ],
+            "id": 10,
+            "luogo": "Stadio di Solesino",
+            "note": "Partita coi bro",
+            "priorita": 0,
+            "tag": [
+                "Sport",
+                "Svago"
+            ],
+            "title": "Partita di calcetto"
+        },
+        {
+            "Tipo": "Scadenza",
+            "complete": false,
+            "dataCreazione": "2026-05-20T12:41:42",
+            "dataFine": "2027-10-20T12:42:01",
+            "durata": 0,
+            "giorniPreavviso": 30,
+            "id": 11,
+            "note": "Cerca di Laurearti in Tempoooooo!!!!!!!",
+            "priorita": 2,
+            "tag": [
+                "Università",
+                "Obbiettivo"
+            ],
+            "title": "Vedi di Laurearti!!!!!!",
+            "todoList": [
+                {
+                    "completa": true,
+                    "descrizione": "Finire esami primo anno"
+                },
+                {
+                    "completa": false,
+                    "descrizione": "Finire esami secondo anno"
+                },
+                {
+                    "completa": false,
+                    "descrizione": "Finire esami terzo anno"
+                },
+                {
+                    "completa": false,
+                    "descrizione": "Fare lo stage"
+                }
+            ]
+        },
+        {
+            "Tipo": "Esame",
+            "cfu": 9,
+            "complete": false,
+            "dataCreazione": "2026-05-20T12:13:08",
+            "dataFine": "2026-06-24T10:30:10",
+            "durata": 150,
+            "id": 3,
+            "lode": false,
+            "note": "Esame di Basi di Dati, prepararsi bene nella proggettazione logica, normalizzazione e indici, per quanto riguarda SQL, usare solo comandi standard e non legati es a Postgres (come LIMIT)",
+            "priorita": 1,
+            "professori": [
+                "Prof. Donald Chamberlin",
+                "Prof. Raymond Boyce"
+            ],
+            "sede": "Aula 1A150, Torre Archimede",
+            "tag": [
+                "Università",
+                "Informatica"
+            ],
+            "title": "Basi di Dati",
+            "voto": 0
+        }
+    ]
+}

@@ -26,6 +26,7 @@ void CardEsame::setup()
     selezionaVoto=new QSpinBox(this);
     selezionaVoto->setMinimum(0);
     selezionaVoto->setMaximum(31); //senza mettere una casella per flaggare la lode, metto 31, poi la gestiro' nella creazione
+    selezionaVoto->setEnabled(false);
     layoutVoto->addWidget(selezionaVoto);
     layoutPrincipale->addLayout(layoutVoto);
     QHBoxLayout* layoutSede=new QHBoxLayout();
@@ -62,8 +63,6 @@ void CardEsame::connectSegnali()
 {
     //seguo lo stesso schema usato nella base
     connect(bottoneTogliProfessore, &QPushButton::clicked, this, [this](){
-        /*QListWidgetItem* elementoSelezionato=listaProfessori->currentItem();
-        delete elementoSelezionato;*/
         int riga=listaProfessori->currentRow(); //restituisce l'indice di riga selezionata
         //controllo che sia selezionata
         if (riga!=-1)
@@ -84,6 +83,14 @@ void CardEsame::connectSegnali()
 
         }
     });
+    //abilito dinamicamente il selettore di voto se l'esame e' completato
+    connect(boxStato, &QCheckBox::toggled, this, [this](bool completato){
+        selezionaVoto->setEnabled(completato);
+        //se l'utente toglie la spunta riporto il voto a 0
+        if(!completato)
+            selezionaVoto->setValue(0);
+
+    });
 }
 
 modello::Esame* CardEsame::generaAttivita(unsigned int id, QDateTime dataCreazione)
@@ -96,9 +103,13 @@ modello::Esame* CardEsame::generaAttivita(unsigned int id, QDateTime dataCreazio
     std::vector<QString> vecProf;
     for(int i=0; i<listaProfessori->count(); i++) vecProf.push_back(listaProfessori->item(i)->text());
     for(const QString& prof:vecProf) nuovoEsame->addProfessor(prof);
+    if(isComplete())
+    {
     nuovoEsame->setVoto(selezionaVoto->value()!=31 ? selezionaVoto->value(): 30); //da impedire in fase di creazione di settare un voto se data ancora da avvenire
     if(selezionaVoto->value()==31)
         nuovoEsame->modifyLode(true);
+    }
+    selezionaVoto->setEnabled(isComplete());
     return nuovoEsame;
 }
 

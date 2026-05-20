@@ -9,18 +9,7 @@
 #include"appuntamento.h"
 #include"sport.h"
 #include<utility>
-/*
- Dati attivita:
-    QString title;
-    unsigned int id;
-    QString note;
-    bool complete;
-    std::vector<QString> tag;
-    QDateTime dataCreazione;
-    QDateTime dataFine;
-    unsigned int durata; //spostata nella classe base, e cambiato il tipo da QTime ad unsigned int considerandolo per i minuti, effettivamente QTime era abbastanza ambiguo e sbagliato
-    Priority priorita;
- */
+
 namespace modello
 {
 //scritta per evitare di riscrivere il codice 4 volte, rispettando il principio DRY
@@ -47,13 +36,7 @@ void JsonSaverVisitor::preparaBase(const Attivita* a)
     daSalvare["priorita"]=static_cast<int>(a->getPriority());
 
 }
-/*Dati Esame
- *  unsigned int cfu;
-    unsigned int voto;
-    bool lode;
-    QString sede;
-    std::vector<QString> professori;
- */
+
 void JsonSaverVisitor::visit(const Esame* e)
 {
     preparaBase(e);
@@ -67,9 +50,7 @@ void JsonSaverVisitor::visit(const Esame* e)
     for(const QString& p:vecProf) professori.append(p);
     daSalvare["professori"]=professori;
 }
-/*dati scadenza
- *     unsigned int giorniPreavviso;
-    std::vector<SottoTask> todoList;*/
+
 void JsonSaverVisitor::visit(const Scadenza* s)
 {
     preparaBase(s);
@@ -88,10 +69,7 @@ void JsonSaverVisitor::visit(const Scadenza* s)
     daSalvare["todoList"]=todoList;
 
 }
-/*dti Appuntamento
- *     QString luogo;
-    bool inPresenza;
-    std::vector<QString> partecipanti;*/
+
 void JsonSaverVisitor::visit(const Appuntamento* a)
 {
     preparaBase(a);
@@ -104,10 +82,7 @@ void JsonSaverVisitor::visit(const Appuntamento* a)
     daSalvare["partecipanti"]=partecipanti;
 
 }
-/*dati Sport
- *     QString luogo;
-    QDate dataInizio;
-    std::vector<Qt::DayOfWeek> giorni_sport;*/
+
 void JsonSaverVisitor::visit(const Sport* s)
 {
     preparaBase(s);

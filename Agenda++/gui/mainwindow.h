@@ -10,6 +10,7 @@
 #include<QMenuBar>
 #include<QMenu>
 #include<QAction>
+#include<QCloseEvent>
 #include "barralateralewidget.h"
 #include"vistaelenco.h"
 #include"vistadettaglio.h"
@@ -25,6 +26,9 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent=nullptr);
+
+protected:
+    void closeEvent(QCloseEvent *event) override;
 
 private:
     modello::Gestore gestorePrincipale;
@@ -47,7 +51,7 @@ private:
     QAction* azioneSalva;
     QAction* azioneCarica;
     void preparaMenuAzioni();
-    void salvataggio();
+    bool salvataggio();
     void caricaAgenda();
     void setup();
     void connectSegnali();

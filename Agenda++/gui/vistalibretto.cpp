@@ -13,27 +13,6 @@ VistaLibretto::VistaLibretto(modello::Libretto* libretto, QWidget *parent): QWid
     connectSegnali();
 }
 
-/*
- *     void popolaAttivita(const std::vector<modello::Attivita*>& vec) override;
-private:
-    void setup();
-    std::vector<modello::Attivita*> vecAttivita;
-    QScrollArea* areaScorrimento;
-    QWidget* contenitoreCentrale;
-    QVBoxLayout* layout;
-    QHBoxLayout* layoutAlto;
-    QVBoxLayout* layoutCentrale;
-    QVBoxLayout* layoutBasso;
-    void setWidget(QWidget* nuovaCard);
-    QLabel* labeltipoCorso;
-    QLabel* labelnomeCorso;
-    QLabel* labelCFU;
-    QProgressBar* barraCFU;
-    QLabel* labelMediaPesata;
-    QProgressBar* barraMedia;
-    QLabel* labelVotoAtteso;
-    QProgressBar* barraVotoAtteso;
- */
 
 void VistaLibretto::setup()
 {
@@ -44,14 +23,12 @@ void VistaLibretto::setup()
     labelnomeCorso=new QLabel(this);
     layoutAlto->addWidget(labelnomeCorso);
     modificaInfo=new QPushButton("Modifica Tipologia Laurea", this);
-    //modificaInfo->setStyleSheet("QPushButton { background-color: transparent; padding: 5px; border: 1px solid grey; border-radius: 10px; } QPushButton:hover { background-color: lightblue; } QPushButton:pressed { background-color: #e0e0e0; border: 1px solid #b0b0b0; }");
     layoutAlto->addWidget(modificaInfo);
     layout->addLayout(layoutAlto);
     contenitoreCentrale=new QWidget(this);
     areaScorrimento=new QScrollArea(this);
     areaScorrimento->setWidget(contenitoreCentrale);
     areaScorrimento->setFrameShape(QFrame::NoFrame);
-    //areaScorrimento->setStyleSheet("background-color: transparent;"); //mettendo lo sfondo trasparente cerco un effetto piu' elegante
     areaScorrimento->setWidgetResizable(true);
     layout->addWidget(areaScorrimento);
     layoutCentrale=new QVBoxLayout(contenitoreCentrale);
@@ -114,7 +91,7 @@ void VistaLibretto::aggiornaVista()
         labeltipoCorso->setText("Laurea Triennale");
            break;
        case 300:
-           labeltipoCorso->setText("Laurea a cilco unico");
+           labeltipoCorso->setText("Laurea a ciclo unico");
            break;
        default:
            labeltipoCorso->setText("Errore");
@@ -123,12 +100,15 @@ void VistaLibretto::aggiornaVista()
     labelCFU->setText("CFU: "+QString::number(libretto->getCfuCompletati())+"/"+QString::number(libretto->getCfu()));
     barraCFU->setRange(0, libretto->getCfu());
     barraCFU->setValue(libretto->getCfuCompletati());
+    barraCFU->setFormat("%v/%m");
     labelMediaPesata->setText("Media Pesata: "+QString::number(libretto->getMediaPesata())+"/30");
     barraMedia->setRange(0,30);
     barraMedia->setValue(libretto->getMediaPesata());
+    barraMedia->setFormat("%v/%m");
     labelVotoAtteso->setText("Voto Finale Atteso: "+QString::number(libretto->getVotoFinaleAtteso())+"/110");
     barraVotoAtteso->setRange(0,110);
     barraVotoAtteso->setValue(libretto->getVotoFinaleAtteso());
+    barraVotoAtteso->setFormat("%v/%m");
     std::vector<modello::Esame*> vecEsami;
     auto vecFuturi=libretto->getEsamiFuturi();
     auto vecSuperati=libretto->getEsamiSuperati();

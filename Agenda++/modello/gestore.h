@@ -16,6 +16,7 @@ private:
   filtro::FiltroCongiuntivo* filtroAttivo=nullptr;
   std::vector<Attivita *> filtra(const filtro::AbstractFilter &af) const;
   Libretto libretto;
+  mutable bool modificheNonSalvate = false;
   void notifyObserves();
 
 public:
@@ -27,6 +28,8 @@ public:
   void registraObserver(GestoreObserverInterface* observer);
   void setFiltro(filtro::FiltroCongiuntivo* nuovoFiltro);
   std::vector<Attivita*> getAttivitaFiltrate() const;
+  bool haModificheNonSalvate() const;
+  void setModificheNonSalvate(bool stato);
   unsigned int generaNuovoId() const;
   void addAttivita(Attivita *a);
   bool removeAttivita(unsigned int id);

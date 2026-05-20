@@ -9,7 +9,17 @@
 #include <QTextStream>
 #include <QtCore/qjsonarray.h>
 #include <algorithm>
+
 namespace modello {
+
+bool Gestore::haModificheNonSalvate() const {
+  return modificheNonSalvate;
+}
+
+void Gestore::setModificheNonSalvate(bool stato) {
+  modificheNonSalvate = stato;
+}
+
 Gestore::~Gestore() {
   for (auto it = listaAttivita.begin(); it != listaAttivita.end(); it++) {
     delete *it;
@@ -48,13 +58,11 @@ void Gestore::addAttivita(Attivita *a) {
   if (it == listaAttivita.end())
   {
     listaAttivita.push_back(a);
+    modificheNonSalvate = true;
       //notifico
       notifyObserves();
   }
 }
-//***** OCIO: ritorna true se trova l'attivita' e la rimuove, false se non
-//presente (anche se la gui dovrebbe sapere gia' gli id presenti, ricorda di
-//togliere il bool eventualmente)
 bool Gestore::removeAttivita(unsigned int id) {
   // unsigned int check=listaAttivita.size();
   // listaAttivita.erase(std::remove_if(listaAttivita.begin(),
@@ -62,11 +70,11 @@ bool Gestore::removeAttivita(unsigned int id) {
   // a->getID()==id;}),listaAttivita.end()); non dealloca la memoria mannaggia a me
   // return check==listaAttivita.size();
   auto it = listaAttivita.begin();
-  for (; it != listaAttivita.end() && (*it)->getID() != id; it++)
-    ;
+  for (; it != listaAttivita.end() && (*it)->getID() != id; it++);
   if (it != listaAttivita.end()) {
     delete *it;
     listaAttivita.erase(it);
+    modificheNonSalvate = true;
     //notifico
     notifyObserves();
     return true;
@@ -114,10 +122,7 @@ bool Gestore::salva(const QString &nomeFile) const {
     arrayAttivita.append(visitor.getJsonObject());
   }
   daSalvare["lista_attivita"] = arrayAttivita;
-  QJsonDocument doc(daSalvare); //"contenitore" dove appoggio il QJsonObject,
-                                //necessario prima del salvataggio
-  // va trasformato in sequenza di byte, uso indented che occupa piu' spazio ma
-  // e' piu' leggibile, almeno per essere sicuro funzioni correttamente
+  QJsonDocument doc(daSalvare); //"contenitore" dove appoggio il QJsonObject,necessario prima del salvataggio va trasformato in sequenza di byte, uso indented che occupa piu' spazio ma e' piu' leggibile, almeno per essere sicuro funzioni correttamente
   QByteArray datiJson = doc.toJson(QJsonDocument::Indented);
   // apro il file
   QFile file(nomeFile);
@@ -125,6 +130,7 @@ bool Gestore::salva(const QString &nomeFile) const {
   if (file.open(QIODevice::WriteOnly)) {
     file.write(datiJson);
     file.close();
+    modificheNonSalvate = false;
     return true;
   }
   return false;
@@ -174,7 +180,8 @@ bool Gestore::carica(const QString &nomeFile) {
         Esame *e = new Esame(title, id, note, sede, cfu, dataFine, durata,
                              complete, priorita);
         e->changeDataCreazione(dataCreazione);
-        e->setVoto(voto);
+        if(voto!=0)
+            e->setVoto(voto);
         e->modifyLode(lode);
         QJsonArray tempTag = aux["tag"].toArray();
         for (auto it = tempTag.begin(); it != tempTag.end(); it++) {
@@ -243,6 +250,7 @@ bool Gestore::carica(const QString &nomeFile) {
       }
     }
     file.close();
+    modificheNonSalvate = false;
     //notifico
     notifyObserves();
     return true;
@@ -303,6 +311,7 @@ void Gestore::inizializzaLibretto(const QString& corso, int cfu)
 {
     libretto.setCorsoLaurea(corso);
     libretto.setCfu(cfu);
+    modificheNonSalvate = true;
     //notifico
     notifyObserves();
 

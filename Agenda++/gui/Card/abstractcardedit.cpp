@@ -13,32 +13,6 @@ AbstractCardEdit::AbstractCardEdit(QWidget *parent)
 
 void AbstractCardEdit::setup()
 {
-    //uniformo lo stile dei bottoni
-    //note: quando un ancestor ha un setStyleSheet Qt disabilita il renderer nativo per tutti i figli.
-    //aggiungo regole esplicite con palette() per ripristinare la resa corretta di SpinBox, ComboBox e DateEdit su tema chiaro e Linux
-    /*this->setStyleSheet(
-        // bottoni
-        "QPushButton { background-color: transparent; padding: 5px; border: 1px solid grey; border-radius: 10px; } "
-        "QPushButton:hover { background-color: lightblue; } "
-        "QPushButton:pressed { background-color: #e0e0e0; border: 1px solid #b0b0b0; } "
-        // QSpinBox: ripristina sfondo e frecce
-        "QSpinBox { background-color: palette(base); color: palette(text); } "
-        "QSpinBox::up-button   { subcontrol-origin: border; subcontrol-position: top right;    width: 16px; border: 1px solid grey; border-radius: 2px; } "
-        "QSpinBox::down-button { subcontrol-origin: border; subcontrol-position: bottom right; width: 16px; border: 1px solid grey; border-radius: 2px; } "
-        "QSpinBox::up-arrow   { width: 7px; height: 7px; } "
-        "QSpinBox::down-arrow { width: 7px; height: 7px; } "
-        // QComboBox: ripristina sfondo e colori nel dropdown
-        "QComboBox { background-color: palette(base); color: palette(text); } "
-        "QComboBox QAbstractItemView { background-color: palette(base); color: palette(text); "
-        "    selection-background-color: palette(highlight); selection-color: palette(highlighted-text); } "
-        // QDateEdit: sfondo e popup calendario
-        "QDateEdit { background-color: palette(base); color: palette(text); } "
-        "QCalendarWidget QAbstractItemView { background-color: palette(base); color: palette(text); "
-        "    selection-background-color: palette(highlight); selection-color: palette(highlighted-text); } "
-        "QCalendarWidget QWidget#qt_calendar_navigationbar { background-color: palette(window); color: palette(window-text); } "
-    );
-*/
-   //this->setStyleSheet("QPushButton { background-color: transparent; padding: 5px; border: 1px solid grey; border-radius: 10px; } QPushButton:hover { background-color: lightblue; } QPushButton:pressed { background-color: #e0e0e0; border: 1px solid #b0b0b0; }");
     layoutPrincipale=new QVBoxLayout(this);
     //la parte alta conterra' gli attributi della base, la parte bassa verra' popolata nelle derivate con le parti spedcifiche
     parteAlta=new QVBoxLayout();
@@ -119,8 +93,6 @@ void AbstractCardEdit::setup()
     layoutNote->addWidget(labelNote);
     inserisciNote=new QTextEdit(this);
     inserisciNote->setPlaceholderText("inserisci note");
-    //imposto lo stile del QTextEdit, se no risulta sgradevole non avendo contorni ne niente, mi uniformo con le parti dell cardAttivita
-    //inserisciNote->setStyleSheet("QTextEdit { border: 1px solid #e0e0e0; border-radius: 10px; padding: 10px; background-color: transparent;}");
     layoutNote->addWidget(inserisciNote);
     parteAlta->addLayout(layoutNote);
     layoutPrincipale->addLayout(parteAlta);
@@ -224,7 +196,7 @@ QString AbstractCardEdit::validazioneBase()
     if(inserisciTitolo->text().isEmpty())
         return "Devi inserire un titolo!";
     //non puo' esistere un attivita selezionata che deve ancora avvenire
-    if(boxStato->isChecked()&&QDate::currentDate().daysTo(getDate())<0)
+    if(boxStato->isChecked()&&QDate::currentDate().daysTo(getDate())>0)
         return "Non puoi completare un attività futura";
     return "";
 

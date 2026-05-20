@@ -13,24 +13,6 @@ void CardAttivita::setup()
 {
     //per "personalizzare lo sfondo" mi serve per mostrare le modifiche estetiche applicate alle card
     this->setAttribute(Qt::WA_StyledBackground, true);
-
-    //elemnti di stile css, il cazzo di tema scuro sminchia tutto, forzo i colori del testo
-    /*
-    this->setStyleSheet("gui--card--CardAttivita { "
-                        "   background-color: white; "
-                        "   border: 1px solid #e0e0e0; "
-                        "   border-radius: 10px; "
-                        "   margin: 5px; "
-                        "}"
-                        "gui--card--CardAttivita:hover { "
-                        "   border: 1px solid #2196F3; " // Cambia bordo al passaggio del mouse (Blu)
-                        "}"
-                        "gui--card--CardAttivita QLabel {"
-                        "   color: #333333;"
-                        "}"
-                        "gui--card--CardAttivita QListWidget {color: #333333; background-color: transparent; border: none; }"
-        );
-*/
     layoutPrincipale=new QVBoxLayout(this);
     layoutPrincipale->setContentsMargins(15, 12, 15, 12); // Piu' respiro ai bordi
     layoutPrincipale->setSpacing(10); // Spazio tra titolo e dettagli
@@ -70,15 +52,14 @@ void CardAttivita::popolaAttivita(modello::Attivita* a)
 {
     attivitaRappresentata=a;
     titolo->setText("Titolo: "+a->getTitle());
-    // titolo->setStyleSheet("font-weight: bold; font-size: 14px; color: #333;");
-    data_ora->setText("Data-ora: "+a->getDate().toString());
+    data_ora->setText("Data-ora: "+a->getDate().toString("ddd dd/MM/yyyy HH:mm")); //la stringa dentro il tostring serve per dare una formattazione visiva della data all'italiana
     //se non e' ancora passata l'attivita' non la rendo flaggabile come completata
     if(QDate::currentDate().daysTo(a->getDate().date())>0)
         nascondiBottoneCambiaStato();
     durata->setText("Durata: "+QString::number(a->getDurata())+" minuti");
     if(a->isComplete()) Completata->setText("Stato: Completata");
     else Completata->setText("Stato: Non completata");
-    dataCreazione->setText("Data creazione: "+a->getDataCreazione().toString());
+    dataCreazione->setText("Data creazione: "+a->getDataCreazione().toString("ddd dd/MM/yyyy HH:mm"));
     if(a->isUrgente())
         urgente->setText("Urgente");
     else
@@ -90,7 +71,8 @@ void CardAttivita::popolaAttivita(modello::Attivita* a)
     priorita->setText("Priorita': "+prior);
     std::vector<QString> tagVec=a->getAllTag();
     QString testoTag="Tag: ";
-    for(int i=0; i<tagVec.size(); i++)
+    //se uso int genera warning, uso size_t, che e' il tipo corretto
+    for(size_t i=0; i<tagVec.size(); i++)
     {
         testoTag+=tagVec[i];
         if(i<tagVec.size()-1) testoTag+=", ";

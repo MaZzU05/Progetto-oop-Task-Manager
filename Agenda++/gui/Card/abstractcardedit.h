@@ -37,8 +37,7 @@ private:
     QTimeEdit* selezionaOra;
     QLabel* labelDurata;
     QSpinBox* inserisciDurata;
-    QLabel* labelStato; //da valutare se spostarla
-    QCheckBox* boxStato;
+    QLabel* labelStato;
     QLabel* labelPriorita;
     QComboBox* comboPriorita;
     QLabel* labelTag;
@@ -56,6 +55,7 @@ public:
      virtual modello::Attivita* generaAttivita(unsigned int id, QDateTime dataCreazione)=0;
      virtual QString validaSelezioni()=0;
  protected:
+     QCheckBox* boxStato;
      void addWidget(QWidget*); //per aggiungere elementi grafici nelle derivate
      //tutti i getter degli elementi della base selezionati, da utilizzare per la costruzione nella derivata
      const QString getTitle() const;

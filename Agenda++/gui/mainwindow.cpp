@@ -30,38 +30,13 @@ void MainWindow::setup()
 {
     //preparo menu
     preparaMenuAzioni();
-    //stile per i bottoni, usato in tutta l'applicazione
-    //this->setStyleSheet("gui--MainWindow QPushButton{border: 1px solid grey; border-radius: 10px;} gui--MainWindow QPushButton:hover { background-color: lightblue;} gui--MainWindow QPushButton:pressed{ background-color: #e0e0e0; border: 1px solid #b0b0b0;}");
-    //test
-    /*modello::Esame* e1=new modello::Esame("analisi", gestorePrincipale.generaNuovoId(), " ", "boh", 12,QDateTime(QDate(2024,12, 20), QTime(15,30,0)), 130 );
-    e1->addTag("Esame");
-    e1->addTag("Prova1");
-    e1->setVoto(27);
-    e1->setComplete(true);
-    gestorePrincipale.addAttivita(e1);
-    modello::Esame* e2=new modello::Esame("analisi 2", gestorePrincipale.generaNuovoId(), " ", "boh", 12,QDateTime(QDate(2025,12, 20), QTime(15,30,0)), 130 );
-    e2->addTag("Esame");
-    e2->addTag("Prova2");
-    e2->setVoto(17);
-    e2->setComplete(true);
-    gestorePrincipale.addAttivita(e2);
-    modello::Appuntamento* a1=new modello::Appuntamento("dentista", gestorePrincipale.generaNuovoId(), " ", QDateTime(QDate(2026,12, 20), QTime(15,30,0)), "boh", 15, true);
-    a1->addTag("Prova3");
-    a1->addTag("Sus");
-    gestorePrincipale.addAttivita(a1);
-    modello::Scadenza* s1=new modello::Scadenza("Consegna Priogetto", gestorePrincipale.generaNuovoId(), "Consegna del cazzo di progetto di pao, aaaaaaaaaaaaaaalugdlijfuasigfinburdsybf rilcuvyrb ewiuotvby5reiowlutygv rbtvcilesbru sbtsrevson  tweilb 5r4vn tvw45ebl sctvt4vukb rystvluiyse4blitv bcye5rilosbcv twie45lbvucbtsioleedbvy owie45bsvyt oiwleb5cy libewoi7 bvwloiebtyuc il8sweybt4iol8b7wo lsbey t4v8ilsevb wci384bc yil8oasebnt c8lioq3ebv awtiw348ybcxiolaw87yv23ci 8ervtq2w43ail87v c64ewoa7v 8itc oi4latrv6alt", QDateTime(QDate(2026,4, 28), QTime(15,30,0)), 4);
-    s1->addPassaggio("GUI");
-    s1->addPassaggio("Test");
-    gestorePrincipale.addAttivita(s1); */
     QWidget* temp=new QWidget();
     setCentralWidget(temp);
     finestraPrincipale=new QStackedWidget(this);
     QHBoxLayout* layout=new QHBoxLayout(temp);
     centrale=new VistaElenco(this);
-    //centrale->popolaAttivita(gestorePrincipale.getAllAttivita());
     finestraPrincipale->addWidget(centrale);
     calendarioCentrale=new VistaCalendario(this);
-    //calendarioCentrale->popolaAttivita(gestorePrincipale.getAllAttivita());
     finestraPrincipale->addWidget(calendarioCentrale);
     dettaglioCentrale=new VistaDettaglio(this);
     finestraPrincipale->addWidget(dettaglioCentrale);
@@ -70,8 +45,6 @@ void MainWindow::setup()
     editCentrale=new VistaEdit(this);
     finestraPrincipale->addWidget(editCentrale);
     barraLaterale=new BarraLateraleWidget(this);
-    //barraLaterale->popolaAnni(gestorePrincipale.getAnniPresenti());
-    //barraLaterale->popolaTag(gestorePrincipale.getTagPresenti());
     layout->addWidget(barraLaterale);
     QVBoxLayout* layoutCentrale=new QVBoxLayout();
     QHBoxLayout* layoutBottoni=new QHBoxLayout();
@@ -80,36 +53,42 @@ void MainWindow::setup()
     QHBoxLayout* layoutBottoniAzioni=new QHBoxLayout();
     layoutBottoniAzioni->setAlignment(Qt::AlignLeft);
     bottoneVistaLista=new QPushButton(this);
-    bottoneVistaLista->setIcon(QIcon(QPixmap(":/gui/assets/icona_lista.png").scaled(24,24,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
+    QIcon iconaLista(":/gui/assets/icona_lista.png");
+    bottoneVistaLista->setIcon(iconaLista);
     bottoneVistaLista->setIconSize(QSize(24,24));
-    bottoneVistaLista->setToolTip("Vista a Lista"); //aggiunge il testo informativo quando vi si passa sopra
+    bottoneVistaLista->setToolTip("Vista ad elenco"); //aggiunge il testo informativo quando vi si passa sopra
     layoutBottoniVista->addWidget(bottoneVistaLista);
     bottoneVistaCalendario=new QPushButton(this);
-    bottoneVistaCalendario->setIcon(QIcon(QPixmap(":/gui/assets/icona_calendario.png").scaled(24,24,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
+    QIcon iconaCalendario(":/gui/assets/icona_calendario.png");
+    bottoneVistaCalendario->setIcon(iconaCalendario);
     bottoneVistaCalendario->setIconSize(QSize(24,24));
     bottoneVistaCalendario->setToolTip("Vista a Calendario");
     layoutBottoniVista->addWidget(bottoneVistaCalendario);
     bottoneVistaLibretto=new QPushButton(this);
-    bottoneVistaLibretto->setIcon(QIcon(QPixmap(":/gui/assets/icona_scuola.png").scaled(24,24,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
+    QIcon iconaLibretto(":/gui/assets/icona_scuola.png");
+    bottoneVistaLibretto->setIcon(iconaLibretto);
     bottoneVistaLibretto->setIconSize(QSize(24,24));
     bottoneVistaLibretto->setToolTip("Vista a Libretto");
     layoutBottoniVista->addWidget(bottoneVistaLibretto);
     bottoneAggiungi=new QPushButton(this);
-    bottoneAggiungi->setIcon(QIcon(QPixmap(":/gui/assets/icona_nuovoElemento.png").scaled(24,24,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
+    QIcon iconaAggiungi(":/gui/assets/icona_nuovoElemento.png");
+    bottoneAggiungi->setIcon(iconaAggiungi);
     bottoneAggiungi->setIconSize(QSize(24,24));
     bottoneAggiungi->setToolTip("Aggiungi Attività");
     bottoneAggiungi->setShortcut(QKeySequence("Ctrl+N"));//shortcut per aggiungere attivita
     layoutBottoniAzioni->addWidget(bottoneAggiungi);
     bottoneModifica=new QPushButton(this);
     bottoneModifica->setEnabled(false); //di default non cliccabile
-    bottoneModifica->setIcon(QIcon(QPixmap(":/gui/assets/icona_modificaElemento.png").scaled(24,24,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
+    QIcon iconaModifica(":/gui/assets/icona_modificaElemento.png");
+    bottoneModifica->setIcon(iconaModifica);
     bottoneModifica->setIconSize(QSize(24,24));
     bottoneModifica->setToolTip("Modifica Attività");
     bottoneModifica->setShortcut(QKeySequence("Ctrl+E"));//shortcut per modificare attivita
     layoutBottoniAzioni->addWidget(bottoneModifica);
     bottoneElimina=new QPushButton(this);
     bottoneElimina->setEnabled(false);
-    bottoneElimina->setIcon(QIcon(QPixmap(":/gui/assets/icona_rimuoviElemento.png").scaled(24,24,Qt::KeepAspectRatio,Qt::SmoothTransformation)));
+    QIcon iconaElimina(":/gui/assets/icona_rimuoviElemento.png");
+    bottoneElimina->setIcon(iconaElimina);
     bottoneElimina->setIconSize(QSize(24,24));
     bottoneElimina->setToolTip("Elimina Attività");
     bottoneElimina->setShortcut(QKeySequence("Ctrl+Backspace"));//shortcut per cancellare attivita
@@ -152,9 +131,6 @@ void MainWindow::preparaMenuAzioni()
     QAction* voceCarica=new QAction("Carica Ctrl+O");
     voceCarica->setEnabled(false);
     sottoMenuScorciatoie->addAction(voceCarica);
-    QAction* voceInfo=new QAction("Questa pagina Ctrl+I");
-    voceInfo->setEnabled(false);
-    sottoMenuScorciatoie->addAction(voceInfo);
     QAction* voceAggiungi=new QAction("Aggiungi Attivita Ctrl+N");
     voceAggiungi->setEnabled(false);
     sottoMenuScorciatoie->addAction(voceAggiungi);
@@ -166,7 +142,7 @@ void MainWindow::preparaMenuAzioni()
     sottoMenuScorciatoie->addAction(voceModifica);
 }
 
-void MainWindow::salvataggio()
+bool MainWindow::salvataggio()
 {
     //con QFileDialog salvo il path selezionato da un utente con una stringa, che passero' al gestore per il salvataggio vero e proprio
     QString percorsoSalvataggio=QFileDialog::getSaveFileName(this, "Salva l'agenda", QDir::homePath(), "File JSON (*.json)"); //indico come directory di partenza la home, e come formato per il salvataggio il json
@@ -174,16 +150,19 @@ void MainWindow::salvataggio()
     if(percorsoSalvataggio.isEmpty())
     {
         QMessageBox::warning(this, "Operazione annullata", "File non salvato");
+        return false;
     }
     else
     {
         if(gestorePrincipale.salva(percorsoSalvataggio))
         {
             QMessageBox::information(this, "File salvato", "Operazione avvenuta con successo");
+            return true;
         }
         else
         {
             QMessageBox::critical(this, "Errore", "File non salvato, riprova");
+            return false;
         }
     }
 
@@ -191,6 +170,27 @@ void MainWindow::salvataggio()
 
 void MainWindow::caricaAgenda()
 {
+    // Verifico se ci sono dati non salvati prima di caricare un nuovo file
+    if(gestorePrincipale.haModificheNonSalvate())
+    {
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("Attenzione");
+        msgBox.setText("Ci sono modifiche non salvate. Caricando un nuovo file, perderai i dati correnti. Vuoi salvare prima di procedere?");
+        QPushButton *bottoneSalva = msgBox.addButton("Salva", QMessageBox::AcceptRole);
+        msgBox.addButton("Continua senza salvare", QMessageBox::DestructiveRole); //dato che il bottone continua lo creo solo per farlo visualizzare, non mi serve controllare che sia stato premuto o altro, dunque non mi serve salvarlo
+        QPushButton *bottoneAnnulla = msgBox.addButton("Annulla", QMessageBox::RejectRole);
+        
+        msgBox.exec();
+
+        if (msgBox.clickedButton() == bottoneSalva) {
+            if (!salvataggio()) {
+                return; // Se fallisce o annulla il salvataggio, blocco il caricamento
+            }
+        } else if (msgBox.clickedButton() == bottoneAnnulla) {
+            return; // L'utente ha annullato l'operazione
+        }
+    }
+
     QString percorsoFile=QFileDialog::getOpenFileName(this, "Carica l'agenda", QDir::homePath(), "File JSON (*.json)"); //analogo al salvataggio, sta volta per il caricamento
     if(percorsoFile.isEmpty())
     {
@@ -200,13 +200,6 @@ void MainWindow::caricaAgenda()
     {
         if(gestorePrincipale.carica(percorsoFile))
         {
-            /*
-            centrale->popolaAttivita(gestorePrincipale.getAllAttivita());
-            calendarioCentrale->popolaAttivita(gestorePrincipale.getAllAttivita());
-            librettoCentrale->aggiornaVista();//va refreshata
-            //devo refreshare in barraLaterale gli anni e i tag che si popolano dinamicamente in base alle attivita'
-            barraLaterale->popolaAnni(gestorePrincipale.getAnniPresenti());
-            barraLaterale->popolaTag(gestorePrincipale.getTagPresenti());*/
 
             QMessageBox::information(this, "File Caricato", "Operazione avvenuta con successo");
         }
@@ -306,13 +299,6 @@ void MainWindow::connectSegnali()
                 //e rendo visibili le parti nascoste
                 barraLaterale->setVisible(true);
                 bottoneAggiungi->setVisible(true);
-                //aggiornamento elementi grafici
-                /*
-                centrale->popolaAttivita(gestorePrincipale.getAllAttivita());
-                calendarioCentrale->popolaAttivita(gestorePrincipale.getAllAttivita());
-                barraLaterale->popolaAnni(gestorePrincipale.getAnniPresenti());
-                barraLaterale->popolaTag(gestorePrincipale.getTagPresenti());
-*/
 
             }
         }
@@ -323,24 +309,17 @@ void MainWindow::connectSegnali()
         bottoneModifica->setEnabled(false);
         bottoneElimina->setEnabled(false);
         gestorePrincipale.addAttivita(a);
-        finestraPrincipale->setCurrentIndex(0);//va alla vista dettaglio
+        finestraPrincipale->setCurrentIndex(0);//va alla vista elenco
         // e reimposta le parti visibili
         barraLaterale->setVisible(true);
         bottoneAggiungi->setVisible(true);
         bottoneModifica->setVisible(true);
         bottoneElimina->setVisible(true);
-        //aggiorno gli elementi grafici
-        /*
-        centrale->popolaAttivita(gestorePrincipale.getAllAttivita());
-        calendarioCentrale->popolaAttivita(gestorePrincipale.getAllAttivita());
-        barraLaterale->popolaAnni(gestorePrincipale.getAnniPresenti());
-        barraLaterale->popolaTag(gestorePrincipale.getTagPresenti());
-*/
 
     });
     connect(editCentrale, &VistaEdit::operazioneAnnulata, this, [this]()
             {
-        finestraPrincipale->setCurrentIndex(0);//va alla vista dettaglio
+        finestraPrincipale->setCurrentIndex(0);//va alla vista elenco
         // e reimposta le parti visibili
         barraLaterale->setVisible(true);
         bottoneAggiungi->setVisible(true);
@@ -500,6 +479,35 @@ void MainWindow::modificaSelezionata(modello::Attivita* a)
         bottoneModifica->setEnabled(false);
         bottoneElimina->setEnabled(false);
         attivitaSelezionata=a;
+    }
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    if (gestorePrincipale.haModificheNonSalvate()) {
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("Modifiche non salvate");
+        msgBox.setText("Ci sono modifiche non salvate. Vuoi salvare prima di uscire?");
+        
+        // Uso bottoni personalizzati per avere i testi in italiano
+        QPushButton *bottoneSalva = msgBox.addButton("Salva", QMessageBox::AcceptRole);
+        QPushButton *bottoneScarta = msgBox.addButton("Non Salvare", QMessageBox::DestructiveRole);
+        msgBox.addButton("Annulla", QMessageBox::RejectRole);//non mi serve salvarlo su puntatore, dato che mi serve solo che compaia
+        msgBox.exec();
+
+        if (msgBox.clickedButton() == bottoneSalva) {
+            if (salvataggio()) {
+                event->accept();
+            } else {
+                event->ignore(); // Se l'utente annulla il salvataggio o fallisce
+            }
+        } else if (msgBox.clickedButton() == bottoneScarta) {
+            event->accept(); // Esce senza salvare
+        } else {
+            event->ignore(); // Annulla la chiusura
+        }
+    } else {
+        event->accept();
     }
 }
 

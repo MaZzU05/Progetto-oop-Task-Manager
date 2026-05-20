@@ -36,8 +36,6 @@ void CardActivityVisitor::visit(modello::Esame* e)
     }
     layoutVoto->addWidget(labelVoto);
     QProgressBar* barraVoto=new QProgressBar();
-    //barraVoto->setStyleSheet("QProgressBar { border: 1px solid grey; border-radius: 5px; text-align: center; }"
-    //                         "QProgressBar::chunk { background-color: #4CAF50; width: 10px; margin: 1px; }");
     barraVoto->setRange(0, 30);
     barraVoto->setValue(e->getVoto());
     barraVoto->setFormat("%v/%m");
@@ -64,18 +62,28 @@ void CardActivityVisitor::visit(modello::Scadenza* s)
     QVBoxLayout* layoutScadenza=new QVBoxLayout(widgetScadenza);
     QHBoxLayout* layoutPreavviso=new QHBoxLayout();
     layoutPreavviso->setAlignment(Qt::AlignLeft);
-    QLabel* labelPreavviso= new QLabel("Stato preavviso: ");
+    QLabel* labelPreavviso= new QLabel("Tempo alla scadenza: ");
     layoutPreavviso->addWidget(labelPreavviso);
     QProgressBar* barraGiorni=new QProgressBar();
     barraGiorni->setRange(0, s->getGiorniPreavviso());
     int giorniMancanti=QDate::currentDate().daysTo(s->getDate().date());
     //riempio la barra nel seguente modo: se i giorni mancanti superano il preavviso la lascio vuota, se sono <=0 vuol dire che e' gia' passata, la metto piena, altrimenti la riempio con valori intermedi
-    if(giorniMancanti>static_cast<int>(s->getGiorniPreavviso())) barraGiorni->setValue(0);
-    else if (giorniMancanti<=0) barraGiorni->setValue(s->getGiorniPreavviso());
+    if(giorniMancanti>static_cast<int>(s->getGiorniPreavviso()))
+    {
+        barraGiorni->setValue(0);
+        barraGiorni->setFormat("Oltre "+QString::number((s->getGiorniPreavviso()))+" giorni rimasti");
+    }
+    else if (giorniMancanti<=0)
+    {
+        barraGiorni->setValue(s->getGiorniPreavviso());
+        barraGiorni->setFormat("Scaduta!");
+    }
     //non ho rischio di underflow dato i due controlli precedenti
-    else barraGiorni->setValue(s->getGiorniPreavviso()-giorniMancanti);
-    //%v stampa il valore attuale, %m il massimo dell'intervallo
-    barraGiorni->setFormat("%v/%m giorni alla scadenza");
+    else
+    {
+        barraGiorni->setValue(s->getGiorniPreavviso()-giorniMancanti);
+        barraGiorni->setFormat(QString::number(giorniMancanti)+" giorni rimasti");
+    }
     layoutPreavviso->addWidget(barraGiorni);
     layoutScadenza->addLayout(layoutPreavviso);
     QLabel* labelSottoTask=new QLabel("Task: ");
@@ -115,16 +123,13 @@ void CardActivityVisitor::visit(modello::Appuntamento* i)
     else labelInPresenza->setText("On-Line");
     layoutLuogo->addWidget(labelInPresenza);
     layoutAppuntamento->addLayout(layoutLuogo);
-    QHBoxLayout* layoutPartecipanti=new QHBoxLayout();
-    layoutPartecipanti->setAlignment(Qt::AlignLeft);
     QLabel* labelPartecipanti=new QLabel("Partecipanti: ");
-    layoutPartecipanti->addWidget(labelPartecipanti);
+    layoutAppuntamento->addWidget(labelPartecipanti);
     std::vector<QString> partecipantiVec=i->getAllPartecipanti();
     QListWidget* listaPartecipanti=new QListWidget();
     listaPartecipanti->setSelectionMode(QAbstractItemView::NoSelection);
     for(const QString& p:partecipantiVec) listaPartecipanti->addItem(p);
-    layoutPartecipanti->addWidget(listaPartecipanti);
-    layoutAppuntamento->addLayout(layoutPartecipanti);
+    layoutAppuntamento->addWidget(listaPartecipanti);
     widget->addWidget(widgetAppuntamento);
 
 
@@ -136,9 +141,9 @@ void CardActivityVisitor::visit(modello::Sport* s)
     widget->popolaAttivita(s);
     QWidget* widgetSport=new QWidget();
     QVBoxLayout* layoutSport = new QVBoxLayout(widgetSport);
-    QLabel* labelDataInizio=new QLabel("Data inizio: "+s->getDataInizio().toString());
+    QLabel* labelDataInizio=new QLabel("Data inizio: "+s->getDataInizio().toString("ddd dd/MM/yyyy"));
     layoutSport->addWidget(labelDataInizio);
-    QLabel* labelOraAllenamento=new QLabel("Orario: "+s->getOraAllenamento().toString());
+    QLabel* labelOraAllenamento=new QLabel("Orario: "+s->getOraAllenamento().toString("HH:mm"));
     layoutSport->addWidget(labelOraAllenamento);
     QLabel* labelGiorniRicorrenza=new QLabel("Si ripete ogni: ");
     layoutSport->addWidget(labelGiorniRicorrenza);
