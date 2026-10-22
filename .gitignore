@@ -1,4 +1,22 @@
-.DS_Store
+cat << 'EOF' > .gitignore
+# Qt Creator e build temporanei
 build-*/
 *.user
+*.user.*
+.qmake.stash
+
+# File compilati
 *.o
+*.obj
+*.a
+*.dylib
+*.app
+Agenda++
+
+# Sistema e IDE
+.DS_Store
+.vscode/
+.idea/
+.clangd/
+~$*.odt
+EOF
